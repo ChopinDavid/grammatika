@@ -6,14 +6,6 @@ abstract class DatabaseEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class DatabaseQueryEvent extends DatabaseEvent {
-  DatabaseQueryEvent({required this.query});
+class DatabaseRetrieveExerciseEvent extends DatabaseEvent {}
 
-  final String query;
-
-  @override
-  List<Object?> get props => [
-        ...super.props,
-        query,
-      ];
-}
+class DatabaseRetrieveRandomNounEvent extends DatabaseEvent {}

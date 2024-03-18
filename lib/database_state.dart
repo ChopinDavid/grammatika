@@ -8,25 +8,26 @@ abstract class DatabaseState extends Equatable {
 
 class DatabaseInitial extends DatabaseState {}
 
-class DatabaseQueryingState extends DatabaseState {
-  DatabaseQueryingState({required this.query});
-  final String query;
-  @override
-  List<Object?> get props => [...super.props, query];
-}
+class DatabaseRetrievingRandomNounState extends DatabaseState {}
 
-class DatabaseQueryCompleteState extends DatabaseState {
-  DatabaseQueryCompleteState({
-    required this.queryResult,
+class DatabaseRandomNounRetrievedState extends DatabaseState {
+  DatabaseRandomNounRetrievedState({
+    required this.noun,
+    required this.word,
   });
-  final List<Map<String, Object?>> queryResult;
+  final Noun noun;
+  final Word word;
 
   @override
-  List<Object?> get props => [...super.props, queryResult];
+  List<Object?> get props => [
+        ...super.props,
+        noun,
+        word,
+      ];
 }
 
-class DatabaseQueryErrorState extends DatabaseState {
-  DatabaseQueryErrorState({
+class DatabaseErrorState extends DatabaseState {
+  DatabaseErrorState({
     required this.errorString,
   });
   final String errorString;
