@@ -1,4 +1,5 @@
 import 'package:uchu/db_helper.dart';
+import 'package:uchu/extensions.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/word.dart';
 
@@ -15,18 +16,25 @@ class Noun {
 
   final int wordId;
   final Gender? gender;
-  final String partner;
+  final String? partner;
   final bool animate;
   final bool indeclinable;
   final bool sgOnly;
   final bool plOnly;
 
   factory Noun.fromJson(Map<String, dynamic> json) {
+    final wordIdJson = json['word_id'];
+    final wordIdInt =
+        wordIdJson is String ? int.tryParse(wordIdJson) : wordIdJson;
+    assert(wordIdInt is int, '"word_id" must be of type int or String');
     final genderJson = json['gender'];
+    final partnerJson = json['partner'];
     return Noun._(
-      wordId: int.parse(json['word_id']),
-      gender: genderJson == '' ? null : Gender.values.byName(genderJson),
-      partner: json['partner'],
+      wordId: wordIdInt,
+      gender: StringExtensions.isNullOrEmpty(genderJson)
+          ? null
+          : Gender.values.byName(genderJson),
+      partner: StringExtensions.isNullOrEmpty(partnerJson) ? null : partnerJson,
       animate: json['animate'] == 0 ? false : true,
       indeclinable: json['indeclinable'] == 0 ? false : true,
       sgOnly: json['sgOnly'] == 0 ? false : true,
