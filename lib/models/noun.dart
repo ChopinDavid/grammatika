@@ -33,7 +33,7 @@ class Noun {
       wordId: wordIdInt,
       gender: StringExtensions.isNullOrEmpty(genderJson)
           ? null
-          : Gender.values.byName(genderJson),
+          : Gender.values.byName(genderJson.toLowerCase()),
       partner: StringExtensions.isNullOrEmpty(partnerJson) ? null : partnerJson,
       animate: json['animate'] == 0 ? false : true,
       indeclinable: json['indeclinable'] == 0 ? false : true,
