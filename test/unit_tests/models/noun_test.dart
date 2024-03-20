@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
 
 main() {
@@ -42,6 +43,54 @@ main() {
                   'word_id': [],
                 }),
             throwsAssertionError);
+      });
+
+      group('gender', () {
+        test('parses lowercase identifiers correctly', () {
+          const expectedGender = Gender.n;
+          final actual = Noun.fromJson({
+            'word_id': 0,
+            'gender': 'n',
+          });
+          expect(actual.gender, expectedGender);
+        });
+
+        test('parses capital identifiers correctly', () {
+          const expectedGender = Gender.n;
+          final actual = Noun.fromJson({
+            'word_id': 0,
+            'gender': 'N',
+          });
+          expect(actual.gender, expectedGender);
+        });
+
+        test('parses nulls correctly', () {
+          const expectedGender = null;
+          final actual = Noun.fromJson({
+            'word_id': 0,
+            'gender': expectedGender,
+          });
+          expect(actual.gender, expectedGender);
+        });
+
+        test('parses empty-strings correctly', () {
+          const expectedGender = null;
+          final actual = Noun.fromJson({
+            'word_id': 0,
+            'gender': '',
+          });
+          expect(actual.gender, expectedGender);
+        });
+
+        test('throws when passed unknown identifier', () {
+          expect(
+            () => Noun.fromJson({
+              'word_id': 0,
+              'gender': 'q',
+            }),
+            throwsArgumentError,
+          );
+        });
       });
     });
   });
