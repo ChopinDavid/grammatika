@@ -29,16 +29,50 @@ class Noun {
     assert(wordIdInt is int, '"word_id" must be of type int or String');
     final genderJson = json['gender'];
     final partnerJson = json['partner'];
+
+    bool parseBoolFromKey(String key) {
+      late final bool? boolValue;
+      final value = json[key];
+      if (value is bool) {
+        boolValue = value;
+      } else if (value is int) {
+        boolValue = value == 0
+            ? false
+            : value == 1
+                ? true
+                : null;
+      } else if (value is String) {
+        boolValue = value == '0'
+            ? false
+            : value == '1'
+                ? true
+                : null;
+      } else if (value == null) {
+        boolValue = false;
+      } else {
+        boolValue = null;
+      }
+
+      assert(boolValue is bool,
+          '"$key" must be of type bool, int (0 or 1), or String ("0" or "1")');
+      return boolValue!;
+    }
+
+    final animateBool = parseBoolFromKey('animate');
+    final indeclinableBool = parseBoolFromKey('indeclinable');
+    final sgOnlyBool = parseBoolFromKey('sg_only');
+    final plOnlyBool = parseBoolFromKey('pl_only');
+
     return Noun._(
       wordId: wordIdInt,
       gender: StringExtensions.isNullOrEmpty(genderJson)
           ? null
           : Gender.values.byName(genderJson.toLowerCase()),
       partner: StringExtensions.isNullOrEmpty(partnerJson) ? null : partnerJson,
-      animate: json['animate'] == 0 ? false : true,
-      indeclinable: json['indeclinable'] == 0 ? false : true,
-      sgOnly: json['sgOnly'] == 0 ? false : true,
-      plOnly: json['plOnly'] == 0 ? false : true,
+      animate: animateBool,
+      indeclinable: indeclinableBool,
+      sgOnly: sgOnlyBool,
+      plOnly: plOnlyBool,
     );
   }
 
