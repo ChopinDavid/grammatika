@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:uchu/db_helper.dart';
 import 'package:uchu/extensions.dart';
+import 'package:uchu/extensions/map_string_dynamic_extension.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/word.dart';
 
@@ -12,7 +14,8 @@ class Noun {
     required this.indeclinable,
     required this.sgOnly,
     required this.plOnly,
-  });
+    @visibleForTesting DbHelper? dbHelper,
+  }) : dbHelper = dbHelper ?? DbHelper();
 
   final int wordId;
   final Gender? gender;
@@ -21,12 +24,12 @@ class Noun {
   final bool indeclinable;
   final bool sgOnly;
   final bool plOnly;
+  final DbHelper dbHelper;
 
-  factory Noun.fromJson(Map<String, dynamic> json) {
-    final wordIdJson = json['word_id'];
-    final wordIdInt =
-        wordIdJson is String ? int.tryParse(wordIdJson) : wordIdJson;
-    assert(wordIdInt is int, '"word_id" must be of type int or String');
+  factory Noun.fromJson(
+    Map<String, dynamic> json, {
+    @visibleForTesting DbHelper? dbHelper,
+  }) {
     final genderJson = json['gender'];
     final partnerJson = json['partner'];
 
@@ -64,7 +67,7 @@ class Noun {
     final plOnlyBool = parseBoolFromKey('pl_only');
 
     return Noun._(
-      wordId: wordIdInt,
+      wordId: json.parseIntFromStringOrInt('word_id'),
       gender: StringExtensions.isNullOrEmpty(genderJson)
           ? null
           : Gender.values.byName(genderJson.toLowerCase()),
@@ -73,12 +76,13 @@ class Noun {
       indeclinable: indeclinableBool,
       sgOnly: sgOnlyBool,
       plOnly: plOnlyBool,
+      dbHelper: dbHelper,
     );
   }
 
   Future<Word> get word async {
-    final db = await DbHelper.getDatabase();
-    final result = await db.rawQuery("SELECT * FROM words WHERE id = $wordId");
+    final db = await dbHelper.getDatabase();
+    final result = await db.rawQuery('SELECT * FROM words WHERE id = $wordId');
     return Word.fromJson(result.single);
   }
 }
