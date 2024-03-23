@@ -1,6 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
+import 'package:uchu/models/word.dart';
+
+import '../mocks.dart';
 
 main() {
   group('fromJson', () {
@@ -515,6 +519,77 @@ main() {
               throwsAssertionError);
         });
       });
+    });
+  });
+
+  group('word', () {
+    test('returns word when sqlite query succeeds', () async {
+      const wordId = 999;
+      final expected = Word.testValue();
+
+      final mockDbHelper = MockDbHelper();
+      final mockDatabase = MockDatabase();
+      when(() => mockDbHelper.getDatabase())
+          .thenAnswer((invocation) async => mockDatabase);
+      when(() =>
+              mockDatabase.rawQuery('SELECT * FROM words WHERE id = $wordId'))
+          .thenAnswer((invocation) async => [expected.toJson()]);
+      final actual = await Noun.fromJson({
+        'word_id': wordId,
+      }, dbHelper: mockDbHelper)
+          .word;
+      expect(actual, expected);
+    });
+
+    test('throws when dbHelper.getDatabase throws', () async {
+      final mockDbHelper = MockDbHelper();
+      when(() => mockDbHelper.getDatabase()).thenThrow(Exception());
+      expect(
+          () => Noun.fromJson({
+                'word_id': '999',
+              }, dbHelper: mockDbHelper)
+                  .word,
+          throwsException);
+    });
+
+    test('throws when dbHelper.getDatabase throws', () async {
+      const wordId = '999';
+      final mockDbHelper = MockDbHelper();
+      final mockDatabase = MockDatabase();
+      when(() => mockDbHelper.getDatabase())
+          .thenAnswer((invocation) async => mockDatabase);
+      when(() =>
+              mockDatabase.rawQuery('SELECT * FROM words WHERE id = $wordId'))
+          .thenThrow(Exception());
+      expect(
+          () => Noun.fromJson({
+                'word_id': wordId,
+              }, dbHelper: mockDbHelper)
+                  .word,
+          throwsException);
+    });
+
+    test('throws when Word.fromJson throws', () async {
+      const wordId = 999;
+
+      final mockDbHelper = MockDbHelper();
+      final mockDatabase = MockDatabase();
+      when(() => mockDbHelper.getDatabase())
+          .thenAnswer((invocation) async => mockDatabase);
+      when(() =>
+              mockDatabase.rawQuery('SELECT * FROM words WHERE id = $wordId'))
+          .thenAnswer((invocation) async => [
+                {'this': 'shouldThrow'}
+              ]);
+      expect(
+        () => Noun.fromJson({
+          'word_id': wordId,
+        }, dbHelper: mockDbHelper)
+            .word,
+        throwsA(
+          isA<TypeError>(),
+        ),
+      );
     });
   });
 }

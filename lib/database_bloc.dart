@@ -26,7 +26,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       if (event is DatabaseRetrieveRandomNounEvent) {
         emit(DatabaseRetrievingRandomNounState());
 
-        final db = await DbHelper.getDatabase();
+        final db = await DbHelper().getDatabase();
 
         try {
           final noun = Noun.fromJson(
