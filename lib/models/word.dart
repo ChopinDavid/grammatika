@@ -28,36 +28,39 @@ class Word extends Equatable {
   final String bare;
   final String accented;
   final int? derivedFromWordId;
-  final int rank;
+  final int? rank;
   final bool disabled;
-  final String audio;
+  final String? audio;
   final String? usageEn;
   final String? usageDe;
   final int? numberValue;
-  final WordType type;
+  final WordType? type;
   final Level? level;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   factory Word.fromJson(Map<String, dynamic> json) {
     final levelString = json['level'];
     final usageDeString = json['usage_de'];
     final usageEnString = json['usage_en'];
+    final createdAtString = json['created_at'];
+    final typeString = json['type'];
     return Word._(
       accented: json['accented'],
       audio: json['audio'],
       bare: json['bare'],
-      createdAt: DateTime.parse(json['created_at']),
-      derivedFromWordId:
-          json.parseOptionalIntFromStringOrInt('derived_from_word_id'),
+      createdAt:
+          createdAtString != null ? DateTime.parse(createdAtString) : null,
+      derivedFromWordId: json.parseOptionalIntForKey('derived_from_word_id'),
       disabled: json['disabled'] == 0 ? false : true,
-      id: json.parseIntFromStringOrInt('id'),
+      id: json.parseIntForKey('id'),
       level: StringExtensions.isNullOrEmpty(levelString)
           ? null
           : Level.values.byName(levelString),
-      numberValue: json.parseOptionalIntFromStringOrInt('number_value'),
-      position: json.parseOptionalIntFromStringOrInt('position'),
-      rank: json.parseIntFromStringOrInt('rank'),
-      type: WordType.values.byName(json['type']),
+      numberValue: json.parseOptionalIntForKey('number_value'),
+      position: json.parseOptionalIntForKey('position'),
+      rank: json.parseOptionalIntForKey('rank'),
+      type:
+          typeString != null ? WordType.values.byName(typeString) : typeString,
       usageDe:
           StringExtensions.isNullOrEmpty(usageDeString) ? null : usageDeString,
       usageEn:
@@ -78,10 +81,10 @@ class Word extends Equatable {
       'usage_en': usageEn,
       'usage_de': usageDe,
       'number_value': numberValue,
-      'type': type.name,
+      'type': type?.name,
       'level': level?.name,
-      'created_at': createdAt.toIso8601String(),
-    };
+      'created_at': createdAt?.toIso8601String(),
+    }..removeWhere((key, value) => value == null);
   }
 
   @override
