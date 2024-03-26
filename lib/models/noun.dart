@@ -33,41 +33,13 @@ class Noun {
     final genderJson = json['gender'];
     final partnerJson = json['partner'];
 
-    bool parseBoolFromKey(String key) {
-      late final bool? boolValue;
-      final value = json[key];
-      if (value is bool) {
-        boolValue = value;
-      } else if (value is int) {
-        boolValue = value == 0
-            ? false
-            : value == 1
-                ? true
-                : null;
-      } else if (value is String) {
-        boolValue = value == '0'
-            ? false
-            : value == '1'
-                ? true
-                : null;
-      } else if (value == null) {
-        boolValue = false;
-      } else {
-        boolValue = null;
-      }
-
-      assert(boolValue is bool,
-          '"$key" must be of type bool, int (0 or 1), or String ("0" or "1")');
-      return boolValue!;
-    }
-
-    final animateBool = parseBoolFromKey('animate');
-    final indeclinableBool = parseBoolFromKey('indeclinable');
-    final sgOnlyBool = parseBoolFromKey('sg_only');
-    final plOnlyBool = parseBoolFromKey('pl_only');
+    final animateBool = json.parseBoolForKey('animate');
+    final indeclinableBool = json.parseBoolForKey('indeclinable');
+    final sgOnlyBool = json.parseBoolForKey('sg_only');
+    final plOnlyBool = json.parseBoolForKey('pl_only');
 
     return Noun._(
-      wordId: json.parseIntFromStringOrInt('word_id'),
+      wordId: json.parseIntForKey('word_id'),
       gender: StringExtensions.isNullOrEmpty(genderJson)
           ? null
           : Gender.values.byName(genderJson.toLowerCase()),
