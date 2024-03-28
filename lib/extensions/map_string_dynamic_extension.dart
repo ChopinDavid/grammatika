@@ -1,4 +1,3 @@
-// TODO(DC): Write tests for all of these
 extension MapStringDynamicExtension on Map<String, dynamic> {
   int parseIntForKey(String key) {
     final json = this[key];
@@ -10,7 +9,7 @@ extension MapStringDynamicExtension on Map<String, dynamic> {
 
   int? parseOptionalIntForKey(String key) {
     final json = this[key];
-    final parsedIntFromJson = json is String ? int.tryParse(json) : json;
+    final parsedIntFromJson = json is String ? int.parse(json) : json;
     assert(parsedIntFromJson is int?,
         '"$key" must be of type int or String, or must be null');
     return parsedIntFromJson;

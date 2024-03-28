@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:uchu/extensions.dart';
 import 'package:uchu/extensions/map_string_dynamic_extension.dart';
+import 'package:uchu/extensions/string_extension.dart';
 import 'package:uchu/models/level.dart';
 import 'package:uchu/models/word_type.dart';
 
@@ -48,25 +48,25 @@ class Word extends Equatable {
       accented: json['accented'],
       audio: json['audio'],
       bare: json['bare'],
-      createdAt: StringExtensions.isNullOrEmpty(createdAtString)
+      createdAt: StringExtension.isNullOrEmpty(createdAtString)
           ? null
           : DateTime.parse(createdAtString),
       derivedFromWordId: json.parseOptionalIntForKey('derived_from_word_id'),
       disabled: json.parseBoolForKey('disabled'),
       id: json.parseIntForKey('id'),
-      level: StringExtensions.isNullOrEmpty(levelString)
+      level: StringExtension.isNullOrEmpty(levelString)
           ? null
           : Level.values.byName(levelString),
       numberValue: json.parseOptionalIntForKey('number_value'),
       position: json.parseOptionalIntForKey('position'),
       rank: json.parseOptionalIntForKey('rank'),
-      type: StringExtensions.isNullOrEmpty(typeString)
+      type: StringExtension.isNullOrEmpty(typeString)
           ? null
           : WordType.values.byName(typeString),
       usageDe:
-          StringExtensions.isNullOrEmpty(usageDeString) ? null : usageDeString,
+          StringExtension.isNullOrEmpty(usageDeString) ? null : usageDeString,
       usageEn:
-          StringExtensions.isNullOrEmpty(usageEnString) ? null : usageEnString,
+          StringExtension.isNullOrEmpty(usageEnString) ? null : usageEnString,
     );
   }
 
