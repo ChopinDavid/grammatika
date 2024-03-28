@@ -1,8 +1,9 @@
 import "dart:math";
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import "package:meta/meta.dart";
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:uchu/db_helper.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/noun.dart';
@@ -26,9 +27,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       if (event is DatabaseRetrieveRandomNounEvent) {
         emit(DatabaseRetrievingRandomNounState());
 
-        final db = await DbHelper().getDatabase();
-
         try {
+          final db = await GetIt.instance.get<DbHelper>().getDatabase();
+
           final noun = Noun.fromJson(
             ((await db.rawQuery(
                         "SELECT * FROM nouns ORDER BY RANDOM() LIMIT 1;"))
