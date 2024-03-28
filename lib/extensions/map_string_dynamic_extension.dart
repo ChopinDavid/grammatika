@@ -9,10 +9,19 @@ extension MapStringDynamicExtension on Map<String, dynamic> {
 
   int? parseOptionalIntForKey(String key) {
     final json = this[key];
-    final parsedIntFromJson = json is String ? int.parse(json) : json;
-    assert(parsedIntFromJson is int?,
-        '"$key" must be of type int or String, or must be null');
-    return parsedIntFromJson;
+    final assertionErrorMessage =
+        '"$key" must be of type int or String, or must be null';
+
+    if (json is String) {
+      if (json.isEmpty) {
+        return null;
+      }
+      final parsedInt = int.tryParse(json);
+      assert(parsedInt != null, assertionErrorMessage);
+      return parsedInt;
+    }
+    assert(json is int?, assertionErrorMessage);
+    return json;
   }
 
   bool parseBoolForKey(String key) {

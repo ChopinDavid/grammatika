@@ -64,11 +64,10 @@ main() {
     });
 
     test(
-        'throws FormatException if value is String that does not represent an int',
+        'throws AssertionError if value is String that does not represent an int',
         () {
       const key = 'key';
-      expect(() => {key: 'spaghetti'}.parseOptionalIntForKey(key),
-          throwsFormatException);
+      expect(() => {key: 'spaghetti'}.parseOptionalIntForKey(key), throws);
     });
 
     test('throws AssertionError if value is bool', () {
@@ -91,6 +90,14 @@ main() {
       const expectedParsedOptionalInt = null;
       const key = 'key';
       final json = {key: expectedParsedOptionalInt};
+      final actual = json.parseOptionalIntForKey(key);
+      expect(actual, expectedParsedOptionalInt);
+    });
+
+    test('throws if value is empty String', () {
+      const expectedParsedOptionalInt = null;
+      const key = 'key';
+      final json = {key: ''};
       final actual = json.parseOptionalIntForKey(key);
       expect(actual, expectedParsedOptionalInt);
     });

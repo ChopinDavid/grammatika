@@ -1026,4 +1026,13 @@ main() {
       expect(actual, expected);
     });
   });
+
+  test('toJson and fromJson translate back and forth', () {
+    final word = Word.testValue();
+    expect(
+        word,
+        Word.fromJson(
+          word.toJson(),
+        ));
+  });
 }

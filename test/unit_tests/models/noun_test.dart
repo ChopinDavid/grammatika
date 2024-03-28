@@ -1,5 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:uchu/db_helper.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/word.dart';
@@ -19,7 +22,7 @@ main() {
 
       test('parses int correctly', () {
         const expectedWordId = 999;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': expectedWordId,
         });
         expect(actual.wordId, expectedWordId);
@@ -27,7 +30,7 @@ main() {
 
       test('throws AssertionError if of type bool', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': true,
                 }),
             throwsAssertionError);
@@ -35,7 +38,7 @@ main() {
 
       test('throws AssertionError if object', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': {},
                 }),
             throwsAssertionError);
@@ -43,7 +46,7 @@ main() {
 
       test('throws AssertionError if array', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': [],
                 }),
             throwsAssertionError);
@@ -53,7 +56,7 @@ main() {
     group('gender', () {
       test('parses lowercase identifiers correctly', () {
         const expectedGender = Gender.n;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'gender': 'n',
         });
@@ -62,7 +65,7 @@ main() {
 
       test('parses capital identifiers correctly', () {
         const expectedGender = Gender.n;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'gender': 'N',
         });
@@ -71,7 +74,7 @@ main() {
 
       test('parses nulls correctly', () {
         const expectedGender = null;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'gender': expectedGender,
         });
@@ -80,7 +83,7 @@ main() {
 
       test('parses empty-strings correctly', () {
         const expectedGender = null;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'gender': '',
         });
@@ -89,7 +92,7 @@ main() {
 
       test('throws when passed unknown identifier', () {
         expect(
-          () => Noun.fromJson({
+          () => Noun.fromJson(const {
             'word_id': 0,
             'gender': 'q',
           }),
@@ -101,7 +104,7 @@ main() {
     group('partner', () {
       test('parses String correctly', () {
         const expectedPartner = 'муж';
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'partner': expectedPartner,
         });
@@ -110,7 +113,7 @@ main() {
 
       test('parses null correctly', () {
         const expectedPartner = null;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'partner': expectedPartner,
         });
@@ -119,7 +122,7 @@ main() {
 
       test('throws TypeError if int', () {
         expect(
-          () => Noun.fromJson({
+          () => Noun.fromJson(const {
             'word_id': 0,
             'partner': 1,
           }),
@@ -129,7 +132,7 @@ main() {
 
       test('throws TypeError if bool', () {
         expect(
-          () => Noun.fromJson({
+          () => Noun.fromJson(const {
             'word_id': 0,
             'partner': true,
           }),
@@ -139,7 +142,7 @@ main() {
 
       test('throws TypeError if object', () {
         expect(
-          () => Noun.fromJson({
+          () => Noun.fromJson(const {
             'word_id': 0,
             'partner': {},
           }),
@@ -149,7 +152,7 @@ main() {
 
       test('throws TypeError if array', () {
         expect(
-          () => Noun.fromJson({
+          () => Noun.fromJson(const {
             'word_id': 0,
             'partner': [],
           }),
@@ -161,7 +164,7 @@ main() {
     group('animate', () {
       test('parses int (0) correctly', () {
         const expectedAnimate = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'animate': 0,
         });
@@ -170,7 +173,7 @@ main() {
 
       test('parses int (1) correctly', () {
         const expectedAnimate = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'animate': 1,
         });
@@ -179,7 +182,7 @@ main() {
 
       test('throws AssertionError when parsing an int that is not 0 or 1', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'animate': 2,
                 }),
@@ -188,7 +191,7 @@ main() {
 
       test('parses bool correctly', () {
         const expectedAnimate = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'animate': expectedAnimate,
         });
@@ -197,7 +200,7 @@ main() {
 
       test('parses String ("0") correctly', () {
         const expectedAnimate = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'animate': '0',
         });
@@ -206,7 +209,7 @@ main() {
 
       test('parses String ("1") correctly', () {
         const expectedAnimate = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'animate': '1',
         });
@@ -215,7 +218,7 @@ main() {
 
       test('throws AssertionError if String (not "0" or "1")', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'animate': '2',
                 }),
@@ -224,7 +227,7 @@ main() {
 
       test('throws AssertionError if object', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'animate': {},
                 }),
@@ -233,7 +236,7 @@ main() {
 
       test('throws AssertionError if array', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'animate': [],
                 }),
@@ -244,7 +247,7 @@ main() {
     group('indeclinable', () {
       test('parses int (0) correctly', () {
         const expectedIndeclinable = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'indeclinable': 0,
         });
@@ -253,7 +256,7 @@ main() {
 
       test('parses int (1) correctly', () {
         const expectedIndeclinable = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'indeclinable': 1,
         });
@@ -262,7 +265,7 @@ main() {
 
       test('throws AssertionError when parsing an int that is not 0 or 1', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'indeclinable': 2,
                 }),
@@ -271,7 +274,7 @@ main() {
 
       test('parses null as false', () {
         const expectedPlOnly = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'indeclinable': null,
         });
@@ -280,7 +283,7 @@ main() {
 
       test('parses bool correctly', () {
         const expectedIndeclinable = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'indeclinable': expectedIndeclinable,
         });
@@ -289,7 +292,7 @@ main() {
 
       test('parses String ("0") correctly', () {
         const expectedIndeclinable = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'indeclinable': '0',
         });
@@ -298,7 +301,7 @@ main() {
 
       test('parses String ("1") correctly', () {
         const expectedIndeclinable = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'indeclinable': '1',
         });
@@ -307,7 +310,7 @@ main() {
 
       test('throws AssertionError if String (not "0" or "1")', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'indeclinable': '2',
                 }),
@@ -316,7 +319,7 @@ main() {
 
       test('throws AssertionError if object', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'indeclinable': {},
                 }),
@@ -325,7 +328,7 @@ main() {
 
       test('throws AssertionError if array', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'indeclinable': [],
                 }),
@@ -336,7 +339,7 @@ main() {
     group('sg_only', () {
       test('parses int (0) correctly', () {
         const expectedSgOnly = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'sg_only': 0,
         });
@@ -345,7 +348,7 @@ main() {
 
       test('parses int (1) correctly', () {
         const expectedSgOnly = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'sg_only': 1,
         });
@@ -354,7 +357,7 @@ main() {
 
       test('throws AssertionError when parsing an int that is not 0 or 1', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'sg_only': 2,
                 }),
@@ -363,7 +366,7 @@ main() {
 
       test('parses null as false', () {
         const expectedPlOnly = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'sg_only': null,
         });
@@ -372,7 +375,7 @@ main() {
 
       test('parses bool correctly', () {
         const expectedSgOnly = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'sg_only': expectedSgOnly,
         });
@@ -381,7 +384,7 @@ main() {
 
       test('parses String ("0") correctly', () {
         const expectedSgOnly = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'sg_only': '0',
         });
@@ -390,7 +393,7 @@ main() {
 
       test('parses String ("1") correctly', () {
         const expectedSgOnly = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'sg_only': '1',
         });
@@ -399,7 +402,7 @@ main() {
 
       test('throws AssertionError if String (not "0" or "1")', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'sg_only': '2',
                 }),
@@ -408,7 +411,7 @@ main() {
 
       test('throws AssertionError if object', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'sg_only': {},
                 }),
@@ -417,7 +420,7 @@ main() {
 
       test('throws AssertionError if array', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'sg_only': [],
                 }),
@@ -428,7 +431,7 @@ main() {
     group('pl_only', () {
       test('parses int (0) correctly', () {
         const expectedPlOnly = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'pl_only': 0,
         });
@@ -437,7 +440,7 @@ main() {
 
       test('parses int (1) correctly', () {
         const expectedPlOnly = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'pl_only': 1,
         });
@@ -446,7 +449,7 @@ main() {
 
       test('throws AssertionError when parsing an int that is not 0 or 1', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'pl_only': 2,
                 }),
@@ -455,7 +458,7 @@ main() {
 
       test('parses null as false', () {
         const expectedPlOnly = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'pl_only': null,
         });
@@ -464,7 +467,7 @@ main() {
 
       test('parses bool correctly', () {
         const expectedPlOnly = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'pl_only': expectedPlOnly,
         });
@@ -473,7 +476,7 @@ main() {
 
       test('parses String ("0") correctly', () {
         const expectedPlOnly = false;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'pl_only': '0',
         });
@@ -482,7 +485,7 @@ main() {
 
       test('parses String ("1") correctly', () {
         const expectedPlOnly = true;
-        final actual = Noun.fromJson({
+        final actual = Noun.fromJson(const {
           'word_id': 0,
           'pl_only': '1',
         });
@@ -491,7 +494,7 @@ main() {
 
       test('throws AssertionError if String (not "0" or "1")', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'pl_only': '2',
                 }),
@@ -500,7 +503,7 @@ main() {
 
       test('throws AssertionError if object', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'pl_only': {},
                 }),
@@ -509,7 +512,7 @@ main() {
 
       test('throws AssertionError if array', () {
         expect(
-            () => Noun.fromJson({
+            () => Noun.fromJson(const {
                   'word_id': 0,
                   'pl_only': [],
                 }),
@@ -519,73 +522,120 @@ main() {
   });
 
   group('word', () {
+    late DbHelper mockDbHelper;
+    late Database mockDatabase;
+    setUp(() async {
+      await GetIt.instance.reset();
+      mockDbHelper = MockDbHelper();
+      mockDatabase = MockDatabase();
+      when(() => mockDbHelper.getDatabase())
+          .thenAnswer((invocation) async => mockDatabase);
+      GetIt.instance.registerSingleton<DbHelper>(mockDbHelper);
+    });
+
     test('returns word when sqlite query succeeds', () async {
       const wordId = 999;
       final expected = Word.testValue();
-
-      final mockDbHelper = MockDbHelper();
-      final mockDatabase = MockDatabase();
-      when(() => mockDbHelper.getDatabase())
-          .thenAnswer((invocation) async => mockDatabase);
       when(() =>
               mockDatabase.rawQuery('SELECT * FROM words WHERE id = $wordId'))
           .thenAnswer((invocation) async => [expected.toJson()]);
-      final actual = await Noun.fromJson({
+      final actual = await Noun.fromJson(const {
         'word_id': wordId,
-      }, dbHelper: mockDbHelper)
-          .word;
+      }).word;
       expect(actual, expected);
     });
 
     test('throws when dbHelper.getDatabase throws', () async {
-      final mockDbHelper = MockDbHelper();
       when(() => mockDbHelper.getDatabase()).thenThrow(Exception());
       expect(
-          () => Noun.fromJson({
+          () => Noun.fromJson(const {
                 'word_id': '999',
-              }, dbHelper: mockDbHelper)
-                  .word,
+              }).word,
           throwsException);
     });
 
     test('throws when dbHelper.getDatabase throws', () async {
       const wordId = '999';
-      final mockDbHelper = MockDbHelper();
-      final mockDatabase = MockDatabase();
-      when(() => mockDbHelper.getDatabase())
-          .thenAnswer((invocation) async => mockDatabase);
       when(() =>
               mockDatabase.rawQuery('SELECT * FROM words WHERE id = $wordId'))
           .thenThrow(Exception());
       expect(
-          () => Noun.fromJson({
+          () => Noun.fromJson(const {
                 'word_id': wordId,
-              }, dbHelper: mockDbHelper)
-                  .word,
+              }).word,
           throwsException);
     });
 
     test('throws when Word.fromJson throws', () async {
       const wordId = 999;
-
-      final mockDbHelper = MockDbHelper();
-      final mockDatabase = MockDatabase();
-      when(() => mockDbHelper.getDatabase())
-          .thenAnswer((invocation) async => mockDatabase);
       when(() =>
               mockDatabase.rawQuery('SELECT * FROM words WHERE id = $wordId'))
           .thenAnswer((invocation) async => [
                 {'this': 'shouldThrow'}
               ]);
       expect(
-        () => Noun.fromJson({
+        () => Noun.fromJson(const {
           'word_id': wordId,
-        }, dbHelper: mockDbHelper)
-            .word,
+        }).word,
         throwsA(
           isA<TypeError>(),
         ),
       );
     });
+  });
+
+  group('toJson', () {
+    test('removes null values', () {
+      final expected = {
+        'word_id': 97,
+        'animate': true,
+        'indeclinable': false,
+        'sg_only': false,
+        'pl_only': false,
+      };
+      final actual = Noun.testValueSimple().toJson();
+      expect(actual, expected);
+    });
+
+    test('maps values correctly', () {
+      final testValue = Noun.testValue();
+      final expected = {
+        'word_id': testValue.wordId,
+        'gender': testValue.gender?.name,
+        'partner': testValue.partner,
+        'animate': testValue.animate,
+        'indeclinable': testValue.indeclinable,
+        'sg_only': testValue.sgOnly,
+        'pl_only': testValue.plOnly,
+      };
+
+      final actual = testValue.toJson();
+      expect(actual, expected);
+    });
+
+    test('maps values correctly', () {
+      final testValue = Noun.testValue();
+      final expected = {
+        'word_id': testValue.wordId,
+        'gender': testValue.gender?.name,
+        'partner': testValue.partner,
+        'animate': testValue.animate,
+        'indeclinable': testValue.indeclinable,
+        'sg_only': testValue.sgOnly,
+        'pl_only': testValue.plOnly,
+      };
+
+      final actual = testValue.toJson();
+      expect(actual, expected);
+    });
+  });
+
+  test('toJson and fromJson translate back and forth', () {
+    final noun = Noun.testValue();
+    expect(
+        noun,
+        Noun.fromJson(
+          noun.toJson(),
+        ));
   });
 }
