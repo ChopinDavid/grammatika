@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uchu/db_helper.dart';
-import 'package:uchu/extensions.dart';
 import 'package:uchu/extensions/map_string_dynamic_extension.dart';
+import 'package:uchu/extensions/string_extension.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/word.dart';
 
@@ -40,10 +40,10 @@ class Noun {
 
     return Noun._(
       wordId: json.parseIntForKey('word_id'),
-      gender: StringExtensions.isNullOrEmpty(genderJson)
+      gender: StringExtension.isNullOrEmpty(genderJson)
           ? null
           : Gender.values.byName(genderJson.toLowerCase()),
-      partner: StringExtensions.isNullOrEmpty(partnerJson) ? null : partnerJson,
+      partner: StringExtension.isNullOrEmpty(partnerJson) ? null : partnerJson,
       animate: animateBool,
       indeclinable: indeclinableBool,
       sgOnly: sgOnlyBool,
