@@ -26,22 +26,29 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       if (event is DatabaseRetrieveRandomNounEvent) {
         emit(DatabaseRetrievingRandomNounState());
 
-        final db = await DbHelper.getDatabase();
+        final db = await DbHelper().getDatabase();
 
-        final noun = Noun.fromJson(
-          ((await db.rawQuery("SELECT * FROM nouns ORDER BY RANDOM() LIMIT 1;"))
-                  as List<Map<String, dynamic>>)
-              .single,
-        );
+        try {
+          final noun = Noun.fromJson(
+            ((await db.rawQuery(
+                        "SELECT * FROM nouns ORDER BY RANDOM() LIMIT 1;"))
+                    as List<Map<String, dynamic>>)
+                .single,
+          );
 
-        final word = await noun.word;
+          final word = await noun.word;
 
-        emit(
-          DatabaseRandomNounRetrievedState(
-            noun: noun,
-            word: word,
-          ),
-        );
+          emit(
+            DatabaseRandomNounRetrievedState(
+              noun: noun,
+              word: word,
+            ),
+          );
+        } catch (e) {
+          emit(
+            DatabaseErrorState(errorString: 'Unable to parse noun from JSON'),
+          );
+        }
       }
     });
   }

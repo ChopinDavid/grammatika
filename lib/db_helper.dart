@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
-  static Future<Database> getDatabase() async {
+  Future<Database> getDatabase() async {
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "russian.db");
 
