@@ -48,10 +48,11 @@ class Word extends Equatable {
       accented: json['accented'],
       audio: json['audio'],
       bare: json['bare'],
-      createdAt:
-          createdAtString != null ? DateTime.parse(createdAtString) : null,
+      createdAt: StringExtensions.isNullOrEmpty(createdAtString)
+          ? null
+          : DateTime.parse(createdAtString),
       derivedFromWordId: json.parseOptionalIntForKey('derived_from_word_id'),
-      disabled: json['disabled'] == 0 ? false : true,
+      disabled: json.parseBoolForKey('disabled'),
       id: json.parseIntForKey('id'),
       level: StringExtensions.isNullOrEmpty(levelString)
           ? null
@@ -59,8 +60,9 @@ class Word extends Equatable {
       numberValue: json.parseOptionalIntForKey('number_value'),
       position: json.parseOptionalIntForKey('position'),
       rank: json.parseOptionalIntForKey('rank'),
-      type:
-          typeString != null ? WordType.values.byName(typeString) : typeString,
+      type: StringExtensions.isNullOrEmpty(typeString)
+          ? null
+          : WordType.values.byName(typeString),
       usageDe:
           StringExtensions.isNullOrEmpty(usageDeString) ? null : usageDeString,
       usageEn:
@@ -138,6 +140,41 @@ class Word extends Equatable {
       'type': type.name,
       'level': level.name,
       'created_at': createdAt.toIso8601String(),
+    });
+  }
+
+  @visibleForTesting
+  factory Word.testValueSimple({
+    int id = 1411,
+    int? position,
+    String bare = 'тепло',
+    String accented = 'тепло\'',
+    int? derivedFromWordId,
+    int? rank,
+    bool disabled = false,
+    String? audio,
+    String? usageEn,
+    String? usageDe,
+    int? numberValue,
+    WordType? type,
+    Level? level,
+    DateTime? createdAt,
+  }) {
+    return Word.fromJson({
+      'id': id,
+      'position': position,
+      'bare': bare,
+      'accented': accented,
+      'derived_from_word_id': derivedFromWordId,
+      'rank': rank,
+      'disabled': disabled,
+      'audio': audio,
+      'usage_en': usageEn,
+      'usage_de': usageDe,
+      'number_value': numberValue,
+      'type': type?.name,
+      'level': level?.name,
+      'created_at': createdAt?.toIso8601String(),
     });
   }
 }
