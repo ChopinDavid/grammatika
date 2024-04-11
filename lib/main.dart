@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:uchu/db_helper.dart';
 import 'package:uchu/screens/exercise_page.dart';
 
-import 'database_bloc.dart';
+import 'exercise_bloc.dart';
 
 void main() {
   GetIt.instance.registerSingleton<DbHelper>(DbHelper());
@@ -22,9 +22,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocProvider<DatabaseBloc>(
+      home: BlocProvider<ExerciseBloc>(
         create: (context) =>
-            DatabaseBloc()..add(DatabaseRetrieveExerciseEvent()),
+            ExerciseBloc()..add(ExerciseRetrieveExerciseEvent()),
         child: const ExercisePage(),
       ),
     );

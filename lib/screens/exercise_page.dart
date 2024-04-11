@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uchu/database_bloc.dart';
+import 'package:uchu/exercise_bloc.dart';
+import 'package:uchu/models/word.dart';
+import 'package:uchu/widgets/gender_exercise_widget.dart';
 
 class ExercisePage extends StatelessWidget {
   const ExercisePage({super.key});
@@ -9,10 +11,20 @@ class ExercisePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: BlocBuilder<DatabaseBloc, DatabaseState>(
+        child: BlocBuilder<ExerciseBloc, ExerciseState>(
           builder: (context, state) {
-            if (state is DatabaseRandomNounRetrievedState) {
-              return Text('What is the gender of: «${state.word.bare}»?');
+            Word? word;
+
+            if (state is ExerciseRandomNounRetrievedState) {
+              word = state.word;
+            }
+            if (state is ExerciseExerciseGradedState) {
+              word = state.answer.word;
+            }
+            if (word != null) {
+              return GenderExerciseWidget(
+                word: word,
+              );
             }
             return const CircularProgressIndicator();
           },
