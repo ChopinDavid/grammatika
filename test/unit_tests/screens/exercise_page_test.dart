@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart' as mocktail;
 import 'package:uchu/exercise_bloc.dart';
 import 'package:uchu/models/answer.dart';
 import 'package:uchu/models/gender.dart';
@@ -171,5 +172,98 @@ main() {
             .widget<GenderExerciseWidget>(find.byType(GenderExerciseWidget))
             .word,
         word);
+  });
+
+  group('"Next" button', () {
+    testWidgets('displays when state is ExerciseExerciseGradedState',
+        (widgetTester) async {
+      whenListen(
+          mockDatabaseBloc,
+          Stream.fromIterable(
+            <ExerciseState>[
+              ExerciseExerciseGradedState(
+                answer: Answer<Gender>.testValue(
+                  answer: Gender.m,
+                  word: Word.testValue(),
+                ),
+              ),
+            ],
+          ),
+          initialState: ExerciseInitial());
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockDatabaseBloc,
+            child: const ExercisePage(),
+          ),
+        ),
+      );
+      await widgetTester.pumpAndSettle();
+
+      final textButtonFinder = find.byType(TextButton);
+      expect(textButtonFinder, findsOneWidget);
+      expect(
+          (widgetTester.widget<TextButton>(textButtonFinder).child as Text)
+              .data,
+          "Next");
+    });
+
+    testWidgets(
+        'does not display when state is not ExerciseExerciseGradedState',
+        (widgetTester) async {
+      whenListen(
+        mockDatabaseBloc,
+        Stream.fromIterable(
+          <ExerciseState>[
+            ExerciseRetrievingRandomNounState(),
+          ],
+        ),
+        initialState: ExerciseInitial(),
+      );
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockDatabaseBloc,
+            child: const ExercisePage(),
+          ),
+        ),
+      );
+      await widgetTester.pump();
+      await widgetTester.idle();
+
+      final textButtonFinder = find.byType(TextButton);
+      expect(textButtonFinder, findsNothing);
+    });
+
+    testWidgets(
+        'adds ExerciseRetrieveExerciseEvent to ExerciseBloc when tapped',
+        (widgetTester) async {
+      whenListen(
+          mockDatabaseBloc,
+          Stream.fromIterable(
+            <ExerciseState>[
+              ExerciseExerciseGradedState(
+                answer: Answer<Gender>.testValue(
+                  answer: Gender.m,
+                  word: Word.testValue(),
+                ),
+              ),
+            ],
+          ),
+          initialState: ExerciseInitial());
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockDatabaseBloc,
+            child: const ExercisePage(),
+          ),
+        ),
+      );
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.tap(find.byType(TextButton));
+      mocktail
+          .verify(() => mockDatabaseBloc.add(ExerciseRetrieveExerciseEvent()));
+    });
   });
 }

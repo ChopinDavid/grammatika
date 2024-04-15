@@ -22,8 +22,27 @@ class ExercisePage extends StatelessWidget {
               word = state.answer.word;
             }
             if (word != null) {
-              return GenderExerciseWidget(
-                word: word,
+              return Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  GenderExerciseWidget(
+                    word: word,
+                  ),
+                  if (state is ExerciseExerciseGradedState)
+                    Container(
+                      color: Colors.grey,
+                      height: 50,
+                      width: double.maxFinite,
+                      child: TextButton(
+                        child: const Text('Next'),
+                        onPressed: () {
+                          BlocProvider.of<ExerciseBloc>(context).add(
+                            ExerciseRetrieveExerciseEvent(),
+                          );
+                        },
+                      ),
+                    ),
+                ],
               );
             }
             return const CircularProgressIndicator();
