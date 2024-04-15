@@ -14,17 +14,17 @@ import 'package:uchu/widgets/gender_exercise_widget.dart';
 import '../mocks.dart';
 
 main() {
-  late ExerciseBloc mockDatabaseBloc;
+  late ExerciseBloc mockExerciseBloc;
 
   setUp(() {
-    mockDatabaseBloc = MockExerciseBloc();
+    mockExerciseBloc = MockExerciseBloc();
   });
 
   testWidgets(
       'displays progress indicator when state is ExerciseRetrievingRandomNounState',
       (widgetTester) async {
     whenListen(
-      mockDatabaseBloc,
+      mockExerciseBloc,
       Stream.fromIterable(
         <ExerciseState>[
           ExerciseRetrievingRandomNounState(),
@@ -35,7 +35,7 @@ main() {
     await widgetTester.pumpWidget(
       MaterialApp(
         home: BlocProvider<ExerciseBloc>.value(
-          value: mockDatabaseBloc,
+          value: mockExerciseBloc,
           child: const ExercisePage(),
         ),
       ),
@@ -52,7 +52,7 @@ main() {
       (widgetTester) async {
     final word = Word.testValue(bare: 'друг');
     whenListen(
-      mockDatabaseBloc,
+      mockExerciseBloc,
       Stream.fromIterable(
         <ExerciseState>[
           ExerciseRandomNounRetrievedState(noun: Noun.testValue(), word: word),
@@ -63,7 +63,7 @@ main() {
     await widgetTester.pumpWidget(
       MaterialApp(
         home: BlocProvider<ExerciseBloc>.value(
-          value: mockDatabaseBloc,
+          value: mockExerciseBloc,
           child: const ExercisePage(),
         ),
       ),
@@ -79,7 +79,7 @@ main() {
       (widgetTester) async {
     final word = Word.testValue(bare: 'друг');
     whenListen(
-        mockDatabaseBloc,
+        mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
             ExerciseExerciseGradedState(
@@ -94,7 +94,7 @@ main() {
     await widgetTester.pumpWidget(
       MaterialApp(
         home: BlocProvider<ExerciseBloc>.value(
-          value: mockDatabaseBloc,
+          value: mockExerciseBloc,
           child: const ExercisePage(),
         ),
       ),
@@ -111,7 +111,7 @@ main() {
       (widgetTester) async {
     final word = Word.testValue(bare: 'друг');
     whenListen(
-        mockDatabaseBloc,
+        mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
             ExerciseRandomNounRetrievedState(
@@ -124,7 +124,7 @@ main() {
     await widgetTester.pumpWidget(
       MaterialApp(
         home: BlocProvider<ExerciseBloc>.value(
-          value: mockDatabaseBloc,
+          value: mockExerciseBloc,
           child: const ExercisePage(),
         ),
       ),
@@ -144,7 +144,7 @@ main() {
       (widgetTester) async {
     final word = Word.testValue(bare: 'друг');
     whenListen(
-        mockDatabaseBloc,
+        mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
             ExerciseExerciseGradedState(
@@ -159,7 +159,7 @@ main() {
     await widgetTester.pumpWidget(
       MaterialApp(
         home: BlocProvider<ExerciseBloc>.value(
-          value: mockDatabaseBloc,
+          value: mockExerciseBloc,
           child: const ExercisePage(),
         ),
       ),
@@ -178,7 +178,7 @@ main() {
     testWidgets('displays when state is ExerciseExerciseGradedState',
         (widgetTester) async {
       whenListen(
-          mockDatabaseBloc,
+          mockExerciseBloc,
           Stream.fromIterable(
             <ExerciseState>[
               ExerciseExerciseGradedState(
@@ -193,7 +193,7 @@ main() {
       await widgetTester.pumpWidget(
         MaterialApp(
           home: BlocProvider<ExerciseBloc>.value(
-            value: mockDatabaseBloc,
+            value: mockExerciseBloc,
             child: const ExercisePage(),
           ),
         ),
@@ -212,7 +212,7 @@ main() {
         'does not display when state is not ExerciseExerciseGradedState',
         (widgetTester) async {
       whenListen(
-        mockDatabaseBloc,
+        mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
             ExerciseRetrievingRandomNounState(),
@@ -223,7 +223,7 @@ main() {
       await widgetTester.pumpWidget(
         MaterialApp(
           home: BlocProvider<ExerciseBloc>.value(
-            value: mockDatabaseBloc,
+            value: mockExerciseBloc,
             child: const ExercisePage(),
           ),
         ),
@@ -239,7 +239,7 @@ main() {
         'adds ExerciseRetrieveExerciseEvent to ExerciseBloc when tapped',
         (widgetTester) async {
       whenListen(
-          mockDatabaseBloc,
+          mockExerciseBloc,
           Stream.fromIterable(
             <ExerciseState>[
               ExerciseExerciseGradedState(
@@ -254,7 +254,7 @@ main() {
       await widgetTester.pumpWidget(
         MaterialApp(
           home: BlocProvider<ExerciseBloc>.value(
-            value: mockDatabaseBloc,
+            value: mockExerciseBloc,
             child: const ExercisePage(),
           ),
         ),
@@ -263,7 +263,7 @@ main() {
 
       await widgetTester.tap(find.byType(TextButton));
       mocktail
-          .verify(() => mockDatabaseBloc.add(ExerciseRetrieveExerciseEvent()));
+          .verify(() => mockExerciseBloc.add(ExerciseRetrieveExerciseEvent()));
     });
   });
 }
