@@ -36,7 +36,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
 
           final noun = Noun.fromJson(
             ((await db.rawQuery(
-                        "SELECT * FROM nouns WHERE gender IS NOT NULL ORDER BY RANDOM() LIMIT 1;"))
+                        'SELECT * FROM nouns WHERE gender IS NOT NULL AND gender IS NOT "" AND gender IS NOT "both" AND gender IS NOT "pl" ORDER BY RANDOM() LIMIT 1;'))
                     as List<Map<String, dynamic>>)
                 .single,
           );
