@@ -24,7 +24,7 @@ main() {
     when(() => mockDbHelper.getDatabase())
         .thenAnswer((invocation) async => mockDatabase);
     when(() => mockDatabase.rawQuery(
-            'SELECT * FROM nouns WHERE gender IS NOT NULL ORDER BY RANDOM() LIMIT 1;'))
+            'SELECT * FROM nouns WHERE gender IS NOT NULL AND gender IS NOT "" AND gender IS NOT "both" AND gender IS NOT "pl" ORDER BY RANDOM() LIMIT 1;'))
         .thenAnswer((invocation) async => [noun.toJson()]);
     when(() => mockDatabase
             .rawQuery('SELECT * FROM words WHERE id = ${noun.wordId}'))
