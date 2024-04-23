@@ -7,20 +7,28 @@ class Answer<T> extends Equatable {
     required this.answer,
     required this.correctAnswer,
     required this.word,
+    required this.explanation,
   });
   final T answer;
   final T? correctAnswer;
   final Word word;
+  final String? explanation;
 
   factory Answer.initial({
     required T answer,
     required Word word,
   }) =>
-      Answer<T>._(answer: answer, correctAnswer: null, word: word);
+      Answer<T>._(
+          answer: answer, correctAnswer: null, word: word, explanation: null);
 
-  Answer<T> gradeAnswer({required T correctAnswer}) {
+  Answer<T> gradeAnswer(
+      {required T correctAnswer, required String? explanation}) {
     return Answer<T>._(
-        answer: answer, correctAnswer: correctAnswer, word: word);
+      answer: answer,
+      correctAnswer: correctAnswer,
+      word: word,
+      explanation: explanation,
+    );
   }
 
   bool? get isCorrectAnswer {
@@ -42,12 +50,14 @@ class Answer<T> extends Equatable {
     required T answer,
     T? correctAnswer,
     Word? word,
+    String? explanation,
   }) {
     word ??= Word.testValue();
     return Answer._(
       answer: answer,
       correctAnswer: correctAnswer,
       word: word,
+      explanation: explanation,
     );
   }
 
@@ -56,5 +66,6 @@ class Answer<T> extends Equatable {
         answer,
         correctAnswer,
         word,
+        explanation,
       ];
 }

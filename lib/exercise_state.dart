@@ -36,7 +36,7 @@ class ExerciseErrorState extends ExerciseState {
   List<Object?> get props => [...super.props, errorString];
 }
 
-class ExerciseExerciseGradedState extends ExerciseState {
+class ExerciseExerciseGradedState<T> extends ExerciseState {
   ExerciseExerciseGradedState({
     required this.answer,
   });
