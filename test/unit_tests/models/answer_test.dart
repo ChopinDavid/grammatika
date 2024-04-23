@@ -7,10 +7,14 @@ main() {
   group('gradeAnswer', () {
     test('adds a correctAnswer', () {
       final word = Word.testValue();
+      const explanation = 'some explanation';
       final expected = Answer<Gender>.testValue(
-          answer: Gender.m, correctAnswer: Gender.f, word: word);
+          answer: Gender.m,
+          correctAnswer: Gender.f,
+          word: word,
+          explanation: explanation);
       final actual = Answer<Gender>.initial(answer: Gender.m, word: word)
-          .gradeAnswer(correctAnswer: Gender.f);
+          .gradeAnswer(correctAnswer: Gender.f, explanation: explanation);
       expect(actual, expected);
     });
   });
@@ -26,7 +30,7 @@ main() {
     test('is true when answer equals correctAnswer', () {
       expect(
           Answer<Gender>.initial(answer: Gender.m, word: Word.testValue())
-              .gradeAnswer(correctAnswer: Gender.m)
+              .gradeAnswer(correctAnswer: Gender.m, explanation: null)
               .isCorrectAnswer,
           isTrue);
     });
@@ -34,7 +38,7 @@ main() {
     test('is false when answer does not equal correctAnswer', () {
       expect(
           Answer<Gender>.initial(answer: Gender.m, word: Word.testValue())
-              .gradeAnswer(correctAnswer: Gender.f)
+              .gradeAnswer(correctAnswer: Gender.f, explanation: null)
               .isCorrectAnswer,
           isFalse);
     });
@@ -51,7 +55,7 @@ main() {
     test('is true when answer does not equal correctAnswer', () {
       expect(
           Answer<Gender>.initial(answer: Gender.m, word: Word.testValue())
-              .gradeAnswer(correctAnswer: Gender.f)
+              .gradeAnswer(correctAnswer: Gender.f, explanation: null)
               .isIncorrectAnswer,
           isTrue);
     });
@@ -59,7 +63,7 @@ main() {
     test('is false when answer equals correctAnswer', () {
       expect(
           Answer<Gender>.initial(answer: Gender.m, word: Word.testValue())
-              .gradeAnswer(correctAnswer: Gender.m)
+              .gradeAnswer(correctAnswer: Gender.m, explanation: null)
               .isIncorrectAnswer,
           isFalse);
     });

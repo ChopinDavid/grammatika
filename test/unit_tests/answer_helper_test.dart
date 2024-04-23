@@ -64,6 +64,7 @@ main() {
           answer: Gender.m,
           word: word,
           correctAnswer: noun.gender,
+          explanation: 'Feminine nouns normally end with -а or -я.',
         );
         final actual = await testObject.processAnswer(
           answer: Answer<Gender>.testValue(
@@ -166,4 +167,6 @@ main() {
       });
     });
   });
+
+  // TODO(DC): write tests covering _getGenderExplanation
 }
