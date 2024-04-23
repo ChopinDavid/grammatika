@@ -36,7 +36,7 @@ extension MapStringDynamicExtension on Map<String, dynamic> {
               ? true
               : null;
     } else if (value is String) {
-      boolValue = value == '0'
+      boolValue = value == '0' || value == ''
           ? false
           : value == '1'
               ? true

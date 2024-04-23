@@ -158,6 +158,14 @@ main() {
       expect(actual, expectedParsedBool);
     });
 
+    test('parses String from json ("")', () {
+      const expectedParsedBool = false;
+      const key = 'key';
+      final json = {key: ''};
+      final actual = json.parseBoolForKey(key);
+      expect(actual, expectedParsedBool);
+    });
+
     test('throws if value is String that is not "0" or "1"', () {
       const key = 'key';
       final json = {key: '2'};
