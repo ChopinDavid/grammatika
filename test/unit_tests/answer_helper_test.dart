@@ -4,6 +4,7 @@ import 'package:mocktail/mocktail.dart' as mocktail;
 import 'package:sqflite/sqflite.dart';
 import 'package:uchu/answer_helper.dart';
 import 'package:uchu/db_helper.dart';
+import 'package:uchu/explanation_helper.dart';
 import 'package:uchu/models/answer.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/level.dart';
@@ -17,18 +18,25 @@ main() {
   late AnswerHelper testObject;
   late DbHelper mockDbHelper;
   late Database mockDatabase;
+  late ExplanationHelper mockExplanationHelper;
+
+  setUpAll(() {
+    mocktail.registerFallbackValue(Gender.m);
+  });
 
   setUp(() async {
     await GetIt.instance.reset();
     testObject = const AnswerHelper();
     mockDbHelper = MockDbHelper();
     mockDatabase = MockDatabase();
+    mockExplanationHelper = MockExplanationHelper();
 
     mocktail
         .when(() => mockDbHelper.getDatabase())
         .thenAnswer((invocation) async => mockDatabase);
 
     GetIt.instance.registerSingleton<DbHelper>(mockDbHelper);
+    GetIt.instance.registerSingleton<ExplanationHelper>(mockExplanationHelper);
   });
   group('processAnswer', () {
     group('type Gender', () {
@@ -64,7 +72,6 @@ main() {
           answer: Gender.m,
           word: word,
           correctAnswer: noun.gender,
-          explanation: 'Feminine nouns normally end with -а or -я.',
         );
         final actual = await testObject.processAnswer(
           answer: Answer<Gender>.testValue(
@@ -165,8 +172,19 @@ main() {
                 ),
             throwsException);
       });
+
+      test('assigns explanation', () async {
+        const expected = 'because I said so';
+        mocktail
+            .when(() => mockExplanationHelper.genderExplanation(
+                bare: mocktail.any(named: 'bare'),
+                gender: mocktail.any(named: 'gender')))
+            .thenReturn(expected);
+        final actual = (await testObject.processAnswer(
+                answer: Answer<Gender>.testValue(answer: Gender.m, word: word)))
+            .explanation;
+        expect(actual, expected);
+      });
     });
   });
-
-  // TODO(DC): write tests covering _getGenderExplanation
 }

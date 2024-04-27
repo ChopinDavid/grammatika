@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uchu/db_helper.dart';
 import 'package:uchu/exercise_bloc.dart';
+import 'package:uchu/explanation_helper.dart';
 import 'package:uchu/models/noun.dart';
 
 class MockDbHelper extends Mock implements DbHelper {}
@@ -18,3 +19,5 @@ class MockNoun extends Mock implements Noun {
 
 class MockExerciseBloc extends MockBloc<ExerciseEvent, ExerciseState>
     implements ExerciseBloc {}
+
+class MockExplanationHelper extends Mock implements ExplanationHelper {}
