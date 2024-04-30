@@ -26,6 +26,22 @@ class ExerciseRandomNounRetrievedState extends ExerciseState {
       ];
 }
 
+class ExerciseRandomSentenceRetrievedState extends ExerciseState {
+  ExerciseRandomSentenceRetrievedState({
+    required this.sentence,
+    required this.answers,
+  });
+  final Sentence sentence;
+  final List<String> answers;
+
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        sentence,
+        answers,
+      ];
+}
+
 class ExerciseErrorState extends ExerciseState {
   ExerciseErrorState({
     required this.errorString,
