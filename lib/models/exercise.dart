@@ -1,3 +1,4 @@
 enum Exercise {
   determineNounGender,
+  determineWordForm,
 }

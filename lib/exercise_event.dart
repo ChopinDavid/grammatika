@@ -10,6 +10,8 @@ class ExerciseRetrieveExerciseEvent extends ExerciseEvent {}
 
 class ExerciseRetrieveRandomNounEvent extends ExerciseEvent {}
 
+class ExerciseRetrieveRandomSentenceEvent extends ExerciseEvent {}
+
 class ExerciseSubmitAnswerEvent extends ExerciseEvent {
   ExerciseSubmitAnswerEvent({
     required this.answer,

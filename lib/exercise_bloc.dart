@@ -9,6 +9,7 @@ import 'package:uchu/db_helper.dart';
 import 'package:uchu/models/answer.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/noun.dart';
+import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word.dart';
 
 part 'exercise_event.dart';
@@ -23,8 +24,11 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
         final random = Random();
         final exerciseType =
             Exercise.values[random.nextInt(Exercise.values.length)];
-        if (exerciseType == Exercise.determineNounGender) {
-          add(ExerciseRetrieveRandomNounEvent());
+        switch (exerciseType) {
+          case Exercise.determineNounGender:
+            add(ExerciseRetrieveRandomNounEvent());
+          case Exercise.determineWordForm:
+            add(ExerciseRetrieveRandomSentenceEvent());
         }
       }
 
@@ -54,6 +58,36 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
             ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
           );
         }
+      }
+
+      if (event is ExerciseRetrieveRandomSentenceEvent) {
+        final db = await GetIt.instance.get<DbHelper>().getDatabase();
+        final sentence = Sentence.fromJson((await db.rawQuery(
+          '''SELECT sentences_words.word_id,
+       sentences.id,
+       sentences.ru,
+       sentences.tatoeba_key,
+       sentences.disabled,
+       sentences.level,
+       words_forms.form_type
+FROM sentences_words
+INNER JOIN sentences ON sentences.id = sentences_words.sentence_id
+INNER JOIN words_forms ON words_forms.word_id = sentences_words.word_id
+WHERE sentences_words.form_type IS NOT NULL
+  AND sentences_words.form_type IS NOT "ru_base"
+  AND words_forms.form_type = sentences_words.form_type
+ORDER BY RANDOM()
+LIMIT 1;''',
+        ))
+            .single);
+
+        final answers = await db.rawQuery(
+            'SELECT form_type, _form_bare FROM words_forms WHERE word_id = ${sentence.wordId};');
+
+        final state = ExerciseRandomSentenceRetrievedState(
+            sentence: sentence,
+            answers: answers.map((e) => e['_form_bare'] as String).toList());
+        emit(state);
       }
 
       if (event is ExerciseSubmitAnswerEvent) {
