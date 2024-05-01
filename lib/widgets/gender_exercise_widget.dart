@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uchu/consts.dart';
-import 'package:uchu/exercise_bloc.dart';
 import 'package:uchu/models/answer.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/word.dart';
@@ -31,41 +29,26 @@ class GenderExerciseWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Expanded(
-              child: GenderCard(
-                gender: Gender.m,
-                onTap: () => BlocProvider.of<ExerciseBloc>(context).add(
-                  ExerciseSubmitAnswerEvent(
-                    answer: Answer<Gender>.initial(
-                      answer: Gender.m,
-                      word: word,
-                    ),
-                  ),
+              child: AnswerCard(
+                answer: Answer<Gender>.initial(
+                  answer: Gender.m,
+                  word: word,
                 ),
               ),
             ),
             Expanded(
-              child: GenderCard(
-                gender: Gender.f,
-                onTap: () => BlocProvider.of<ExerciseBloc>(context).add(
-                  ExerciseSubmitAnswerEvent(
-                    answer: Answer<Gender>.initial(
-                      answer: Gender.f,
-                      word: word,
-                    ),
-                  ),
+              child: AnswerCard(
+                answer: Answer<Gender>.initial(
+                  answer: Gender.f,
+                  word: word,
                 ),
               ),
             ),
             Expanded(
-              child: GenderCard(
-                gender: Gender.n,
-                onTap: () => BlocProvider.of<ExerciseBloc>(context).add(
-                  ExerciseSubmitAnswerEvent(
-                    answer: Answer<Gender>.initial(
-                      answer: Gender.n,
-                      word: word,
-                    ),
-                  ),
+              child: AnswerCard(
+                answer: Answer<Gender>.initial(
+                  answer: Gender.n,
+                  word: word,
                 ),
               ),
             ),
