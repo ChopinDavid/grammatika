@@ -5,20 +5,21 @@ import 'package:uchu/extensions/gender_extension.dart';
 import 'package:uchu/models/answer.dart';
 import 'package:uchu/models/gender.dart';
 
-class GenderCard extends StatelessWidget {
-  GenderCard({
+class AnswerCard extends StatelessWidget {
+  AnswerCard({
     super.key,
-    required this.gender,
-    required this.onTap,
+    required this.answer,
   }) {
-    genderDisplayString = gender.displayString ?? '';
-    assert((genderDisplayString).isNotEmpty,
+    displayString = (answer is Answer<Gender>
+            ? (answer.answer as Gender).displayString
+            : answer.word.bare) ??
+        '';
+    assert((displayString).isNotEmpty,
         'Gender other than masculine, feminine, or neuter passed to GenderCard');
   }
 
-  final Gender gender;
-  final VoidCallback onTap;
-  late final String genderDisplayString;
+  final Answer answer;
+  late final String displayString;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +33,10 @@ class GenderCard extends StatelessWidget {
           }
         }
 
-        final isCorrectAnswer = gender == correctAnswer?.correctAnswer;
-        final isIncorrectAnswer = gender != correctAnswer?.correctAnswer &&
-            gender == correctAnswer?.answer;
+        final isCorrectAnswer = answer.answer == correctAnswer?.correctAnswer;
+        final isIncorrectAnswer =
+            answer.answer != correctAnswer?.correctAnswer &&
+                answer.answer == correctAnswer?.answer;
 
         return SizedBox(
           height: 50,
@@ -46,10 +48,16 @@ class GenderCard extends StatelessWidget {
                     : null,
             clipBehavior: Clip.hardEdge,
             child: InkWell(
-              onTap: onTap,
+              onTap: () {
+                BlocProvider.of<ExerciseBloc>(context).add(
+                  ExerciseSubmitAnswerEvent(
+                    answer: answer,
+                  ),
+                );
+              },
               child: Center(
                 child: Text(
-                  genderDisplayString,
+                  displayString,
                   textAlign: TextAlign.center,
                 ),
               ),

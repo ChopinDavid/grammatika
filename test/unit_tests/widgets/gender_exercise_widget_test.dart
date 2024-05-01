@@ -74,18 +74,18 @@ main() {
 
     await widgetTester.pumpAndSettle();
 
-    final genderCardFinder = find.byType(GenderCard);
+    final genderCardFinder = find.byType(AnswerCard);
     expect(genderCardFinder, findsNWidgets(3));
     expect(
-      widgetTester.widget<GenderCard>(genderCardFinder.at(0)).gender,
+      widgetTester.widget<AnswerCard>(genderCardFinder.at(0)).gender,
       Gender.m,
     );
     expect(
-      widgetTester.widget<GenderCard>(genderCardFinder.at(1)).gender,
+      widgetTester.widget<AnswerCard>(genderCardFinder.at(1)).gender,
       Gender.f,
     );
     expect(
-      widgetTester.widget<GenderCard>(genderCardFinder.at(2)).gender,
+      widgetTester.widget<AnswerCard>(genderCardFinder.at(2)).gender,
       Gender.n,
     );
   });
@@ -106,7 +106,7 @@ main() {
 
     await widgetTester.pumpAndSettle();
 
-    await widgetTester.tap(find.byType(GenderCard).at(0));
+    await widgetTester.tap(find.byType(AnswerCard).at(0));
 
     mocktail.verify(
       () => mockExerciseBloc.add(
@@ -136,7 +136,7 @@ main() {
 
     await widgetTester.pumpAndSettle();
 
-    await widgetTester.tap(find.byType(GenderCard).at(1));
+    await widgetTester.tap(find.byType(AnswerCard).at(1));
 
     mocktail.verify(
       () => mockExerciseBloc.add(
@@ -166,7 +166,7 @@ main() {
 
     await widgetTester.pumpAndSettle();
 
-    await widgetTester.tap(find.byType(GenderCard).at(2));
+    await widgetTester.tap(find.byType(AnswerCard).at(2));
 
     mocktail.verify(
       () => mockExerciseBloc.add(

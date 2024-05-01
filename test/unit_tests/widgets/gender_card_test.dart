@@ -30,7 +30,7 @@ main() {
   testWidgets(
     'throws when Gender.pl passed as gender',
     (widgetTester) async {
-      expect(() => GenderCard(gender: Gender.pl, onTap: () {}),
+      expect(() => AnswerCard(gender: Gender.pl, onTap: () {}),
           throwsAssertionError);
     },
   );
@@ -38,7 +38,7 @@ main() {
   testWidgets(
     'throws when Gender.both passed as gender',
     (widgetTester) async {
-      expect(() => GenderCard(gender: Gender.both, onTap: () {}),
+      expect(() => AnswerCard(gender: Gender.both, onTap: () {}),
           throwsAssertionError);
     },
   );
@@ -66,7 +66,7 @@ main() {
           MaterialApp(
             home: BlocProvider<ExerciseBloc>.value(
               value: mockExerciseBloc,
-              child: GenderCard(
+              child: AnswerCard(
                 gender: Gender.m,
                 onTap: () {},
               ),
@@ -102,7 +102,7 @@ main() {
           MaterialApp(
             home: BlocProvider<ExerciseBloc>.value(
               value: mockExerciseBloc,
-              child: GenderCard(
+              child: AnswerCard(
                 gender: Gender.m,
                 onTap: () {},
               ),
@@ -138,7 +138,7 @@ main() {
           MaterialApp(
             home: BlocProvider<ExerciseBloc>.value(
               value: mockExerciseBloc,
-              child: GenderCard(
+              child: AnswerCard(
                 gender: Gender.m,
                 onTap: () {},
               ),
@@ -168,7 +168,7 @@ main() {
           MaterialApp(
             home: BlocProvider<ExerciseBloc>.value(
               value: mockExerciseBloc,
-              child: GenderCard(
+              child: AnswerCard(
                 gender: Gender.m,
                 onTap: () {},
               ),
@@ -199,7 +199,7 @@ main() {
           MaterialApp(
             home: BlocProvider<ExerciseBloc>.value(
               value: mockExerciseBloc,
-              child: GenderCard(
+              child: AnswerCard(
                 gender: Gender.m,
                 onTap: () {},
               ),
@@ -229,7 +229,7 @@ main() {
           MaterialApp(
             home: BlocProvider<ExerciseBloc>.value(
               value: mockExerciseBloc,
-              child: GenderCard(
+              child: AnswerCard(
                 gender: Gender.m,
                 onTap: () {},
               ),
@@ -259,7 +259,7 @@ main() {
           MaterialApp(
             home: BlocProvider<ExerciseBloc>.value(
               value: mockExerciseBloc,
-              child: GenderCard(
+              child: AnswerCard(
                 gender: Gender.m,
                 onTap: () {},
               ),
@@ -282,7 +282,7 @@ main() {
         MaterialApp(
           home: BlocProvider<ExerciseBloc>.value(
             value: mockExerciseBloc,
-            child: GenderCard(
+            child: AnswerCard(
               gender: Gender.m,
               onTap: () {
                 onTapCalledCount++;
@@ -307,7 +307,7 @@ main() {
         MaterialApp(
           home: BlocProvider<ExerciseBloc>.value(
             value: mockExerciseBloc,
-            child: GenderCard(
+            child: AnswerCard(
               gender: Gender.m,
               onTap: () {},
             ),

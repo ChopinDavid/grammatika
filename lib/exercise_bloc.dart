@@ -11,6 +11,7 @@ import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word.dart';
+import 'package:uchu/models/word_form.dart';
 
 part 'exercise_event.dart';
 part 'exercise_state.dart';
@@ -22,8 +23,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
     on<ExerciseEvent>((event, emit) async {
       if (event is ExerciseRetrieveExerciseEvent) {
         final random = Random();
-        final exerciseType =
-            Exercise.values[random.nextInt(Exercise.values.length)];
+        final exerciseType = Exercise.values[1];
         switch (exerciseType) {
           case Exercise.determineNounGender:
             add(ExerciseRetrieveRandomNounEvent());
@@ -73,6 +73,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
 FROM sentences_words
 INNER JOIN sentences ON sentences.id = sentences_words.sentence_id
 INNER JOIN words_forms ON words_forms.word_id = sentences_words.word_id
+INNER JOIN words ON words.id = sentences_words.word_id
 WHERE sentences_words.form_type IS NOT NULL
   AND sentences_words.form_type IS NOT "ru_base"
   AND words_forms.form_type = sentences_words.form_type
@@ -81,12 +82,16 @@ LIMIT 1;''',
         ))
             .single);
 
-        final answers = await db.rawQuery(
-            'SELECT form_type, _form_bare FROM words_forms WHERE word_id = ${sentence.wordId};');
+        final answers = (await db.rawQuery(
+                'SELECT form_type, form, _form_bare FROM words_forms WHERE word_id = ${sentence.wordId};'))
+            .map((wordFormMap) => WordForm.fromJson(wordFormMap))
+            .toList();
 
         final state = ExerciseRandomSentenceRetrievedState(
-            sentence: sentence,
-            answers: answers.map((e) => e['_form_bare'] as String).toList());
+          sentence: sentence.withPossibleAnswers(
+            answers,
+          ),
+        );
         emit(state);
       }
 
