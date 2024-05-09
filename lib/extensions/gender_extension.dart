@@ -1,7 +1,7 @@
 import 'package:uchu/models/gender.dart';
 
 extension GenderExtension on Gender {
-  String? get displayString {
+  String get displayString {
     switch (this) {
       case Gender.m:
         return 'Masculine';
@@ -9,8 +9,10 @@ extension GenderExtension on Gender {
         return 'Feminine';
       case Gender.n:
         return 'Neuter';
-      default:
-        return null;
+      case Gender.pl:
+        return 'Plural';
+      case Gender.both:
+        return 'Both';
     }
   }
 }

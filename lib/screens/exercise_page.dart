@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uchu/exercise_bloc.dart';
-import 'package:uchu/models/answer.dart';
+import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/word.dart';
-import 'package:uchu/models/word_form_type.dart';
+import 'package:uchu/models/noun.dart';
+import 'package:uchu/models/word_form.dart';
 import 'package:uchu/widgets/exercise_footer.dart';
 import 'package:uchu/widgets/gender_exercise_widget.dart';
 import 'package:uchu/widgets/sentence_exercise_widget.dart';
@@ -26,48 +26,40 @@ class ExercisePage extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            Word? word;
-            Sentence? sentence;
-            Answer? answer;
+            if (state is ExerciseRetrievingExerciseState) {
+              return const CircularProgressIndicator();
+            }
+            Exercise? exercise;
 
-            if (state is ExerciseRandomNounRetrievedState) {
-              word = state.word;
+            if (state is ExerciseQuestionRetrievedState) {
+              exercise = state.exercise;
             }
 
-            if (state is ExerciseRandomSentenceRetrievedState) {
-              sentence = state.sentence;
-            }
-
-            if (state is ExerciseExerciseGradedState) {
-              word = state.answer.word;
-              answer = state.answer;
+            if (state is ExerciseAnswerSelectedState) {
+              exercise = state.exercise;
             }
 
             List<Widget> stackChildren = [];
 
-            if ((state is ExerciseRandomNounRetrievedState ||
-                    answer is Answer<Gender>) &&
-                word != null) {
+            if (exercise is Exercise<Gender, Noun>) {
               stackChildren.add(
                 GenderExerciseWidget(
-                  word: word,
+                  answer: exercise,
                 ),
               );
             }
 
-            if ((state is ExerciseRandomSentenceRetrievedState ||
-                    answer is Answer<WordFormType>) &&
-                sentence != null) {
+            if (exercise is Exercise<WordForm, Sentence>) {
               stackChildren.add(
                 SentenceExerciseWidget(
-                  sentence: sentence,
+                  answer: exercise,
                 ),
               );
             }
 
-            if (state is ExerciseExerciseGradedState) {
+            if (state is ExerciseAnswerSelectedState) {
               stackChildren.add(ExerciseFooter(
-                explanation: state.answer.explanation,
+                explanation: state.exercise.question.explanation,
               ));
             }
 

@@ -39,8 +39,8 @@ main() {
       build: () => testObject,
       act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
       expect: () => [
-        ExerciseRetrievingRandomNounState(),
-        ExerciseRandomNounRetrievedState(noun: noun, word: word),
+        ExerciseRetrievingExerciseState(),
+        ExerciseQuestionRetrievedState(noun: noun, word: word),
       ],
     );
 
@@ -53,7 +53,7 @@ main() {
       },
       act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
       expect: () => [
-        ExerciseRetrievingRandomNounState(),
+        ExerciseRetrievingExerciseState(),
         ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
       ],
     );
@@ -67,7 +67,7 @@ main() {
       },
       act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
       expect: () => [
-        ExerciseRetrievingRandomNounState(),
+        ExerciseRetrievingExerciseState(),
         ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
       ],
     );
@@ -79,8 +79,8 @@ main() {
       build: () => testObject,
       act: (bloc) => bloc.add(ExerciseRetrieveRandomNounEvent()),
       expect: () => [
-        ExerciseRetrievingRandomNounState(),
-        ExerciseRandomNounRetrievedState(noun: noun, word: word),
+        ExerciseRetrievingExerciseState(),
+        ExerciseQuestionRetrievedState(noun: noun, word: word),
       ],
     );
 
@@ -93,7 +93,7 @@ main() {
       },
       act: (bloc) => bloc.add(ExerciseRetrieveRandomNounEvent()),
       expect: () => [
-        ExerciseRetrievingRandomNounState(),
+        ExerciseRetrievingExerciseState(),
         ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
       ],
     );
@@ -107,7 +107,7 @@ main() {
       },
       act: (bloc) => bloc.add(ExerciseRetrieveRandomNounEvent()),
       expect: () => [
-        ExerciseRetrievingRandomNounState(),
+        ExerciseRetrievingExerciseState(),
         ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
       ],
     );

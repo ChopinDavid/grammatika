@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:uchu/models/answer.dart';
 import 'package:uchu/models/word_form_type.dart';
 
-class WordForm extends Equatable {
+class WordForm extends Equatable implements Answer {
   final WordFormType type;
   final String form;
   final String bare;

@@ -8,34 +8,18 @@ abstract class ExerciseState extends Equatable {
 
 class ExerciseInitial extends ExerciseState {}
 
-class ExerciseRetrievingRandomNounState extends ExerciseState {}
+class ExerciseRetrievingExerciseState extends ExerciseState {}
 
-class ExerciseRandomNounRetrievedState extends ExerciseState {
-  ExerciseRandomNounRetrievedState({
-    required this.noun,
-    required this.word,
+class ExerciseQuestionRetrievedState extends ExerciseState {
+  ExerciseQuestionRetrievedState({
+    required this.exercise,
   });
-  final Noun noun;
-  final Word word;
+  final Exercise exercise;
 
   @override
   List<Object?> get props => [
         ...super.props,
-        noun,
-        word,
-      ];
-}
-
-class ExerciseRandomSentenceRetrievedState extends ExerciseState {
-  ExerciseRandomSentenceRetrievedState({
-    required this.sentence,
-  });
-  final Sentence sentence;
-
-  @override
-  List<Object?> get props => [
-        ...super.props,
-        sentence,
+        exercise,
       ];
 }
 
@@ -49,15 +33,16 @@ class ExerciseErrorState extends ExerciseState {
   List<Object?> get props => [...super.props, errorString];
 }
 
-class ExerciseExerciseGradedState extends ExerciseState {
-  ExerciseExerciseGradedState({
-    required this.answer,
+class ExerciseAnswerSelectedState extends ExerciseState {
+  ExerciseAnswerSelectedState({
+    required this.exercise,
   });
-  final Answer answer;
+
+  final Exercise exercise;
 
   @override
   List<Object?> get props => [
         ...super.props,
-        answer,
+        exercise,
       ];
 }

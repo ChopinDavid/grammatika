@@ -4,53 +4,69 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/answer_helper.dart';
 import 'package:uchu/db_helper.dart';
-import 'package:uchu/models/answer.dart';
+import 'package:uchu/explanation_helper.dart';
 import 'package:uchu/models/exercise.dart';
+import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
-import 'package:uchu/models/word.dart';
 import 'package:uchu/models/word_form.dart';
 
 part 'exercise_event.dart';
 part 'exercise_state.dart';
 
 class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
-  ExerciseBloc(
-      {@visibleForTesting AnswerHelper answerHelper = const AnswerHelper()})
-      : super(ExerciseInitial()) {
+  ExerciseBloc() : super(ExerciseInitial()) {
     on<ExerciseEvent>((event, emit) async {
       if (event is ExerciseRetrieveExerciseEvent) {
         final random = Random();
-        final exerciseType = Exercise.values[1];
+        final exerciseType =
+            ExerciseType.values[random.nextInt(ExerciseType.values.length)];
         switch (exerciseType) {
-          case Exercise.determineNounGender:
+          case ExerciseType.determineNounGender:
             add(ExerciseRetrieveRandomNounEvent());
-          case Exercise.determineWordForm:
+          case ExerciseType.determineWordForm:
             add(ExerciseRetrieveRandomSentenceEvent());
         }
       }
 
       if (event is ExerciseRetrieveRandomNounEvent) {
-        emit(ExerciseRetrievingRandomNounState());
+        emit(ExerciseRetrievingExerciseState());
 
         try {
           final db = await GetIt.instance.get<DbHelper>().getDatabase();
 
-          final noun = Noun.fromJson(
-            ((await db.rawQuery(
-                        'SELECT * FROM nouns WHERE gender IS NOT NULL AND gender IS NOT "" AND gender IS NOT "both" AND gender IS NOT "pl" ORDER BY RANDOM() LIMIT 1;'))
-                    as List<Map<String, dynamic>>)
-                .single,
-          );
+          final Map<String, dynamic> nounQuery = (await db.rawQuery(
+            '''SELECT *
+FROM nouns
+  INNER JOIN words ON words.id = nouns.word_id
+WHERE gender IS NOT NULL
+  AND gender IS NOT ''
+  AND gender IS NOT 'both'
+  AND gender IS NOT 'pl'
+ORDER BY RANDOM()
+LIMIT 1;
+''',
+          ))
+              .single;
+          final answers = Gender.values.map((gender) => gender.name);
+          final explanation = GetIt.instance
+              .get<ExplanationHelper>()
+              .genderExplanation(
+                  bare: nounQuery['bare'],
+                  correctAnswer: Gender.values.byName(nounQuery['gender']));
 
-          final word = await noun.word;
-
+          final json = {
+            ...nounQuery,
+            'possible_answers': answers,
+            'explanation': explanation,
+          };
           emit(
-            ExerciseRandomNounRetrievedState(
-              noun: noun,
-              word: word,
+            ExerciseQuestionRetrievedState(
+              exercise: Exercise<Gender, Noun>(
+                question: Noun.fromJson(json),
+                answer: null,
+              ),
             ),
           );
         } catch (e) {
@@ -61,46 +77,59 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       }
 
       if (event is ExerciseRetrieveRandomSentenceEvent) {
+        emit(ExerciseRetrievingExerciseState());
         final db = await GetIt.instance.get<DbHelper>().getDatabase();
-        final sentence = Sentence.fromJson((await db.rawQuery(
-          '''SELECT sentences_words.word_id,
+
+        final Map<String, dynamic> sentenceQuery = (await db.rawQuery(
+          '''SELECT words.*,
+       words.id AS word_id,
+       words.disabled AS word_disabled,
+       words.level AS word_level,
        sentences.id,
        sentences.ru,
        sentences.tatoeba_key,
        sentences.disabled,
        sentences.level,
-       words_forms.form_type
+       words_forms.*
 FROM sentences_words
 INNER JOIN sentences ON sentences.id = sentences_words.sentence_id
 INNER JOIN words_forms ON words_forms.word_id = sentences_words.word_id
 INNER JOIN words ON words.id = sentences_words.word_id
 WHERE sentences_words.form_type IS NOT NULL
-  AND sentences_words.form_type IS NOT "ru_base"
+  AND sentences_words.form_type IS NOT 'ru_base'
   AND words_forms.form_type = sentences_words.form_type
 ORDER BY RANDOM()
 LIMIT 1;''',
         ))
-            .single);
+            .single;
 
-        final answers = (await db.rawQuery(
-                'SELECT form_type, form, _form_bare FROM words_forms WHERE word_id = ${sentence.wordId};'))
-            .map((wordFormMap) => WordForm.fromJson(wordFormMap))
-            .toList();
+        final List<Map<String, dynamic>> answers = (await db.rawQuery(
+            'SELECT form_type, form, _form_bare FROM words_forms WHERE word_id = ${sentenceQuery['word_id']};'));
+        final explanation =
+            GetIt.instance.get<ExplanationHelper>().sentenceExplanation();
+        final json = {
+          ...sentenceQuery,
+          'possible_answers': answers,
+          'explanation': explanation,
+        };
+        final sentence = Sentence.fromJson(json);
 
-        final state = ExerciseRandomSentenceRetrievedState(
-          sentence: sentence.withPossibleAnswers(
-            answers,
+        emit(
+          ExerciseQuestionRetrievedState(
+            exercise: Exercise<WordForm, Sentence>(
+              question: sentence,
+              answer: null,
+            ),
           ),
         );
-        emit(state);
       }
 
       if (event is ExerciseSubmitAnswerEvent) {
-        final gradedAnswer = await answerHelper.processAnswer(
-          answer: event.answer,
+        emit(
+          ExerciseAnswerSelectedState(
+            exercise: event.exercise,
+          ),
         );
-
-        emit(ExerciseExerciseGradedState(answer: gradedAnswer));
       }
     });
   }

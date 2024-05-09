@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uchu/answer_helper.dart';
 import 'package:uchu/db_helper.dart';
 import 'package:uchu/explanation_helper.dart';
-import 'package:uchu/models/answer.dart';
+import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/level.dart';
 import 'package:uchu/models/noun.dart';
@@ -68,13 +68,13 @@ main() {
       });
 
       test('assigns correct gender as correctAnswer', () async {
-        final expected = Answer.testValue(
+        final expected = Exercise.testValue(
           answer: Gender.m,
           word: word,
           correctAnswer: noun.gender,
         );
-        final actual = await testObject.processAnswer(
-          answer: Answer<Gender>.testValue(
+        final actual = await testObject.processGenderAnswer(
+          answer: Exercise<Gender>.testValue(
             answer: expected.answer,
             word: word,
           ),
@@ -94,8 +94,8 @@ main() {
         );
 
         expect(
-            () async => await testObject.processAnswer(
-                  answer: Answer<Gender>.testValue(
+            () async => await testObject.processGenderAnswer(
+                  answer: Exercise<Gender>.testValue(
                     answer: Gender.m,
                     word: word,
                   ),
@@ -114,8 +114,8 @@ main() {
         );
 
         expect(
-            () async => await testObject.processAnswer(
-                  answer: Answer<Gender>.testValue(
+            () async => await testObject.processGenderAnswer(
+                  answer: Exercise<Gender>.testValue(
                     answer: Gender.m,
                     word: word,
                   ),
@@ -134,8 +134,8 @@ main() {
         );
 
         expect(
-            () async => await testObject.processAnswer(
-                  answer: Answer<Gender>.testValue(
+            () async => await testObject.processGenderAnswer(
+                  answer: Exercise<Gender>.testValue(
                     answer: Gender.m,
                     word: word,
                   ),
@@ -149,8 +149,8 @@ main() {
             .thenThrow(Exception('something went wrong!'));
 
         expect(
-            () async => await testObject.processAnswer(
-                  answer: Answer<Gender>.testValue(
+            () async => await testObject.processGenderAnswer(
+                  answer: Exercise<Gender>.testValue(
                     answer: Gender.m,
                     word: word,
                   ),
@@ -164,8 +164,8 @@ main() {
             .thenThrow(Exception('something went wrong!'));
 
         expect(
-            () async => await testObject.processAnswer(
-                  answer: Answer<Gender>.testValue(
+            () async => await testObject.processGenderAnswer(
+                  answer: Exercise<Gender>.testValue(
                     answer: Gender.m,
                     word: word,
                   ),
@@ -180,8 +180,9 @@ main() {
                 bare: mocktail.any(named: 'bare'),
                 gender: mocktail.any(named: 'gender')))
             .thenReturn(expected);
-        final actual = (await testObject.processAnswer(
-                answer: Answer<Gender>.testValue(answer: Gender.m, word: word)))
+        final actual = (await testObject.processGenderAnswer(
+                answer:
+                    Exercise<Gender>.testValue(answer: Gender.m, word: word)))
             .explanation;
         expect(actual, expected);
       });
