@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart' as mocktail;
 import 'package:uchu/exercise_bloc.dart';
-import 'package:uchu/models/answer.dart';
+import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/word.dart';
@@ -27,7 +27,7 @@ main() {
       mockExerciseBloc,
       Stream.fromIterable(
         <ExerciseState>[
-          ExerciseRetrievingRandomNounState(),
+          ExerciseRetrievingExerciseState(),
         ],
       ),
       initialState: ExerciseInitial(),
@@ -55,7 +55,7 @@ main() {
       mockExerciseBloc,
       Stream.fromIterable(
         <ExerciseState>[
-          ExerciseRandomNounRetrievedState(noun: Noun.testValue(), word: word),
+          ExerciseQuestionRetrievedState(noun: Noun.testValue(), word: word),
         ],
       ),
       initialState: ExerciseInitial(),
@@ -82,8 +82,8 @@ main() {
         mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
-            ExerciseExerciseGradedState(
-              answer: Answer<Gender>.testValue(
+            ExerciseAnswerSelectedState(
+              answer: Exercise<Gender>.testValue(
                 answer: Gender.m,
                 word: word,
               ),
@@ -114,7 +114,7 @@ main() {
         mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
-            ExerciseRandomNounRetrievedState(
+            ExerciseQuestionRetrievedState(
               noun: Noun.testValue(),
               word: word,
             ),
@@ -147,8 +147,8 @@ main() {
         mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
-            ExerciseExerciseGradedState(
-              answer: Answer<Gender>.testValue(
+            ExerciseAnswerSelectedState(
+              answer: Exercise<Gender>.testValue(
                 answer: Gender.m,
                 word: word,
               ),
@@ -181,8 +181,8 @@ main() {
           mockExerciseBloc,
           Stream.fromIterable(
             <ExerciseState>[
-              ExerciseExerciseGradedState(
-                answer: Answer<Gender>.testValue(
+              ExerciseAnswerSelectedState(
+                answer: Exercise<Gender>.testValue(
                   answer: Gender.m,
                   word: Word.testValue(),
                 ),
@@ -215,7 +215,7 @@ main() {
         mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
-            ExerciseRetrievingRandomNounState(),
+            ExerciseRetrievingExerciseState(),
           ],
         ),
         initialState: ExerciseInitial(),
@@ -242,8 +242,8 @@ main() {
           mockExerciseBloc,
           Stream.fromIterable(
             <ExerciseState>[
-              ExerciseExerciseGradedState(
-                answer: Answer<Gender>.testValue(
+              ExerciseAnswerSelectedState(
+                answer: Exercise<Gender>.testValue(
                   answer: Gender.m,
                   word: Word.testValue(),
                 ),

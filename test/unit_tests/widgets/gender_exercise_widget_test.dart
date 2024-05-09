@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart' as mocktail;
 import 'package:uchu/exercise_bloc.dart';
-import 'package:uchu/models/answer.dart';
+import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/word.dart';
-import 'package:uchu/widgets/gender_card.dart';
+import 'package:uchu/widgets/answer_card.dart';
 import 'package:uchu/widgets/gender_exercise_widget.dart';
 
 import '../mocks.dart';
@@ -24,8 +24,8 @@ main() {
       mockExerciseBloc,
       Stream.fromIterable(
         [
-          ExerciseRetrievingRandomNounState(),
-          ExerciseRandomNounRetrievedState(
+          ExerciseRetrievingExerciseState(),
+          ExerciseQuestionRetrievedState(
               noun: Noun.testValue(), word: Word.testValue()),
         ],
       ),
@@ -111,7 +111,7 @@ main() {
     mocktail.verify(
       () => mockExerciseBloc.add(
         ExerciseSubmitAnswerEvent(
-          answer: Answer<Gender>.initial(
+          answer: Exercise<Gender>.initial(
             answer: Gender.m,
             word: word,
           ),
@@ -141,7 +141,7 @@ main() {
     mocktail.verify(
       () => mockExerciseBloc.add(
         ExerciseSubmitAnswerEvent(
-          answer: Answer<Gender>.initial(
+          answer: Exercise<Gender>.initial(
             answer: Gender.f,
             word: word,
           ),
@@ -171,7 +171,7 @@ main() {
     mocktail.verify(
       () => mockExerciseBloc.add(
         ExerciseSubmitAnswerEvent(
-          answer: Answer<Gender>.initial(
+          answer: Exercise<Gender>.initial(
             answer: Gender.n,
             word: word,
           ),

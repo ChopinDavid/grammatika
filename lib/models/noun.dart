@@ -1,30 +1,29 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:uchu/db_helper.dart';
 import 'package:uchu/extensions/map_string_dynamic_extension.dart';
 import 'package:uchu/extensions/string_extension.dart';
 import 'package:uchu/models/gender.dart';
+import 'package:uchu/models/question.dart';
 import 'package:uchu/models/word.dart';
 
-class Noun extends Equatable {
+class Noun extends Question<Gender> {
   const Noun._({
-    required this.wordId,
-    required this.gender,
+    required super.correctAnswer,
+    required super.possibleAnswers,
+    required super.explanation,
     required this.partner,
     required this.animate,
     required this.indeclinable,
     required this.sgOnly,
     required this.plOnly,
+    required this.word,
   });
 
-  final int wordId;
-  final Gender? gender;
   final String? partner;
   final bool animate;
   final bool indeclinable;
   final bool sgOnly;
   final bool plOnly;
+  final Word word;
 
   factory Noun.fromJson(Map<String, dynamic> json) {
     final genderJson = json['gender'];
@@ -35,23 +34,51 @@ class Noun extends Equatable {
     final sgOnlyBool = json.parseBoolForKey('sg_only');
     final plOnlyBool = json.parseBoolForKey('pl_only');
 
-    return Noun._(
-      wordId: json.parseIntForKey('word_id'),
-      gender: StringExtension.isNullOrEmpty(genderJson)
-          ? null
-          : Gender.values.byName(genderJson.toLowerCase()),
-      partner: StringExtension.isNullOrEmpty(partnerJson) ? null : partnerJson,
-      animate: animateBool,
-      indeclinable: indeclinableBool,
-      sgOnly: sgOnlyBool,
-      plOnly: plOnlyBool,
-    );
+    final gender = StringExtension.isNullOrEmpty(genderJson)
+        ? null
+        : Gender.values.byName(genderJson.toLowerCase());
+
+    if (gender == null) {
+      throw ArgumentError("Noun's gender must not be null");
+    } else {
+      return Noun._(
+        correctAnswer: gender,
+        possibleAnswers: const [
+          Gender.m,
+          Gender.f,
+          Gender.n,
+        ],
+        explanation: json['explanation'],
+        word: Word.fromJson({
+          'id': json['id'],
+          'position': json['position'],
+          'bare': json['bare'],
+          'accented': json['accented'],
+          'derived_from_word_id': json['derived_from_word_id'],
+          'rank': json['rank'],
+          'disabled': json['disabled'],
+          'audio': json['audio'],
+          'usage_en': json['usage_en'],
+          'usage_de': json['usage_de'],
+          'number_value': json['number_value'],
+          'type': json['type'],
+          'level': json['level'],
+          'created_at': json['created_at'],
+        }),
+        partner:
+            StringExtension.isNullOrEmpty(partnerJson) ? null : partnerJson,
+        animate: animateBool,
+        indeclinable: indeclinableBool,
+        sgOnly: sgOnlyBool,
+        plOnly: plOnlyBool,
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'word_id': wordId,
-      'gender': gender?.name,
+      'word': word.toJson(),
+      'gender': correctAnswer.name,
       'partner': partner,
       'animate': animate,
       'indeclinable': indeclinable,
@@ -60,16 +87,10 @@ class Noun extends Equatable {
     }..removeWhere((key, value) => value == null);
   }
 
-  Future<Word> get word async {
-    final db = await GetIt.instance.get<DbHelper>().getDatabase();
-    final result = await db.rawQuery('SELECT * FROM words WHERE id = $wordId');
-    return Word.fromJson(result.single);
-  }
-
   @override
   List<Object?> get props => [
-        wordId,
-        gender,
+        ...super.props,
+        word,
         partner,
         animate,
         indeclinable,
