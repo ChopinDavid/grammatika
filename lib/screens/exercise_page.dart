@@ -41,18 +41,18 @@ class ExercisePage extends StatelessWidget {
 
             List<Widget> stackChildren = [];
 
-            if (exercise is Exercise<Gender, Noun>) {
+            if (exercise?.type == ExerciseType.determineNounGender) {
               stackChildren.add(
                 GenderExerciseWidget(
-                  answer: exercise,
+                  answer: exercise as Exercise<Gender, Noun>,
                 ),
               );
             }
 
-            if (exercise is Exercise<WordForm, Sentence>) {
+            if (exercise?.type == ExerciseType.determineWordForm) {
               stackChildren.add(
                 SentenceExerciseWidget(
-                  answer: exercise,
+                  answer: exercise as Exercise<WordForm, Sentence>,
                 ),
               );
             }

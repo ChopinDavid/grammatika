@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:uchu/extensions/map_string_dynamic_extension.dart';
 import 'package:uchu/extensions/string_extension.dart';
 import 'package:uchu/models/gender.dart';
+import 'package:uchu/models/level.dart';
 import 'package:uchu/models/question.dart';
 import 'package:uchu/models/word.dart';
+import 'package:uchu/models/word_type.dart';
 
 class Noun extends Question<Gender> {
   const Noun._({
@@ -100,22 +102,50 @@ class Noun extends Question<Gender> {
 
   @visibleForTesting
   factory Noun.testValue({
-    int wordId = 97,
     Gender gender = Gender.m,
     String partner = 'подру́га',
     bool animate = true,
     bool indeclinable = false,
     bool sgOnly = false,
     bool plOnly = false,
+    String explanation = 'because I said so',
+    int wordId = 28,
+    int? position,
+    String bare = 'сказать',
+    String accented = "сказа'ть",
+    int? derivedFromWordId,
+    int rank = 20,
+    bool wordDisabled = false,
+    String audio = 'https://openrussian.org/audio-shtooka/сказать.mp3',
+    String usageEn = 'скажи́те, пожа́луйста - tell me, please',
+    String usageDe = 'кому? о чём?',
+    int? numberValue,
+    WordType type = WordType.verb,
+    Level wordLevel = Level.A2,
+    DateTime? createdAt,
   }) {
     return Noun.fromJson({
-      'word_id': wordId,
       'gender': gender.name,
       'partner': partner,
       'animate': animate,
       'indeclinable': indeclinable,
       'sg_only': sgOnly,
       'pl_only': plOnly,
+      'explanation': explanation,
+      'id': wordId,
+      'position': position,
+      'bare': bare,
+      'accented': accented,
+      'derived_from_word_id': derivedFromWordId,
+      'rank': rank,
+      'word_disabled': wordDisabled,
+      'audio': audio,
+      'usage_en': usageEn,
+      'usage_de': usageDe,
+      'number_value': numberValue,
+      'type': type.name,
+      'word_level': wordLevel,
+      'created_at': createdAt,
     });
   }
 
