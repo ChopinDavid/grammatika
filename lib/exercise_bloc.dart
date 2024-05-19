@@ -62,7 +62,7 @@ LIMIT 1;
             'explanation': explanation,
           };
           emit(
-            ExerciseQuestionRetrievedState(
+            ExerciseExerciseRetrievedState(
               exercise: Exercise<Gender, Noun>(
                 question: Noun.fromJson(json),
                 answer: null,
@@ -115,7 +115,7 @@ LIMIT 1;''',
         final sentence = Sentence.fromJson(json);
 
         emit(
-          ExerciseQuestionRetrievedState(
+          ExerciseExerciseRetrievedState(
             exercise: Exercise<WordForm, Sentence>(
               question: sentence,
               answer: null,

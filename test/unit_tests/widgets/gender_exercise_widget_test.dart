@@ -25,7 +25,7 @@ main() {
       Stream.fromIterable(
         [
           ExerciseRetrievingExerciseState(),
-          ExerciseQuestionRetrievedState(
+          ExerciseExerciseRetrievedState(
               noun: Noun.testValue(), word: Word.testValue()),
         ],
       ),

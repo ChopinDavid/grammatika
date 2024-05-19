@@ -55,7 +55,7 @@ main() {
       mockExerciseBloc,
       Stream.fromIterable(
         <ExerciseState>[
-          ExerciseQuestionRetrievedState(noun: Noun.testValue(), word: word),
+          ExerciseExerciseRetrievedState(noun: Noun.testValue(), word: word),
         ],
       ),
       initialState: ExerciseInitial(),
@@ -114,7 +114,7 @@ main() {
         mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
-            ExerciseQuestionRetrievedState(
+            ExerciseExerciseRetrievedState(
               noun: Noun.testValue(),
               word: word,
             ),

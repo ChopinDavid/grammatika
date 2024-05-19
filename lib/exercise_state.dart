@@ -10,8 +10,8 @@ class ExerciseInitial extends ExerciseState {}
 
 class ExerciseRetrievingExerciseState extends ExerciseState {}
 
-class ExerciseQuestionRetrievedState extends ExerciseState {
-  ExerciseQuestionRetrievedState({
+class ExerciseExerciseRetrievedState extends ExerciseState {
+  ExerciseExerciseRetrievedState({
     required this.exercise,
   });
   final Exercise exercise;
