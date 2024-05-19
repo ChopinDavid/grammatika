@@ -40,7 +40,7 @@ main() {
       act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
       expect: () => [
         ExerciseRetrievingExerciseState(),
-        ExerciseQuestionRetrievedState(noun: noun, word: word),
+        ExerciseExerciseRetrievedState(noun: noun, word: word),
       ],
     );
 
@@ -80,7 +80,7 @@ main() {
       act: (bloc) => bloc.add(ExerciseRetrieveRandomNounEvent()),
       expect: () => [
         ExerciseRetrievingExerciseState(),
-        ExerciseQuestionRetrievedState(noun: noun, word: word),
+        ExerciseExerciseRetrievedState(noun: noun, word: word),
       ],
     );
 

@@ -31,7 +31,7 @@ class ExercisePage extends StatelessWidget {
             }
             Exercise? exercise;
 
-            if (state is ExerciseQuestionRetrievedState) {
+            if (state is ExerciseExerciseRetrievedState) {
               exercise = state.exercise;
             }
 
