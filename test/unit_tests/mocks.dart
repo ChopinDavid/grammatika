@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sqflite/sqflite.dart';
@@ -21,3 +23,5 @@ class MockExerciseBloc extends MockBloc<ExerciseEvent, ExerciseState>
     implements ExerciseBloc {}
 
 class MockExplanationHelper extends Mock implements ExplanationHelper {}
+
+class MockRandom extends Mock implements Random {}

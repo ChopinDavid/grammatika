@@ -8,7 +8,6 @@ import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
 import 'package:uchu/models/word_type.dart';
 
-// TODO(DC): Should extend `Answerable` with an answer of type `WordFormType`
 class Sentence extends Question<WordForm> {
   const Sentence._({
     required super.correctAnswer,
@@ -28,7 +27,6 @@ class Sentence extends Question<WordForm> {
   final bool disabled;
   final Level? level;
   final Word word;
-  final String explanation = 'because I said so';
 
   factory Sentence.fromJson(Map<String, dynamic> json) {
     final String? levelString = json['level'];
@@ -74,6 +72,35 @@ class Sentence extends Question<WordForm> {
         'created_at': json['created_at']
       }),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'form_type': correctAnswer.type.name,
+      'form': correctAnswer.form,
+      '_form_bare': correctAnswer.bare,
+      'possible_answers': possibleAnswers.map((e) => e.toJson()).toList(),
+      'explanation': explanation,
+      'id': id,
+      'ru': ru,
+      'tatoeba_key': tatoebaKey,
+      'disabled': disabled,
+      'level': level?.name,
+      'word_id': word.id,
+      'position': word.position,
+      'bare': word.bare,
+      'accented': word.accented,
+      'derived_from_word_id': word.derivedFromWordId,
+      'rank': word.rank,
+      'word_disabled': word.disabled,
+      'audio': word.audio,
+      'usage_en': word.usageEn,
+      'usage_de': word.usageDe,
+      'number_value': word.numberValue,
+      'type': word.type?.name,
+      'word_level': word.level?.name,
+      'created_at': word.createdAt?.toIso8601String(),
+    }..removeWhere((key, value) => value == null);
   }
 
   @override
