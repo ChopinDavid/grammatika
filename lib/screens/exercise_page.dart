@@ -22,6 +22,7 @@ class ExercisePage extends StatelessWidget {
           listener: (context, state) {
             if (state is ExerciseErrorState) {
               // TODO(DC): Make it so that we show an error snack bar and show previous answer/exercise
+              // TODO(DC): Write tests around this snack bar when implemented
               print(state.errorString);
             }
           },
@@ -44,7 +45,7 @@ class ExercisePage extends StatelessWidget {
             if (exercise?.type == ExerciseType.determineNounGender) {
               stackChildren.add(
                 GenderExerciseWidget(
-                  answer: exercise as Exercise<Gender, Noun>,
+                  exercise: exercise as Exercise<Gender, Noun>,
                 ),
               );
             }
@@ -52,7 +53,7 @@ class ExercisePage extends StatelessWidget {
             if (exercise?.type == ExerciseType.determineWordForm) {
               stackChildren.add(
                 SentenceExerciseWidget(
-                  answer: exercise as Exercise<WordForm, Sentence>,
+                  exercise: exercise as Exercise<WordForm, Sentence>,
                 ),
               );
             }

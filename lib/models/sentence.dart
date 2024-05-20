@@ -120,88 +120,7 @@ class Sentence extends Question<WordForm> {
     WordFormType formType = WordFormType.ruVerbGerundPast,
     String form = "сказа'л",
     String formBare = 'сказал',
-    List<Map<String, dynamic>> possibleAnswers = const [
-      {
-        'type': WordFormType.ruVerbGerundPast,
-        'form': "сказа'в",
-        '_form_bare': 'сказав'
-      },
-      {
-        'type': WordFormType.ruVerbGerundPast,
-        'form': 'сказавши',
-        '_form_bare': 'сказавши'
-      },
-      {
-        'type': WordFormType.ruVerbImperativeSg,
-        'form': "скажи'",
-        '_form_bare': 'скажи'
-      },
-      {
-        'type': WordFormType.ruVerbImperativePl,
-        'form': "скажи'те",
-        '_form_bare': 'скажите'
-      },
-      {
-        'type': WordFormType.ruVerbPastM,
-        'form': "сказа'л",
-        '_form_bare': 'сказал'
-      },
-      {
-        'type': WordFormType.ruVerbPastF,
-        'form': "сказа'ла",
-        '_form_bare': 'сказала'
-      },
-      {
-        'type': WordFormType.ruVerbPastN,
-        'form': "сказа'ло",
-        '_form_bare': 'сказало'
-      },
-      {
-        'type': WordFormType.ruVerbPastPl,
-        'form': "сказа'ли",
-        '_form_bare': 'сказали'
-      },
-      {
-        'type': WordFormType.ruVerbPresfutSg1,
-        'form': "скажу'",
-        '_form_bare': 'скажу'
-      },
-      {
-        'type': WordFormType.ruVerbPresfutSg2,
-        'form': "ска'жешь",
-        '_form_bare': 'скажешь'
-      },
-      {
-        'type': WordFormType.ruVerbPresfutSg3,
-        'form': "ска'жет",
-        '_form_bare': 'скажет'
-      },
-      {
-        'type': WordFormType.ruVerbPresfutPl1,
-        'form': "ска'жем",
-        '_form_bare': 'скажем'
-      },
-      {
-        'type': WordFormType.ruVerbPresfutPl2,
-        'form': "ска'жете",
-        '_form_bare': 'скажете'
-      },
-      {
-        'type': WordFormType.ruVerbPresfutPl3,
-        'form': "ска'жут",
-        '_form_bare': 'скажут'
-      },
-      {
-        'type': WordFormType.ruVerbParticipleActivePast,
-        'form': "сказа'вший",
-        '_form_bare': 'сказавший'
-      },
-      {
-        'type': WordFormType.ruVerbParticiplePassivePast,
-        'form': "ска'занный",
-        '_form_bare': 'сказанный'
-      },
-    ],
+    List<Map<String, dynamic>>? possibleAnswers,
     String explanation = 'because I said so',
     int id = 33,
     String ru = "Я сказа'л им посла'ть мне ещё один биле'т.",
@@ -223,6 +142,88 @@ class Sentence extends Question<WordForm> {
     Level wordLevel = Level.A2,
     DateTime? createdAt,
   }) {
+    possibleAnswers ??= [
+      {
+        'form_type': WordFormType.ruVerbGerundPast.name,
+        'form': "сказа'в",
+        '_form_bare': 'сказав'
+      },
+      {
+        'form_type': WordFormType.ruVerbGerundPast.name,
+        'form': 'сказавши',
+        '_form_bare': 'сказавши'
+      },
+      {
+        'form_type': WordFormType.ruVerbImperativeSg.name,
+        'form': "скажи'",
+        '_form_bare': 'скажи'
+      },
+      {
+        'form_type': WordFormType.ruVerbImperativePl.name,
+        'form': "скажи'те",
+        '_form_bare': 'скажите'
+      },
+      {
+        'form_type': WordFormType.ruVerbPastM.name,
+        'form': "сказа'л",
+        '_form_bare': 'сказал'
+      },
+      {
+        'form_type': WordFormType.ruVerbPastF.name,
+        'form': "сказа'ла",
+        '_form_bare': 'сказала'
+      },
+      {
+        'form_type': WordFormType.ruVerbPastN.name,
+        'form': "сказа'ло",
+        '_form_bare': 'сказало'
+      },
+      {
+        'form_type': WordFormType.ruVerbPastPl.name,
+        'form': "сказа'ли",
+        '_form_bare': 'сказали'
+      },
+      {
+        'form_type': WordFormType.ruVerbPresfutSg1.name,
+        'form': "скажу'",
+        '_form_bare': 'скажу'
+      },
+      {
+        'form_type': WordFormType.ruVerbPresfutSg2.name,
+        'form': "ска'жешь",
+        '_form_bare': 'скажешь'
+      },
+      {
+        'form_type': WordFormType.ruVerbPresfutSg3.name,
+        'form': "ска'жет",
+        '_form_bare': 'скажет'
+      },
+      {
+        'form_type': WordFormType.ruVerbPresfutPl1.name,
+        'form': "ска'жем",
+        '_form_bare': 'скажем'
+      },
+      {
+        'form_type': WordFormType.ruVerbPresfutPl2.name,
+        'form': "ска'жете",
+        '_form_bare': 'скажете'
+      },
+      {
+        'form_type': WordFormType.ruVerbPresfutPl3.name,
+        'form': "ска'жут",
+        '_form_bare': 'скажут'
+      },
+      {
+        'form_type': WordFormType.ruVerbParticipleActivePast.name,
+        'form': "сказа'вший",
+        '_form_bare': 'сказавший'
+      },
+      {
+        'form_type': WordFormType.ruVerbParticiplePassivePast.name,
+        'form': "ска'занный",
+        '_form_bare': 'сказанный'
+      },
+    ];
     createdAt ??= DateTime.parse('2020-01-01 00:00:00');
     return Sentence.fromJson({
       'form_type': formType.name,

@@ -52,7 +52,7 @@ main() {
           Stream.fromIterable(
             [
               ExerciseAnswerSelectedState(
-                answer: Exercise<Gender>.testValue(
+                exercise: Exercise<Gender>.testValue(
                   answer: Gender.m,
                   correctAnswer: Gender.m,
                 ),
@@ -88,7 +88,7 @@ main() {
           Stream.fromIterable(
             [
               ExerciseAnswerSelectedState(
-                answer: Exercise<Gender>.testValue(
+                exercise: Exercise<Gender>.testValue(
                   answer: Gender.f,
                   correctAnswer: Gender.m,
                 ),
@@ -124,7 +124,7 @@ main() {
           Stream.fromIterable(
             [
               ExerciseAnswerSelectedState(
-                answer: Exercise<Gender>.testValue(
+                exercise: Exercise<Gender>.testValue(
                   answer: Gender.m,
                   correctAnswer: Gender.f,
                 ),

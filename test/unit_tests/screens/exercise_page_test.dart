@@ -7,9 +7,12 @@ import 'package:uchu/exercise_bloc.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
-import 'package:uchu/models/word.dart';
+import 'package:uchu/models/sentence.dart';
+import 'package:uchu/models/word_form.dart';
 import 'package:uchu/screens/exercise_page.dart';
+import 'package:uchu/widgets/exercise_footer.dart';
 import 'package:uchu/widgets/gender_exercise_widget.dart';
+import 'package:uchu/widgets/sentence_exercise_widget.dart';
 
 import '../mocks.dart';
 
@@ -47,144 +50,217 @@ main() {
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
-  testWidgets(
-      'displays correct text when state is ExerciseRandomNounRetrievedState',
-      (widgetTester) async {
-    final word = Word.testValue(bare: 'друг');
-    whenListen(
-      mockExerciseBloc,
-      Stream.fromIterable(
-        <ExerciseState>[
-          ExerciseExerciseRetrievedState(noun: Noun.testValue(), word: word),
-        ],
-      ),
-      initialState: ExerciseInitial(),
-    );
-    await widgetTester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<ExerciseBloc>.value(
-          value: mockExerciseBloc,
-          child: const ExercisePage(),
-        ),
-      ),
-    );
-
-    await widgetTester.pumpAndSettle();
-
-    expect(find.text('What is the gender of the word...'), findsOneWidget);
-    expect(find.text('${word.bare}?'), findsOneWidget);
-  });
-
-  testWidgets('displays correct text when state is ExerciseExerciseGradedState',
-      (widgetTester) async {
-    final word = Word.testValue(bare: 'друг');
-    whenListen(
-        mockExerciseBloc,
-        Stream.fromIterable(
-          <ExerciseState>[
-            ExerciseAnswerSelectedState(
-              answer: Exercise<Gender>.testValue(
-                answer: Gender.m,
-                word: word,
-              ),
-            ),
-          ],
-        ),
-        initialState: ExerciseInitial());
-    await widgetTester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<ExerciseBloc>.value(
-          value: mockExerciseBloc,
-          child: const ExercisePage(),
-        ),
-      ),
-    );
-
-    await widgetTester.pumpAndSettle();
-
-    expect(find.text('What is the gender of the word...'), findsOneWidget);
-    expect(find.text('${word.bare}?'), findsOneWidget);
-  });
-
-  testWidgets(
-      'creates GenderExerciseWidget passing state.word when state is ExerciseRandomNounRetrievedState',
-      (widgetTester) async {
-    final word = Word.testValue(bare: 'друг');
-    whenListen(
+  group('when state is ExerciseExerciseRetrievedState', () {
+    testWidgets(
+        "displays GenderExerciseWidget when state's exercise is of type Exercise<Gender, Noun>",
+        (widgetTester) async {
+      final exercise = Exercise<Gender, Noun>(
+        question: Noun.testValue(),
+        answer: null,
+      );
+      whenListen(
         mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
             ExerciseExerciseRetrievedState(
-              noun: Noun.testValue(),
-              word: word,
+              exercise: exercise,
             ),
           ],
         ),
-        initialState: ExerciseInitial());
-    await widgetTester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<ExerciseBloc>.value(
-          value: mockExerciseBloc,
-          child: const ExercisePage(),
+        initialState: ExerciseInitial(),
+      );
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: const ExercisePage(),
+          ),
         ),
-      ),
-    );
+      );
 
-    await widgetTester.pumpAndSettle();
+      await widgetTester.pumpAndSettle();
 
-    expect(
-        widgetTester
-            .widget<GenderExerciseWidget>(find.byType(GenderExerciseWidget))
-            .word,
-        word);
+      final genderExerciseWidgetFinder = find.byType(GenderExerciseWidget);
+      expect(genderExerciseWidgetFinder, findsOneWidget);
+      expect(
+          widgetTester
+              .widget<GenderExerciseWidget>(genderExerciseWidgetFinder)
+              .exercise,
+          exercise);
+      expect(find.byType(SentenceExerciseWidget), findsNothing);
+      expect(find.byType(ExerciseFooter), findsNothing);
+    });
+
+    testWidgets(
+        "displays SentenceExerciseWidget when state's exercise is of type Exercise<WordForm, Sentence>",
+        (widgetTester) async {
+      final exercise = Exercise<WordForm, Sentence>(
+        question: Sentence.testValue(),
+        answer: null,
+      );
+      whenListen(
+        mockExerciseBloc,
+        Stream.fromIterable(
+          <ExerciseState>[
+            ExerciseExerciseRetrievedState(
+              exercise: exercise,
+            ),
+          ],
+        ),
+        initialState: ExerciseInitial(),
+      );
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: const ExercisePage(),
+          ),
+        ),
+      );
+
+      await widgetTester.pumpAndSettle();
+
+      final sentenceExerciseWidgetFinder = find.byType(SentenceExerciseWidget);
+      expect(sentenceExerciseWidgetFinder, findsOneWidget);
+      expect(
+          widgetTester
+              .widget<SentenceExerciseWidget>(sentenceExerciseWidgetFinder)
+              .exercise,
+          exercise);
+      expect(find.byType(GenderExerciseWidget), findsNothing);
+      expect(find.byType(ExerciseFooter), findsNothing);
+    });
   });
 
-  testWidgets(
-      'creates GenderExerciseWidget passing state.answer.word when state is ExerciseExerciseGradedState',
-      (widgetTester) async {
-    final word = Word.testValue(bare: 'друг');
-    whenListen(
+  group('when state is ExerciseAnswerSelectedState', () {
+    testWidgets(
+        "displays GenderExerciseWidget when state's exercise is of type Exercise<Gender, Noun>",
+        (widgetTester) async {
+      final noun = Noun.testValue();
+      final exercise = Exercise<Gender, Noun>(
+        question: noun,
+        answer: noun.correctAnswer,
+      );
+      whenListen(
+        mockExerciseBloc,
+        Stream.fromIterable(
+          <ExerciseState>[
+            ExerciseExerciseRetrievedState(
+              exercise: exercise,
+            ),
+          ],
+        ),
+        initialState: ExerciseInitial(),
+      );
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: const ExercisePage(),
+          ),
+        ),
+      );
+
+      await widgetTester.pumpAndSettle();
+
+      final genderExerciseWidgetFinder = find.byType(GenderExerciseWidget);
+      expect(genderExerciseWidgetFinder, findsOneWidget);
+      expect(
+          widgetTester
+              .widget<GenderExerciseWidget>(genderExerciseWidgetFinder)
+              .exercise,
+          exercise);
+      expect(find.byType(SentenceExerciseWidget), findsNothing);
+    });
+
+    testWidgets(
+        "displays SentenceExerciseWidget when state's exercise is of type Exercise<WordForm, Sentence>",
+        (widgetTester) async {
+      final sentence = Sentence.testValue();
+      final exercise = Exercise<WordForm, Sentence>(
+        question: sentence,
+        answer: sentence.correctAnswer,
+      );
+      whenListen(
         mockExerciseBloc,
         Stream.fromIterable(
           <ExerciseState>[
             ExerciseAnswerSelectedState(
-              answer: Exercise<Gender>.testValue(
-                answer: Gender.m,
-                word: word,
+              exercise: exercise,
+            ),
+          ],
+        ),
+        initialState: ExerciseInitial(),
+      );
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: const ExercisePage(),
+          ),
+        ),
+      );
+
+      await widgetTester.pumpAndSettle();
+
+      final sentenceExerciseWidgetFinder = find.byType(SentenceExerciseWidget);
+      expect(sentenceExerciseWidgetFinder, findsOneWidget);
+      expect(
+          widgetTester
+              .widget<SentenceExerciseWidget>(sentenceExerciseWidgetFinder)
+              .exercise,
+          exercise);
+      expect(find.byType(GenderExerciseWidget), findsNothing);
+    });
+
+    testWidgets("displays ExerciseFooter with correct explanation",
+        (widgetTester) async {
+      final noun = Noun.testValue();
+      whenListen(
+        mockExerciseBloc,
+        Stream.fromIterable(
+          <ExerciseState>[
+            ExerciseAnswerSelectedState(
+              exercise: Exercise<Gender, Noun>(
+                question: noun,
+                answer: noun.correctAnswer,
               ),
             ),
           ],
         ),
-        initialState: ExerciseInitial());
-    await widgetTester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<ExerciseBloc>.value(
-          value: mockExerciseBloc,
-          child: const ExercisePage(),
+        initialState: ExerciseInitial(),
+      );
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: const ExercisePage(),
+          ),
         ),
-      ),
-    );
+      );
 
-    await widgetTester.pumpAndSettle();
+      await widgetTester.pumpAndSettle();
 
-    expect(
-        widgetTester
-            .widget<GenderExerciseWidget>(find.byType(GenderExerciseWidget))
-            .word,
-        word);
+      final exerciseFooterFinder = find.byType(ExerciseFooter);
+      expect(exerciseFooterFinder, findsOneWidget);
+      expect(
+          widgetTester.widget<ExerciseFooter>(exerciseFooterFinder).explanation,
+          noun.explanation);
+    });
   });
 
   group('"Next" button', () {
     testWidgets('displays when state is ExerciseExerciseGradedState',
         (widgetTester) async {
+      final noun = Noun.testValue();
       whenListen(
           mockExerciseBloc,
           Stream.fromIterable(
             <ExerciseState>[
               ExerciseAnswerSelectedState(
-                answer: Exercise<Gender>.testValue(
-                  answer: Gender.m,
-                  word: Word.testValue(),
+                exercise: Exercise<Gender, Noun>(
+                  question: noun,
+                  answer: noun.correctAnswer,
                 ),
               ),
             ],
@@ -238,14 +314,15 @@ main() {
     testWidgets(
         'adds ExerciseRetrieveExerciseEvent to ExerciseBloc when tapped',
         (widgetTester) async {
+      final noun = Noun.testValue();
       whenListen(
           mockExerciseBloc,
           Stream.fromIterable(
             <ExerciseState>[
               ExerciseAnswerSelectedState(
-                answer: Exercise<Gender>.testValue(
-                  answer: Gender.m,
-                  word: Word.testValue(),
+                exercise: Exercise<Gender, Noun>(
+                  question: noun,
+                  answer: noun.correctAnswer,
                 ),
               ),
             ],

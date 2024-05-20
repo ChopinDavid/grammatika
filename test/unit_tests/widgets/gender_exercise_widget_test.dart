@@ -111,8 +111,8 @@ main() {
     mocktail.verify(
       () => mockExerciseBloc.add(
         ExerciseSubmitAnswerEvent(
-          answer: Exercise<Gender>.initial(
-            answer: Gender.m,
+          exercise: Exercise<Gender>.initial(
+            exercise: Gender.m,
             word: word,
           ),
         ),
@@ -141,8 +141,8 @@ main() {
     mocktail.verify(
       () => mockExerciseBloc.add(
         ExerciseSubmitAnswerEvent(
-          answer: Exercise<Gender>.initial(
-            answer: Gender.f,
+          exercise: Exercise<Gender>.initial(
+            exercise: Gender.f,
             word: word,
           ),
         ),
@@ -171,8 +171,8 @@ main() {
     mocktail.verify(
       () => mockExerciseBloc.add(
         ExerciseSubmitAnswerEvent(
-          answer: Exercise<Gender>.initial(
-            answer: Gender.n,
+          exercise: Exercise<Gender>.initial(
+            exercise: Gender.n,
             word: word,
           ),
         ),
