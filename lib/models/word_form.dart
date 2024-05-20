@@ -18,6 +18,14 @@ class WordForm extends Equatable implements Answer {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'form_type': type.name,
+      'form': form,
+      '_form_bare': bare,
+    };
+  }
+
   @override
   List<Object?> get props => [type, form, bare];
 }
