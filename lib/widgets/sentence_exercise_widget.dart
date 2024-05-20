@@ -10,20 +10,20 @@ import 'answer_card.dart';
 class SentenceExerciseWidget extends StatelessWidget {
   const SentenceExerciseWidget({
     super.key,
-    required this.answer,
+    required this.exercise,
   });
 
-  final Exercise<WordForm, Sentence> answer;
+  final Exercise<WordForm, Sentence> exercise;
 
   @override
   Widget build(BuildContext context) {
-    final possibleAnswers = answer.question.possibleAnswers;
+    final possibleAnswers = exercise.question.possibleAnswers;
     Map<String, List<Exercise<WordForm, Sentence>>> answerGroups = {};
     for (var element in possibleAnswers) {
       final listOfAnswers = answerGroups[element.bare];
       final answerToAdd = Exercise<WordForm, Sentence>(
         answer: element,
-        question: answer.question,
+        question: exercise.question,
       );
       if (listOfAnswers != null) {
         listOfAnswers.add(answerToAdd);
@@ -36,25 +36,25 @@ class SentenceExerciseWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-            'What is the correct form of the word ${answer.question.word.bare} in the sentence:'),
+            'What is the correct form of the word ${exercise.question.word.bare} in the sentence:'),
         const SizedBox(height: UchuSpacing.M),
         Text(
-          '«${answer.question.ru.replaceFirst(answer.question.possibleAnswers.firstWhere((element) => element.type == answer.question.correctAnswer.type).form ?? '', '______')}»',
+          '«${exercise.question.ru.replaceFirst(exercise.question.possibleAnswers.firstWhere((element) => element.type == exercise.question.correctAnswer.type).form ?? '', '______')}»',
         ),
         const SizedBox(height: UchuSpacing.L),
         Wrap(
             children: answerGroups
                 .map<String, Widget>((key, value) {
-                  final answerIsCorrect = answer.answer == null
+                  final answerIsCorrect = exercise.answer == null
                       ? null
                       // TODO(DC): remove bangs
                       : value
                               .where((element) =>
                                   element.answer?.type ==
-                                  answer.question.correctAnswer.type)
+                                  exercise.question.correctAnswer.type)
                               .isNotEmpty
                           ? true
-                          : answer.answer == value.first.answer
+                          : exercise.answer == value.first.answer
                               ? false
                               : null;
 
