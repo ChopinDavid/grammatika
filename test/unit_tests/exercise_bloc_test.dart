@@ -43,7 +43,8 @@ main() {
         .thenAnswer((invocation) async => [sentence.toJson()]);
     when(() => mockDatabase.rawQuery(
             'SELECT form_type, form, _form_bare FROM words_forms WHERE word_id = ${sentence.word.id};'))
-        .thenAnswer((invocation) async => []);
+        .thenAnswer((invocation) async =>
+            sentence.possibleAnswers.map((e) => e.toJson()).toList());
     when(() => mockExplanationHelper.genderExplanation(
             bare: any(named: 'bare'),
             correctAnswer: any(named: 'correctAnswer')))
