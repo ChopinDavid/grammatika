@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uchu/exercise_bloc.dart';
-import 'package:uchu/models/exercise.dart';
+import 'package:uchu/models/answer.dart';
 
 // TODO(DC): rename file to answer_card.dart
-class AnswerCard<T> extends StatelessWidget {
+class AnswerCard<T extends Answer> extends StatelessWidget {
   const AnswerCard({
     super.key,
     required this.answers,
@@ -12,15 +12,12 @@ class AnswerCard<T> extends StatelessWidget {
     required this.isCorrect,
   });
 
-  final List<Exercise> answers;
+  final List<T> answers;
   final String displayString;
   final bool? isCorrect;
 
   @override
   Widget build(BuildContext context) {
-    final exercise = answers
-        .where((element) => element.answer == element.question.correctAnswer)
-        .singleOrNull;
     return BlocBuilder<ExerciseBloc, ExerciseState>(
       builder: (context, state) {
         return SizedBox(
@@ -38,8 +35,8 @@ class AnswerCard<T> extends StatelessWidget {
                   ? null
                   : () {
                       BlocProvider.of<ExerciseBloc>(context).add(
-                        ExerciseSubmitAnswerEvent(
-                          exercise: exercise ?? answers.first,
+                        ExerciseSubmitAnswerEvent<T>(
+                          answers: answers,
                         ),
                       );
                     },

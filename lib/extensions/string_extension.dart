@@ -6,4 +6,8 @@ extension StringExtension on String {
     }
     return string.isEmpty || string.trim().isEmpty;
   }
+
+  String capitalized() {
+    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
+  }
 }

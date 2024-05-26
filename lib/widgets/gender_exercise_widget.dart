@@ -16,6 +16,7 @@ class GenderExerciseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final answers = exercise.answers;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -28,63 +29,24 @@ class GenderExerciseWidget extends StatelessWidget {
         const SizedBox(height: UchuSpacing.L),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: AnswerCard(
-                answers: [
-                  Exercise<Gender, Noun>(
-                    answer: Gender.m,
-                    question: exercise.question,
-                  )
-                ],
-                displayString: Gender.m.displayString,
-                isCorrect: exercise.answer == null
-                    ? null
-                    : exercise.answer == Gender.m
-                        ? exercise.question.correctAnswer == Gender.m
+          children: [Gender.m, Gender.f, Gender.n]
+              .map(
+                (gender) => Expanded(
+                  child: AnswerCard<Gender>(
+                    answers: [gender],
+                    displayString: gender.displayString,
+                    isCorrect: answers == null
+                        ? null
+                        : exercise.question.correctAnswer == gender
                             ? true
-                            : false
-                        : null,
-              ),
-            ),
-            Expanded(
-              child: AnswerCard(
-                answers: [
-                  Exercise<Gender, Noun>(
-                    answer: Gender.f,
-                    question: exercise.question,
-                  )
-                ],
-                displayString: Gender.f.displayString,
-                isCorrect: exercise.answer == null
-                    ? null
-                    : exercise.answer == Gender.f
-                        ? exercise.question.correctAnswer == Gender.f
-                            ? true
-                            : false
-                        : null,
-              ),
-            ),
-            Expanded(
-              child: AnswerCard(
-                answers: [
-                  Exercise<Gender, Noun>(
-                    answer: Gender.n,
-                    question: exercise.question,
-                  )
-                ],
-                displayString: Gender.n.displayString,
-                isCorrect: exercise.answer == null
-                    ? null
-                    : exercise.answer == Gender.n
-                        ? exercise.question.correctAnswer == Gender.n
-                            ? true
-                            : false
-                        : null,
-              ),
-            ),
-          ],
-        )
+                            : answers.contains(gender)
+                                ? false
+                                : null,
+                  ),
+                ),
+              )
+              .toList(),
+        ),
       ],
     );
   }

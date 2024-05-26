@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:uchu/extensions/list_extension.dart';
 import 'package:uchu/models/answer.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
@@ -11,10 +12,10 @@ import 'package:uchu/models/word_form.dart';
 class Exercise<A extends Answer, Q extends Question<A>> extends Equatable {
   const Exercise({
     required this.question,
-    required this.answer,
+    required this.answers,
   });
   final Q question;
-  final A? answer;
+  final List<A>? answers;
 
   ExerciseType get type {
     if (A == Gender && Q == Noun) {
@@ -30,31 +31,37 @@ class Exercise<A extends Answer, Q extends Question<A>> extends Equatable {
   }
 
   bool get isCorrectAnswer {
-    return answer == question.correctAnswer;
+    assert(answers != null);
+    return question.answerSynonyms.duplicates(answers!).isNotEmpty;
   }
 
   bool get isIncorrectAnswer {
-    return answer != question.correctAnswer && answer == answer;
+    assert(answers != null);
+    return question.answerSynonyms.duplicates(answers!).isEmpty;
+  }
+
+  Exercise<A, Q> withAnswers(List<A> answers) {
+    return Exercise<A, Q>(question: question, answers: answers);
   }
 
   @visibleForTesting
   factory Exercise.testValue({
     required Q question,
-    required A answer,
+    required List<A> answers,
     Word? word,
     required String explanation,
   }) {
     word ??= Word.testValue();
     return Exercise(
       question: question,
-      answer: answer,
+      answers: answers,
     );
   }
 
   @override
   List<Object?> get props => [
         question,
-        answer,
+        answers,
       ];
 }
 

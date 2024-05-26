@@ -12,16 +12,16 @@ class ExerciseRetrieveRandomNounEvent extends ExerciseEvent {}
 
 class ExerciseRetrieveRandomSentenceEvent extends ExerciseEvent {}
 
-class ExerciseSubmitAnswerEvent<T> extends ExerciseEvent {
+class ExerciseSubmitAnswerEvent<T extends Answer> extends ExerciseEvent {
   ExerciseSubmitAnswerEvent({
-    required this.exercise,
+    required this.answers,
   });
 
-  final Exercise exercise;
+  final List<T> answers;
 
   @override
   List<Object?> get props => [
         ...super.props,
-        exercise,
+        answers,
       ];
 }
