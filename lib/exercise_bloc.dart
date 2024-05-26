@@ -14,10 +14,13 @@ import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 
+import 'models/answer.dart';
+
 part 'exercise_event.dart';
 part 'exercise_state.dart';
 
 class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
+  Exercise? exercise;
   ExerciseBloc({@visibleForTesting Random? mockRandom})
       : super(ExerciseInitial()) {
     on<ExerciseEvent>((event, emit) async {
@@ -55,13 +58,12 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
             'possible_answers': answers,
             'explanation': explanation,
           };
+          exercise = Exercise<Gender, Noun>(
+            question: Noun.fromJson(json),
+            answers: null,
+          );
           emit(
-            ExerciseExerciseRetrievedState(
-              exercise: Exercise<Gender, Noun>(
-                question: Noun.fromJson(json),
-                answer: null,
-              ),
-            ),
+            ExerciseExerciseRetrievedState(),
           );
         } catch (e) {
           emit(
@@ -86,18 +88,22 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
               GetIt.instance.get<ExplanationHelper>().sentenceExplanation();
           final json = {
             ...sentenceQuery,
+            'answer_synonyms': answers.where((element) {
+              return element['_form_bare'] == sentenceQuery['_form_bare'] &&
+                  element['form_type'] != sentenceQuery['form_type'];
+            }),
             'possible_answers': answers,
             'explanation': explanation,
           };
           final sentence = Sentence.fromJson(json);
 
+          exercise = Exercise<WordForm, Sentence>(
+            question: sentence,
+            answers: null,
+          );
+
           emit(
-            ExerciseExerciseRetrievedState(
-              exercise: Exercise<WordForm, Sentence>(
-                question: sentence,
-                answer: null,
-              ),
-            ),
+            ExerciseExerciseRetrievedState(),
           );
         } catch (e) {
           emit(
@@ -108,10 +114,9 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       }
 
       if (event is ExerciseSubmitAnswerEvent) {
+        exercise = exercise?.withAnswers(event.answers);
         emit(
-          ExerciseAnswerSelectedState(
-            exercise: event.exercise,
-          ),
+          ExerciseAnswerSelectedState(),
         );
       }
     });

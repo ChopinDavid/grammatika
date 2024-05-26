@@ -10,6 +10,7 @@ import 'package:uchu/models/word_type.dart';
 class Noun extends Question<Gender> {
   const Noun._({
     required super.correctAnswer,
+    required super.answerSynonyms,
     required super.possibleAnswers,
     required super.explanation,
     required this.partner,
@@ -45,6 +46,7 @@ class Noun extends Question<Gender> {
     } else {
       return Noun._(
         correctAnswer: gender,
+        answerSynonyms: const [],
         possibleAnswers: const [
           Gender.m,
           Gender.f,

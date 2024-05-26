@@ -10,18 +10,7 @@ class ExerciseInitial extends ExerciseState {}
 
 class ExerciseRetrievingExerciseState extends ExerciseState {}
 
-class ExerciseExerciseRetrievedState extends ExerciseState {
-  ExerciseExerciseRetrievedState({
-    required this.exercise,
-  });
-  final Exercise exercise;
-
-  @override
-  List<Object?> get props => [
-        ...super.props,
-        exercise,
-      ];
-}
+class ExerciseExerciseRetrievedState extends ExerciseState {}
 
 class ExerciseErrorState extends ExerciseState {
   ExerciseErrorState({
@@ -33,16 +22,4 @@ class ExerciseErrorState extends ExerciseState {
   List<Object?> get props => [...super.props, errorString];
 }
 
-class ExerciseAnswerSelectedState extends ExerciseState {
-  ExerciseAnswerSelectedState({
-    required this.exercise,
-  });
-
-  final Exercise exercise;
-
-  @override
-  List<Object?> get props => [
-        ...super.props,
-        exercise,
-      ];
-}
+class ExerciseAnswerSelectedState<T> extends ExerciseState {}

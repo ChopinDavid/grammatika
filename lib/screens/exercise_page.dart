@@ -33,11 +33,11 @@ class ExercisePage extends StatelessWidget {
             Exercise? exercise;
 
             if (state is ExerciseExerciseRetrievedState) {
-              exercise = state.exercise;
+              exercise = context.read<ExerciseBloc>().exercise;
             }
 
             if (state is ExerciseAnswerSelectedState) {
-              exercise = state.exercise;
+              exercise = context.read<ExerciseBloc>().exercise;
             }
 
             List<Widget> stackChildren = [];
@@ -60,7 +60,8 @@ class ExercisePage extends StatelessWidget {
 
             if (state is ExerciseAnswerSelectedState) {
               stackChildren.add(ExerciseFooter(
-                explanation: state.exercise.question.explanation,
+                explanation:
+                    context.read<ExerciseBloc>().exercise?.question.explanation,
               ));
             }
 

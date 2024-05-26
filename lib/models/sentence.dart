@@ -11,6 +11,7 @@ import 'package:uchu/models/word_type.dart';
 class Sentence extends Question<WordForm> {
   const Sentence._({
     required super.correctAnswer,
+    required super.answerSynonyms,
     required super.possibleAnswers,
     required super.explanation,
     required this.id,
@@ -32,11 +33,17 @@ class Sentence extends Question<WordForm> {
     final String? levelString = json['level'];
 
     return Sentence._(
-      correctAnswer: WordForm.fromJson({
-        'form_type': json['form_type'],
-        'form': json['form'],
-        '_form_bare': json['_form_bare'],
-      }),
+      correctAnswer: WordForm.fromJson(json),
+      answerSynonyms: json['answer_synonyms']
+          .map<WordForm?>((e) {
+            try {
+              return WordForm.fromJson(e);
+            } catch (e) {
+              return null;
+            }
+          })
+          .whereType<WordForm>()
+          .toList(),
       possibleAnswers: json['possible_answers']
           .map<WordForm?>((e) {
             try {
@@ -76,9 +83,7 @@ class Sentence extends Question<WordForm> {
 
   Map<String, dynamic> toJson() {
     return {
-      'form_type': correctAnswer.type.name,
-      'form': correctAnswer.form,
-      '_form_bare': correctAnswer.bare,
+      'correct_answers': answerSynonyms.map((e) => e.toJson()).toList(),
       'possible_answers': possibleAnswers.map((e) => e.toJson()).toList(),
       'explanation': explanation,
       'id': id,
