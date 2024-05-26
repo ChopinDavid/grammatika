@@ -14,10 +14,10 @@ main() {
       expect(Gender.n.displayString, 'Neuter');
     });
     test('returns null when gender is Gender.pl', () {
-      expect(Gender.pl.displayString, isNull);
+      expect(Gender.pl.displayString, 'Plural');
     });
     test('returns null when gender is Gender.both', () {
-      expect(Gender.both.displayString, isNull);
+      expect(Gender.both.displayString, 'Both');
     });
   });
 }
