@@ -2,12 +2,10 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart' as mocktail;
 import 'package:uchu/exercise_bloc.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
-import 'package:uchu/models/word.dart';
 import 'package:uchu/widgets/answer_card.dart';
 import 'package:uchu/widgets/gender_exercise_widget.dart';
 
@@ -15,168 +13,158 @@ import '../mocks.dart';
 
 main() {
   late ExerciseBloc mockExerciseBloc;
-  final word = Word.testValue();
 
-  setUp(() async {
+  setUp(() {
     mockExerciseBloc = MockExerciseBloc();
-
     whenListen(
       mockExerciseBloc,
-      Stream.fromIterable(
-        [
-          ExerciseRetrievingExerciseState(),
-          ExerciseExerciseRetrievedState(
-              noun: Noun.testValue(), word: Word.testValue()),
-        ],
-      ),
+      Stream.fromIterable([ExerciseExerciseRetrievedState()]),
       initialState: ExerciseInitial(),
     );
   });
 
-  testWidgets("displays state's word.bare", (widgetTester) async {
-    await widgetTester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<ExerciseBloc>.value(
-          value: mockExerciseBloc,
-          child: GenderExerciseWidget(
-            word: word,
-          ),
-        ),
-      ),
-    );
-
-    await widgetTester.pumpAndSettle();
-
-    expect(
-        widgetTester
-            .widget<Text>(
-              find.byKey(
-                const Key(
-                  'bare-key',
-                ),
+  testWidgets(
+    'bare word is displayed',
+    (widgetTester) async {
+      const bare = 'телефон';
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: GenderExerciseWidget(
+              exercise: Exercise<Gender, Noun>.testValue(
+                question: Noun.testValue(bare: bare),
+                answers: const [],
               ),
-            )
-            .data,
-        '${word.bare}?');
-  });
-
-  testWidgets("shows three GenderCards", (widgetTester) async {
-    await widgetTester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<ExerciseBloc>.value(
-          value: mockExerciseBloc,
-          child: GenderExerciseWidget(
-            word: word,
+            ),
           ),
         ),
-      ),
-    );
+      );
+      await widgetTester.pumpAndSettle();
 
-    await widgetTester.pumpAndSettle();
+      expect(widgetTester.widget<Text>(find.byKey(const Key('bare-key'))).data,
+          '$bare?');
+    },
+  );
 
-    final genderCardFinder = find.byType(AnswerCard);
-    expect(genderCardFinder, findsNWidgets(3));
-    expect(
-      widgetTester.widget<AnswerCard>(genderCardFinder.at(0)).gender,
-      Gender.m,
-    );
-    expect(
-      widgetTester.widget<AnswerCard>(genderCardFinder.at(1)).gender,
-      Gender.f,
-    );
-    expect(
-      widgetTester.widget<AnswerCard>(genderCardFinder.at(2)).gender,
-      Gender.n,
-    );
-  });
-
-  testWidgets(
-      "tapping the first GenderCard adds ExerciseSubmitAnswerEvent with an answer of Gender.m to the ExerciseBloc",
-      (widgetTester) async {
-    await widgetTester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<ExerciseBloc>.value(
-          value: mockExerciseBloc,
-          child: GenderExerciseWidget(
-            word: word,
+  group('isCorrect', () {
+    testWidgets('isNull when answers is null', (widgetTester) async {
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: GenderExerciseWidget(
+              exercise: Exercise<Gender, Noun>.testValueSimple(
+                question: Noun.testValue(),
+                answers: null,
+              ),
+            ),
           ),
         ),
-      ),
-    );
+      );
+      await widgetTester.pumpAndSettle();
 
-    await widgetTester.pumpAndSettle();
+      final answerCardFinder = find.byType(AnswerCard<Gender>);
+      expect(answerCardFinder, findsNWidgets(3));
+      widgetTester
+          .widgetList<AnswerCard<Gender>>(answerCardFinder)
+          .forEach((element) {
+        expect(element.isCorrect, isNull);
+      });
+    });
 
-    await widgetTester.tap(find.byType(AnswerCard).at(0));
-
-    mocktail.verify(
-      () => mockExerciseBloc.add(
-        ExerciseSubmitAnswerEvent(
-          exercise: Exercise<Gender>.initial(
-            exercise: Gender.m,
-            word: word,
+    testWidgets('isNull when answers is empty', (widgetTester) async {
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: GenderExerciseWidget(
+              exercise: Exercise<Gender, Noun>.testValue(
+                question: Noun.testValue(),
+                answers: const [],
+              ),
+            ),
           ),
         ),
-      ),
-    );
-  });
+      );
+      await widgetTester.pumpAndSettle();
 
-  testWidgets(
-      "tapping the second GenderCard adds ExerciseSubmitAnswerEvent with an answer of Gender.f to the ExerciseBloc",
-      (widgetTester) async {
-    await widgetTester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<ExerciseBloc>.value(
-          value: mockExerciseBloc,
-          child: GenderExerciseWidget(
-            word: word,
+      final answerCardFinder = find.byType(AnswerCard<Gender>);
+      expect(answerCardFinder, findsNWidgets(3));
+      widgetTester
+          .widgetList<AnswerCard<Gender>>(answerCardFinder)
+          .forEach((element) {
+        expect(element.isCorrect, isNull);
+      });
+    });
+
+    testWidgets(
+        "isTrue when answers is not empty and answer is exercise's correctAnswer",
+        (widgetTester) async {
+      const correctAnswer = Gender.m;
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: GenderExerciseWidget(
+              exercise: Exercise<Gender, Noun>.testValue(
+                question: Noun.testValue(gender: Gender.m),
+                answers: const [correctAnswer],
+              ),
+            ),
           ),
         ),
-      ),
-    );
+      );
+      await widgetTester.pumpAndSettle();
 
-    await widgetTester.pumpAndSettle();
+      final answerCardFinder = find.byType(AnswerCard<Gender>);
+      expect(answerCardFinder, findsNWidgets(3));
+      final foundAnswerCards =
+          widgetTester.widgetList<AnswerCard<Gender>>(answerCardFinder);
+      expect(
+          foundAnswerCards
+              .where((element) => element.answers.contains(correctAnswer))
+              .single
+              .isCorrect,
+          isTrue);
 
-    await widgetTester.tap(find.byType(AnswerCard).at(1));
+      foundAnswerCards
+          .where((element) => !element.answers.contains(correctAnswer))
+          .forEach((element) {
+        expect(element.isCorrect, isNull);
+      });
+    });
 
-    mocktail.verify(
-      () => mockExerciseBloc.add(
-        ExerciseSubmitAnswerEvent(
-          exercise: Exercise<Gender>.initial(
-            exercise: Gender.f,
-            word: word,
+    testWidgets(
+        "isFalse when answers is not empty and answer is not exercise's correctAnswer",
+        (widgetTester) async {
+      const correctAnswer = Gender.m;
+      const givenAnswer = Gender.f;
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: GenderExerciseWidget(
+              exercise: Exercise<Gender, Noun>.testValue(
+                question: Noun.testValue(gender: correctAnswer),
+                answers: const [givenAnswer],
+              ),
+            ),
           ),
         ),
-      ),
-    );
-  });
+      );
+      await widgetTester.pumpAndSettle();
 
-  testWidgets(
-      "tapping the third GenderCard adds ExerciseSubmitAnswerEvent with an answer of Gender.n to the ExerciseBloc",
-      (widgetTester) async {
-    await widgetTester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<ExerciseBloc>.value(
-          value: mockExerciseBloc,
-          child: GenderExerciseWidget(
-            word: word,
-          ),
-        ),
-      ),
-    );
-
-    await widgetTester.pumpAndSettle();
-
-    await widgetTester.tap(find.byType(AnswerCard).at(2));
-
-    mocktail.verify(
-      () => mockExerciseBloc.add(
-        ExerciseSubmitAnswerEvent(
-          exercise: Exercise<Gender>.initial(
-            exercise: Gender.n,
-            word: word,
-          ),
-        ),
-      ),
-    );
+      final answerCardFinder = find.byType(AnswerCard<Gender>);
+      expect(answerCardFinder, findsNWidgets(3));
+      final foundAnswerCards =
+          widgetTester.widgetList<AnswerCard<Gender>>(answerCardFinder);
+      expect(
+          foundAnswerCards
+              .where((element) => element.answers.contains(givenAnswer))
+              .single
+              .isCorrect,
+          isFalse);
+    });
   });
 }
