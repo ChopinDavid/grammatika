@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/ChopinDavid/uchu/graph/badge.svg?token=H40NNOYB8Y)](https://codecov.io/gh/ChopinDavid/uchu)
 # uchu
 
 A new Flutter project.
