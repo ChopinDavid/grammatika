@@ -24,8 +24,9 @@ class Exercise<A extends Answer, Q extends Question<A>> extends Equatable {
       return ExerciseType.determineWordForm;
     }
 
-    throw UnsupportedError(
-        'ExerciseType not yet defined for Answer type: $A and Question type: $Q');
+    /*LCOV_EXCL_LINE*/ throw UnsupportedError(
+      'ExerciseType not yet defined for Answer type: $A and Question type: $Q',
+    );
   }
 
   Exercise<A, Q> withAnswers(List<A> answers) {
