@@ -35,7 +35,7 @@ class GenderExerciseWidget extends StatelessWidget {
                   child: AnswerCard<Gender>(
                     answers: [gender],
                     displayString: gender.displayString,
-                    isCorrect: answers == null
+                    isCorrect: answers == null || answers.isEmpty
                         ? null
                         : exercise.question.correctAnswer == gender
                             ? true
