@@ -2,12 +2,10 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:uchu/exercise_bloc.dart';
 import 'package:uchu/extensions/gender_extension.dart';
-import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/noun.dart';
-import 'package:uchu/models/word.dart';
 import 'package:uchu/widgets/answer_card.dart';
 
 import '../mocks.dart';
@@ -27,48 +25,18 @@ main() {
     );
   });
 
-  testWidgets(
-    'throws when Gender.pl passed as gender',
-    (widgetTester) async {
-      expect(() => AnswerCard(gender: Gender.pl, onTap: () {}),
-          throwsAssertionError);
-    },
-  );
-
-  testWidgets(
-    'throws when Gender.both passed as gender',
-    (widgetTester) async {
-      expect(() => AnswerCard(gender: Gender.both, onTap: () {}),
-          throwsAssertionError);
-    },
-  );
-
   group('color', () {
     testWidgets(
-      'is green when gender is both the answer and the correctAnswer',
+      'is green when isCorrect',
       (widgetTester) async {
-        whenListen(
-          mockExerciseBloc,
-          Stream.fromIterable(
-            [
-              ExerciseAnswerSelectedState(
-                exercise: Exercise<Gender>.testValue(
-                  answer: Gender.m,
-                  correctAnswer: Gender.m,
-                ),
-              ),
-            ],
-          ),
-          initialState: ExerciseInitial(),
-        );
-
         await widgetTester.pumpWidget(
           MaterialApp(
             home: BlocProvider<ExerciseBloc>.value(
               value: mockExerciseBloc,
-              child: AnswerCard(
-                gender: Gender.m,
-                onTap: () {},
+              child: const AnswerCard<Gender>(
+                isCorrect: true,
+                answers: [],
+                displayString: '',
               ),
             ),
           ),
@@ -81,66 +49,16 @@ main() {
     );
 
     testWidgets(
-      'is green when gender is both the correctAnswer but not the answer',
+      'is red when !isCorrect',
       (widgetTester) async {
-        whenListen(
-          mockExerciseBloc,
-          Stream.fromIterable(
-            [
-              ExerciseAnswerSelectedState(
-                exercise: Exercise<Gender>.testValue(
-                  answer: Gender.f,
-                  correctAnswer: Gender.m,
-                ),
-              ),
-            ],
-          ),
-          initialState: ExerciseInitial(),
-        );
-
         await widgetTester.pumpWidget(
           MaterialApp(
             home: BlocProvider<ExerciseBloc>.value(
               value: mockExerciseBloc,
-              child: AnswerCard(
-                gender: Gender.m,
-                onTap: () {},
-              ),
-            ),
-          ),
-        );
-        await widgetTester.pumpAndSettle();
-
-        expect(
-            widgetTester.widget<Card>(find.byType(Card)).color, Colors.green);
-      },
-    );
-
-    testWidgets(
-      'is red when gender is the answer but not the correctAnswer',
-      (widgetTester) async {
-        whenListen(
-          mockExerciseBloc,
-          Stream.fromIterable(
-            [
-              ExerciseAnswerSelectedState(
-                exercise: Exercise<Gender>.testValue(
-                  answer: Gender.m,
-                  correctAnswer: Gender.f,
-                ),
-              ),
-            ],
-          ),
-          initialState: ExerciseInitial(),
-        );
-
-        await widgetTester.pumpWidget(
-          MaterialApp(
-            home: BlocProvider<ExerciseBloc>.value(
-              value: mockExerciseBloc,
-              child: AnswerCard(
-                gender: Gender.m,
-                onTap: () {},
+              child: const AnswerCard<Gender>(
+                isCorrect: false,
+                answers: [],
+                displayString: '',
               ),
             ),
           ),
@@ -152,116 +70,16 @@ main() {
     );
 
     testWidgets(
-      'has no color when the state is ExerciseInitial',
+      'is null when isCorrect is null',
       (widgetTester) async {
-        whenListen(
-          mockExerciseBloc,
-          Stream.fromIterable(
-            [
-              ExerciseInitial(),
-            ],
-          ),
-          initialState: ExerciseInitial(),
-        );
-
         await widgetTester.pumpWidget(
           MaterialApp(
             home: BlocProvider<ExerciseBloc>.value(
               value: mockExerciseBloc,
-              child: AnswerCard(
-                gender: Gender.m,
-                onTap: () {},
-              ),
-            ),
-          ),
-        );
-        await widgetTester.pumpAndSettle();
-
-        expect(widgetTester.widget<Card>(find.byType(Card)).color, null);
-      },
-    );
-
-    testWidgets(
-      'has no color when the state is ExerciseRandomNounRetrievedState',
-      (widgetTester) async {
-        whenListen(
-          mockExerciseBloc,
-          Stream.fromIterable(
-            [
-              ExerciseExerciseRetrievedState(
-                  noun: Noun.testValue(), word: Word.testValue()),
-            ],
-          ),
-          initialState: ExerciseInitial(),
-        );
-
-        await widgetTester.pumpWidget(
-          MaterialApp(
-            home: BlocProvider<ExerciseBloc>.value(
-              value: mockExerciseBloc,
-              child: AnswerCard(
-                gender: Gender.m,
-                onTap: () {},
-              ),
-            ),
-          ),
-        );
-        await widgetTester.pumpAndSettle();
-
-        expect(widgetTester.widget<Card>(find.byType(Card)).color, null);
-      },
-    );
-
-    testWidgets(
-      'has no color when the state is ExerciseRetrievingRandomNounState',
-      (widgetTester) async {
-        whenListen(
-          mockExerciseBloc,
-          Stream.fromIterable(
-            [
-              ExerciseRetrievingExerciseState(),
-            ],
-          ),
-          initialState: ExerciseInitial(),
-        );
-
-        await widgetTester.pumpWidget(
-          MaterialApp(
-            home: BlocProvider<ExerciseBloc>.value(
-              value: mockExerciseBloc,
-              child: AnswerCard(
-                gender: Gender.m,
-                onTap: () {},
-              ),
-            ),
-          ),
-        );
-        await widgetTester.pumpAndSettle();
-
-        expect(widgetTester.widget<Card>(find.byType(Card)).color, null);
-      },
-    );
-
-    testWidgets(
-      'has no color when the state is ExerciseErrorState',
-      (widgetTester) async {
-        whenListen(
-          mockExerciseBloc,
-          Stream.fromIterable(
-            [
-              ExerciseErrorState(errorString: 'some error'),
-            ],
-          ),
-          initialState: ExerciseInitial(),
-        );
-
-        await widgetTester.pumpWidget(
-          MaterialApp(
-            home: BlocProvider<ExerciseBloc>.value(
-              value: mockExerciseBloc,
-              child: AnswerCard(
-                gender: Gender.m,
-                onTap: () {},
+              child: const AnswerCard<Gender>(
+                isCorrect: null,
+                answers: [],
+                displayString: '',
               ),
             ),
           ),
@@ -273,33 +91,88 @@ main() {
     );
   });
 
-  testWidgets(
-    'invokes onTap when tapped',
-    (widgetTester) async {
-      int onTapCalledCount = 0;
+  group('InkWell onTap', () {
+    testWidgets(
+      'does not add ExerciseSubmitAnswerEvent when ExerciseBloc state is ExerciseAnswerSelectedState',
+      (widgetTester) async {
+        whenListen(
+          mockExerciseBloc,
+          Stream.fromIterable(
+            [
+              ExerciseAnswerSelectedState(),
+            ],
+          ),
+        );
 
-      await widgetTester.pumpWidget(
-        MaterialApp(
-          home: BlocProvider<ExerciseBloc>.value(
-            value: mockExerciseBloc,
-            child: AnswerCard(
-              gender: Gender.m,
-              onTap: () {
-                onTapCalledCount++;
-              },
+        final answers = [Gender.m];
+
+        await widgetTester.pumpWidget(
+          MaterialApp(
+            home: BlocProvider<ExerciseBloc>.value(
+              value: mockExerciseBloc,
+              child: AnswerCard<Gender>(
+                isCorrect: null,
+                answers: answers,
+                displayString: '',
+              ),
             ),
           ),
-        ),
-      );
-      await widgetTester.pumpAndSettle();
-      await widgetTester.tap(find.byType(Card));
+        );
+        await widgetTester.pumpAndSettle();
+        await widgetTester.tap(find.byType(Card));
 
-      expect(onTapCalledCount, 1);
-    },
-  );
+        verifyNever(
+          () => mockExerciseBloc.add(
+            ExerciseSubmitAnswerEvent<Gender>(
+              answers: answers,
+            ),
+          ),
+        );
+      },
+    );
+
+    testWidgets(
+      'does add ExerciseSubmitAnswerEvent when ExerciseBloc state is ExerciseExerciseRetrievedState',
+      (widgetTester) async {
+        whenListen(
+          mockExerciseBloc,
+          Stream.fromIterable(
+            [
+              ExerciseExerciseRetrievedState(),
+            ],
+          ),
+        );
+
+        final answers = [Gender.m];
+
+        await widgetTester.pumpWidget(
+          MaterialApp(
+            home: BlocProvider<ExerciseBloc>.value(
+              value: mockExerciseBloc,
+              child: AnswerCard<Gender>(
+                isCorrect: null,
+                answers: answers,
+                displayString: '',
+              ),
+            ),
+          ),
+        );
+        await widgetTester.pumpAndSettle();
+        await widgetTester.tap(find.byType(Card));
+
+        verify(
+          () => mockExerciseBloc.add(
+            ExerciseSubmitAnswerEvent<Gender>(
+              answers: answers,
+            ),
+          ),
+        );
+      },
+    );
+  });
 
   testWidgets(
-    "displays gender's displayString",
+    "displays displayString",
     (widgetTester) async {
       final expected = Gender.m.displayString;
 
@@ -307,9 +180,10 @@ main() {
         MaterialApp(
           home: BlocProvider<ExerciseBloc>.value(
             value: mockExerciseBloc,
-            child: AnswerCard(
-              gender: Gender.m,
-              onTap: () {},
+            child: AnswerCard<Gender>(
+              isCorrect: null,
+              answers: const [],
+              displayString: expected,
             ),
           ),
         ),
@@ -317,7 +191,7 @@ main() {
       await widgetTester.pumpAndSettle();
       await widgetTester.tap(find.byType(Card));
 
-      expect(find.text(expected!), findsOneWidget);
+      expect(find.text(expected), findsOneWidget);
     },
   );
 }
