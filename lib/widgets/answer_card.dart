@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uchu/exercise_bloc.dart';
 import 'package:uchu/models/answer.dart';
 
-// TODO(DC): rename file to answer_card.dart
 class AnswerCard<T extends Answer> extends StatelessWidget {
   const AnswerCard({
     super.key,
@@ -30,8 +29,7 @@ class AnswerCard<T extends Answer> extends StatelessWidget {
                 : null,
             clipBehavior: Clip.hardEdge,
             child: InkWell(
-              onTap: BlocProvider.of<ExerciseBloc>(context).state
-                      is ExerciseAnswerSelectedState
+              onTap: state is ExerciseAnswerSelectedState
                   ? null
                   : () {
                       BlocProvider.of<ExerciseBloc>(context).add(
