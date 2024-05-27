@@ -67,12 +67,16 @@ main() {
         act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
         expect: () => [
           ExerciseRetrievingExerciseState(),
-          ExerciseExerciseRetrievedState(
-              exercise: Exercise<Gender, Noun>(
-            question: noun,
-            answer: null,
-          )),
+          ExerciseExerciseRetrievedState(),
         ],
+        tearDown: () {
+          expect(
+              testObject.exercise,
+              Exercise<Gender, Noun>(
+                question: noun,
+                answers: null,
+              ));
+        },
       );
 
       blocTest(
@@ -87,6 +91,9 @@ main() {
           ExerciseRetrievingExerciseState(),
           ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
         ],
+        tearDown: () {
+          expect(testObject.exercise, isNull);
+        },
       );
 
       blocTest(
@@ -101,6 +108,9 @@ main() {
           ExerciseRetrievingExerciseState(),
           ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
         ],
+        tearDown: () {
+          expect(testObject.exercise, isNull);
+        },
       );
 
       blocTest(
@@ -117,6 +127,9 @@ main() {
           ExerciseRetrievingExerciseState(),
           ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
         ],
+        tearDown: () {
+          expect(testObject.exercise, isNull);
+        },
       );
     });
 
@@ -130,12 +143,16 @@ main() {
         act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
         expect: () => [
           ExerciseRetrievingExerciseState(),
-          ExerciseExerciseRetrievedState(
-              exercise: Exercise<WordForm, Sentence>(
-            question: sentence,
-            answer: null,
-          )),
+          ExerciseExerciseRetrievedState(),
         ],
+        tearDown: () {
+          expect(
+              testObject.exercise,
+              Exercise<WordForm, Sentence>(
+                question: sentence,
+                answers: null,
+              ));
+        },
       );
 
       blocTest(
@@ -150,6 +167,9 @@ main() {
           ExerciseRetrievingExerciseState(),
           ExerciseErrorState(errorString: 'Unable to parse sentence from JSON'),
         ],
+        tearDown: () {
+          expect(testObject.exercise, isNull);
+        },
       );
 
       blocTest(
@@ -164,6 +184,9 @@ main() {
           ExerciseRetrievingExerciseState(),
           ExerciseErrorState(errorString: 'Unable to parse sentence from JSON'),
         ],
+        tearDown: () {
+          expect(testObject.exercise, isNull);
+        },
       );
 
       blocTest(
@@ -178,6 +201,9 @@ main() {
           ExerciseRetrievingExerciseState(),
           ExerciseErrorState(errorString: 'Unable to parse sentence from JSON'),
         ],
+        tearDown: () {
+          expect(testObject.exercise, isNull);
+        },
       );
     });
   });
@@ -189,13 +215,16 @@ main() {
       act: (bloc) => bloc.add(ExerciseRetrieveRandomNounEvent()),
       expect: () => [
         ExerciseRetrievingExerciseState(),
-        ExerciseExerciseRetrievedState(
-          exercise: Exercise<Gender, Noun>(
-            question: noun,
-            answer: null,
-          ),
-        ),
+        ExerciseExerciseRetrievedState(),
       ],
+      tearDown: () {
+        expect(
+            testObject.exercise,
+            Exercise<Gender, Noun>(
+              question: noun,
+              answers: null,
+            ));
+      },
     );
 
     blocTest(
@@ -210,6 +239,9 @@ main() {
         ExerciseRetrievingExerciseState(),
         ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
       ],
+      tearDown: () {
+        expect(testObject.exercise, isNull);
+      },
     );
 
     blocTest(
@@ -224,6 +256,9 @@ main() {
         ExerciseRetrievingExerciseState(),
         ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
       ],
+      tearDown: () {
+        expect(testObject.exercise, isNull);
+      },
     );
 
     blocTest(
@@ -239,6 +274,9 @@ main() {
         ExerciseRetrievingExerciseState(),
         ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
       ],
+      tearDown: () {
+        expect(testObject.exercise, isNull);
+      },
     );
   });
 
@@ -249,12 +287,16 @@ main() {
       act: (bloc) => bloc.add(ExerciseRetrieveRandomSentenceEvent()),
       expect: () => [
         ExerciseRetrievingExerciseState(),
-        ExerciseExerciseRetrievedState(
-            exercise: Exercise<WordForm, Sentence>(
-          question: sentence,
-          answer: null,
-        )),
+        ExerciseExerciseRetrievedState(),
       ],
+      tearDown: () {
+        expect(
+            testObject.exercise,
+            Exercise<WordForm, Sentence>(
+              question: sentence,
+              answers: null,
+            ));
+      },
     );
 
     blocTest(
@@ -269,6 +311,9 @@ main() {
         ExerciseRetrievingExerciseState(),
         ExerciseErrorState(errorString: 'Unable to parse sentence from JSON'),
       ],
+      tearDown: () {
+        expect(testObject.exercise, isNull);
+      },
     );
 
     blocTest(
@@ -283,6 +328,9 @@ main() {
         ExerciseRetrievingExerciseState(),
         ExerciseErrorState(errorString: 'Unable to parse sentence from JSON'),
       ],
+      tearDown: () {
+        expect(testObject.exercise, isNull);
+      },
     );
 
     blocTest(
@@ -297,6 +345,37 @@ main() {
         ExerciseRetrievingExerciseState(),
         ExerciseErrorState(errorString: 'Unable to parse sentence from JSON'),
       ],
+      tearDown: () {
+        expect(testObject.exercise, isNull);
+      },
+    );
+  });
+
+  group('ExerciseSubmitAnswerEvent', () {
+    final initialExercise = Exercise<WordForm, Sentence>(
+      question: sentence,
+      answers: null,
+    );
+    final answersToAdd = [WordForm.testValue()];
+    blocTest(
+      'emits ExerciseAnswerSelectedState, appending answers to existing Exercise',
+      build: () => testObject,
+      setUp: () {
+        testObject.exercise = initialExercise;
+      },
+      act: (bloc) => bloc.add(ExerciseSubmitAnswerEvent(answers: answersToAdd)),
+      expect: () => [
+        ExerciseAnswerSelectedState(),
+      ],
+      tearDown: () {
+        expect(
+          testObject.exercise,
+          Exercise<WordForm, Sentence>(
+            question: initialExercise.question,
+            answers: answersToAdd,
+          ),
+        );
+      },
     );
   });
 }

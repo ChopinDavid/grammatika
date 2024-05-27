@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:uchu/models/answer.dart';
 import 'package:uchu/models/word_form_type.dart';
 
@@ -28,4 +29,17 @@ class WordForm extends Equatable implements Answer {
 
   @override
   List<Object?> get props => [type, form, bare];
+
+  @visibleForTesting
+  factory WordForm.testValue(
+          {WordFormType type = WordFormType.ruBase,
+          String form = "сказа'в",
+          String formBare = 'сказав'}) =>
+      WordForm.fromJson(
+        {
+          'form_type': type.name,
+          'form': form,
+          '_form_bare': formBare,
+        },
+      );
 }
