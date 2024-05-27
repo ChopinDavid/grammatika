@@ -83,7 +83,7 @@ class Sentence extends Question<WordForm> {
 
   Map<String, dynamic> toJson() {
     return {
-      'correct_answers': answerSynonyms.map((e) => e.toJson()).toList(),
+      'answer_synonyms': answerSynonyms.map((e) => e.toJson()).toList(),
       'possible_answers': possibleAnswers.map((e) => e.toJson()).toList(),
       'explanation': explanation,
       'id': id,
@@ -122,6 +122,7 @@ class Sentence extends Question<WordForm> {
 
   @visibleForTesting
   factory Sentence.testValue({
+    List<Map<String, dynamic>>? answerSynonyms,
     WordFormType formType = WordFormType.ruVerbGerundPast,
     String form = "сказа'л",
     String formBare = 'сказал',
@@ -147,6 +148,13 @@ class Sentence extends Question<WordForm> {
     Level wordLevel = Level.A2,
     DateTime? createdAt,
   }) {
+    answerSynonyms ??= [
+      {
+        'form_type': WordFormType.ruVerbPastM.name,
+        'form': "сказа'л",
+        '_form_bare': 'сказал'
+      },
+    ];
     possibleAnswers ??= [
       {
         'form_type': WordFormType.ruVerbGerundPast.name,
@@ -231,6 +239,7 @@ class Sentence extends Question<WordForm> {
     ];
     createdAt ??= DateTime.parse('2020-01-01 00:00:00');
     return Sentence.fromJson({
+      'answer_synonyms': answerSynonyms,
       'form_type': formType.name,
       'form': form,
       '_form_bare': formBare,
