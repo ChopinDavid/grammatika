@@ -83,6 +83,9 @@ class Sentence extends Question<WordForm> {
 
   Map<String, dynamic> toJson() {
     return {
+      'form_type': correctAnswer.type.name,
+      'form': correctAnswer.form,
+      '_form_bare': correctAnswer.bare,
       'answer_synonyms': answerSynonyms.map((e) => e.toJson()).toList(),
       'possible_answers': possibleAnswers.map((e) => e.toJson()).toList(),
       'explanation': explanation,
