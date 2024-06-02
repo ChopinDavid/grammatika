@@ -20,15 +20,19 @@ class ExerciseFooter extends StatelessWidget {
           ),
         Container(
           color: Colors.grey,
-          height: 50,
           width: double.maxFinite,
-          child: TextButton(
-            child: const Text('Next'),
-            onPressed: () {
-              BlocProvider.of<ExerciseBloc>(context).add(
-                ExerciseRetrieveExerciseEvent(),
-              );
-            },
+          // TODO(DC): Can we use a SafeArea widget instead?
+          child: Padding(
+            padding:
+                EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+            child: TextButton(
+              child: const Text('Next'),
+              onPressed: () {
+                BlocProvider.of<ExerciseBloc>(context).add(
+                  ExerciseRetrieveExerciseEvent(),
+                );
+              },
+            ),
           ),
         ),
       ],
