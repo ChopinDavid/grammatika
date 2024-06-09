@@ -1,3 +1,6 @@
+import 'package:uchu/models/word_form.dart';
+import 'package:uchu/models/word_form_type.dart';
+
 import 'consts.dart';
 import 'models/gender.dart';
 
@@ -40,8 +43,149 @@ class ExplanationHelper {
     }
   }
 
-  String? sentenceExplanation() {
-    // TODO(DC): Flesh this out.
+  String? sentenceExplanation(
+      {required String bare, required WordForm correctAnswer}) {
+    switch (correctAnswer.type) {
+      case WordFormType.ruVerbGerundPast:
+        String? formationExplanation;
+        bool isReflexive =
+            bare.endsWith('ться') && correctAnswer.bare.endsWith('вшись');
+        if (isReflexive) {
+          formationExplanation =
+              ' Since the verb in this sentence is reflexive, you replace the "-ться" suffix with a "-вшись" suffix.';
+        } else if (correctAnswer.position == 1 &&
+            bare.endsWith('ть') &&
+            correctAnswer.bare.endsWith('в')) {
+          formationExplanation =
+              ' Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-в" suffix. Alternatively, you could replace the "-ть" suffix with a "-вши" suffix, though this is marked (colloquial, dated, or humorous).';
+        } else if (correctAnswer.position == 2 &&
+            bare.endsWith('ть') &&
+            correctAnswer.bare.endsWith('вши')) {
+          formationExplanation =
+              ' Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-вши" suffix. Alternatively, you could replace the "-ть" suffix with a "-в" suffix.';
+        }
+        return 'This word is a perfective gerund, also known as a perfective adverbial participle. Perfective gerunds are used to describe an action, preceding the action expressed by the main verb.${formationExplanation ?? ''}';
+      case WordFormType.ruVerbGerundPresent:
+        return '';
+      case WordFormType.ruBase:
+        return '';
+      case WordFormType.ruAdjMNom:
+        return '';
+      case WordFormType.ruAdjMGen:
+        return '';
+      case WordFormType.ruAdjMDat:
+        return '';
+      case WordFormType.ruAdjMAcc:
+        return '';
+      case WordFormType.ruAdjMInst:
+        return '';
+      case WordFormType.ruAdjMPrep:
+        return '';
+      case WordFormType.ruAdjFNom:
+        return '';
+      case WordFormType.ruAdjFGen:
+        return '';
+      case WordFormType.ruAdjFDat:
+        return '';
+      case WordFormType.ruAdjFAcc:
+        return '';
+      case WordFormType.ruAdjFInst:
+        return '';
+      case WordFormType.ruAdjFPrep:
+        return '';
+      case WordFormType.ruAdjNNom:
+        return '';
+      case WordFormType.ruAdjNGen:
+        return '';
+      case WordFormType.ruAdjNDat:
+        return '';
+      case WordFormType.ruAdjNAcc:
+        return '';
+      case WordFormType.ruAdjNInst:
+        return '';
+      case WordFormType.ruAdjNPrep:
+        return '';
+      case WordFormType.ruAdjPlNom:
+        return '';
+      case WordFormType.ruAdjPlGen:
+        return '';
+      case WordFormType.ruAdjPlDat:
+        return '';
+      case WordFormType.ruAdjPlAcc:
+        return '';
+      case WordFormType.ruAdjPlInst:
+        return '';
+      case WordFormType.ruAdjPlPrep:
+        return '';
+      case WordFormType.ruVerbImperativeSg:
+        return '';
+      case WordFormType.ruVerbImperativePl:
+        return '';
+      case WordFormType.ruVerbPastM:
+        return '';
+      case WordFormType.ruVerbPastF:
+        return '';
+      case WordFormType.ruVerbPastN:
+        return '';
+      case WordFormType.ruVerbPastPl:
+        return '';
+      case WordFormType.ruVerbPresfutSg1:
+        return '';
+      case WordFormType.ruVerbPresfutSg2:
+        return '';
+      case WordFormType.ruVerbPresfutSg3:
+        return '';
+      case WordFormType.ruVerbPresfutPl1:
+        return '';
+      case WordFormType.ruVerbPresfutPl2:
+        return '';
+      case WordFormType.ruVerbPresfutPl3:
+        return '';
+      case WordFormType.ruVerbParticipleActivePast:
+        return '';
+      case WordFormType.ruVerbParticiplePassivePast:
+        return '';
+      case WordFormType.ruVerbParticipleActivePresent:
+        return '';
+      case WordFormType.ruVerbParticiplePassivePresent:
+        return '';
+      case WordFormType.ruNounSgNom:
+        return '';
+      case WordFormType.ruNounSgGen:
+        return '';
+      case WordFormType.ruNounSgDat:
+        return '';
+      case WordFormType.ruNounSgAcc:
+        return '';
+      case WordFormType.ruNounSgInst:
+        return '';
+      case WordFormType.ruNounSgPrep:
+        return '';
+      case WordFormType.ruNounPlNom:
+        return '';
+      case WordFormType.ruNounPlGen:
+        return '';
+      case WordFormType.ruNounPlDat:
+        return '';
+      case WordFormType.ruNounPlAcc:
+        return '';
+      case WordFormType.ruNounPlInst:
+        return '';
+      case WordFormType.ruNounPlPrep:
+        return '';
+      case WordFormType.ruAdjComparative:
+        return '';
+      case WordFormType.ruAdjSuperlative:
+        return '';
+      case WordFormType.ruAdjShortM:
+        return '';
+      case WordFormType.ruAdjShortF:
+        return '';
+      case WordFormType.ruAdjShortN:
+        return '';
+      case WordFormType.ruAdjShortPl:
+        return '';
+    }
     return 'This is the explanation for the sentence exercise.';
   }
 }
