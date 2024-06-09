@@ -84,6 +84,7 @@ class Sentence extends Question<WordForm> {
   Map<String, dynamic> toJson() {
     return {
       'form_type': correctAnswer.type.name,
+      'word_form_position': correctAnswer.position,
       'form': correctAnswer.form,
       '_form_bare': correctAnswer.bare,
       'answer_synonyms': answerSynonyms.map((e) => e.toJson()).toList(),
@@ -127,6 +128,7 @@ class Sentence extends Question<WordForm> {
   factory Sentence.testValue({
     List<Map<String, dynamic>>? answerSynonyms,
     WordFormType formType = WordFormType.ruVerbGerundPast,
+    int wordFormPosition = 1,
     String form = "сказа'л",
     String formBare = 'сказал',
     List<Map<String, dynamic>>? possibleAnswers,
@@ -154,6 +156,7 @@ class Sentence extends Question<WordForm> {
     answerSynonyms ??= [
       {
         'form_type': WordFormType.ruVerbPastM.name,
+        'word_form_position': 1,
         'form': "сказа'л",
         '_form_bare': 'сказал'
       },
@@ -161,81 +164,97 @@ class Sentence extends Question<WordForm> {
     possibleAnswers ??= [
       {
         'form_type': WordFormType.ruVerbGerundPast.name,
+        'word_form_position': 1,
         'form': "сказа'в",
         '_form_bare': 'сказав'
       },
       {
         'form_type': WordFormType.ruVerbGerundPast.name,
+        'word_form_position': 2,
         'form': 'сказавши',
         '_form_bare': 'сказавши'
       },
       {
         'form_type': WordFormType.ruVerbImperativeSg.name,
+        'word_form_position': 1,
         'form': "скажи'",
         '_form_bare': 'скажи'
       },
       {
         'form_type': WordFormType.ruVerbImperativePl.name,
+        'word_form_position': 1,
         'form': "скажи'те",
         '_form_bare': 'скажите'
       },
       {
         'form_type': WordFormType.ruVerbPastM.name,
+        'word_form_position': 1,
         'form': "сказа'л",
         '_form_bare': 'сказал'
       },
       {
         'form_type': WordFormType.ruVerbPastF.name,
+        'word_form_position': 1,
         'form': "сказа'ла",
         '_form_bare': 'сказала'
       },
       {
         'form_type': WordFormType.ruVerbPastN.name,
+        'word_form_position': 1,
         'form': "сказа'ло",
         '_form_bare': 'сказало'
       },
       {
         'form_type': WordFormType.ruVerbPastPl.name,
+        'word_form_position': 1,
         'form': "сказа'ли",
         '_form_bare': 'сказали'
       },
       {
         'form_type': WordFormType.ruVerbPresfutSg1.name,
+        'word_form_position': 1,
         'form': "скажу'",
         '_form_bare': 'скажу'
       },
       {
         'form_type': WordFormType.ruVerbPresfutSg2.name,
+        'word_form_position': 1,
         'form': "ска'жешь",
         '_form_bare': 'скажешь'
       },
       {
         'form_type': WordFormType.ruVerbPresfutSg3.name,
+        'word_form_position': 1,
         'form': "ска'жет",
         '_form_bare': 'скажет'
       },
       {
         'form_type': WordFormType.ruVerbPresfutPl1.name,
+        'word_form_position': 1,
         'form': "ска'жем",
         '_form_bare': 'скажем'
       },
       {
         'form_type': WordFormType.ruVerbPresfutPl2.name,
+        'word_form_position': 1,
         'form': "ска'жете",
         '_form_bare': 'скажете'
       },
       {
         'form_type': WordFormType.ruVerbPresfutPl3.name,
+        'word_form_position': 1,
         'form': "ска'жут",
         '_form_bare': 'скажут'
       },
       {
         'form_type': WordFormType.ruVerbParticipleActivePast.name,
+        'word_form_position': 1,
         'form': "сказа'вший",
         '_form_bare': 'сказавший'
       },
       {
         'form_type': WordFormType.ruVerbParticiplePassivePast.name,
+        'word_form_position': 1,
         'form': "ска'занный",
         '_form_bare': 'сказанный'
       },
@@ -244,6 +263,7 @@ class Sentence extends Question<WordForm> {
     return Sentence.fromJson({
       'answer_synonyms': answerSynonyms,
       'form_type': formType.name,
+      'word_form_position': wordFormPosition,
       'form': form,
       '_form_bare': formBare,
       'explanation': explanation,
