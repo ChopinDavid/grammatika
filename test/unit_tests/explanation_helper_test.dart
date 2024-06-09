@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uchu/explanation_helper.dart';
 import 'package:uchu/models/gender.dart';
+import 'package:uchu/models/word_form.dart';
+import 'package:uchu/models/word_form_type.dart';
 
 main() {
   late ExplanationHelper testObject;
@@ -75,5 +77,97 @@ main() {
 
   group('sentenceExplanation', () {
     // TODO(DC): write sentenceExplanation tests
+    group('when correctAnswer.type is ruVerbGerundPast', () {
+      group('and word is reflexive', () {
+        test('returns correct explanation', () {
+          expect(
+            testObject.sentenceExplanation(
+              bare: 'авторизоваться',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruVerbGerundPast,
+                position: 1,
+                form: "авторизовавшись",
+                formBare: 'авторизовавшись',
+              ),
+            ),
+            'This word is a perfective gerund, also known as a perfective adverbial participle. Perfective gerunds are used to describe an action, preceding the action expressed by the main verb. Since the verb in this sentence is reflexive, you replace the "-ться" suffix with a "-вшись" suffix.',
+          );
+        });
+      });
+
+      group('and word is not reflexive', () {
+        group('and position is 1', () {
+          test(
+              'and bare ends in "ть" and correctAnswer.bare ends in "в", returns correct explanation',
+              () {
+            expect(
+              testObject.sentenceExplanation(
+                bare: 'авторизовать',
+                correctAnswer: WordForm.testValue(
+                  type: WordFormType.ruVerbGerundPast,
+                  position: 1,
+                  form: "авторизова'в",
+                  formBare: 'авторизовав',
+                ),
+              ),
+              'This word is a perfective gerund, also known as a perfective adverbial participle. Perfective gerunds are used to describe an action, preceding the action expressed by the main verb. Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-в" suffix. Alternatively, you could replace the "-ть" suffix with a "-вши" suffix, though this is marked (colloquial, dated, or humorous).',
+            );
+          });
+
+          test(
+              'and bare does not end in "ть" or correctAnswer.bare does not end in "в", returns correct explanation',
+              () {
+            expect(
+              testObject.sentenceExplanation(
+                bare: 'агитировать',
+                correctAnswer: WordForm.testValue(
+                  type: WordFormType.ruVerbGerundPast,
+                  position: 1,
+                  form: "агитировавши",
+                  formBare: 'агитировавши',
+                ),
+              ),
+              'This word is a perfective gerund, also known as a perfective adverbial participle. Perfective gerunds are used to describe an action, preceding the action expressed by the main verb.',
+            );
+          });
+        });
+
+        group('and position is 2', () {
+          test(
+              'and bare ends in "ть" and correctAnswer.bare ends in "вши", returns correct explanation',
+              () {
+            expect(
+              testObject.sentenceExplanation(
+                bare: 'абонировать',
+                correctAnswer: WordForm.testValue(
+                  type: WordFormType.ruVerbGerundPast,
+                  position: 2,
+                  form: "абонировавши",
+                  formBare: 'абонировавши',
+                ),
+              ),
+              'This word is a perfective gerund, also known as a perfective adverbial participle. Perfective gerunds are used to describe an action, preceding the action expressed by the main verb. Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-вши" suffix. Alternatively, you could replace the "-ть" suffix with a "-в" suffix.',
+            );
+          });
+
+          test(
+              'and bare does not end in "ть" or correctAnswer.bare does not end in "вши", returns correct explanation',
+              () {
+            expect(
+              testObject.sentenceExplanation(
+                bare: 'броситься',
+                correctAnswer: WordForm.testValue(
+                  type: WordFormType.ruVerbGerundPast,
+                  position: 2,
+                  form: "бро'сясь",
+                  formBare: 'бросясь',
+                ),
+              ),
+              'This word is a perfective gerund, also known as a perfective adverbial participle. Perfective gerunds are used to describe an action, preceding the action expressed by the main verb.',
+            );
+          });
+        });
+      });
+    });
   });
 }

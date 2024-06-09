@@ -42,14 +42,17 @@ main() {
     when(() => mockDatabase.rawQuery(randomSentenceQueryString))
         .thenAnswer((invocation) async => [sentence.toJson()]);
     when(() => mockDatabase.rawQuery(
-            'SELECT form_type, form, _form_bare FROM words_forms WHERE word_id = ${sentence.word.id};'))
-        .thenAnswer((invocation) async =>
-            sentence.possibleAnswers.map((e) => e.toJson()).toList());
+            'SELECT form_type, position AS word_form_position, form, _form_bare FROM words_forms WHERE word_id = ${sentence.word.id};'))
+        .thenAnswer((invocation) async {
+      return sentence.possibleAnswers.map((e) => e.toJson()).toList();
+    });
     when(() => mockExplanationHelper.genderExplanation(
             bare: any(named: 'bare'),
             correctAnswer: any(named: 'correctAnswer')))
         .thenAnswer((invocation) => 'because I said so');
-    when(() => mockExplanationHelper.sentenceExplanation())
+    when(() => mockExplanationHelper.sentenceExplanation(
+            bare: any(named: 'bare'),
+            correctAnswer: any(named: 'correctAnswer')))
         .thenAnswer((invocation) => 'because I said so');
     GetIt.instance.registerSingleton<DbHelper>(mockDbHelper);
     GetIt.instance.registerSingleton<ExplanationHelper>(mockExplanationHelper);
@@ -193,7 +196,9 @@ main() {
         'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExplanationHelper.sentenceExplanation throws',
         build: () => testObject,
         setUp: () {
-          when(() => mockExplanationHelper.sentenceExplanation())
+          when(() => mockExplanationHelper.sentenceExplanation(
+                  bare: any(named: 'bare'),
+                  correctAnswer: any(named: 'correctAnswer')))
               .thenThrow(Exception());
         },
         act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
@@ -337,8 +342,9 @@ main() {
       'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExplanationHelper.sentenceExplanation throws',
       build: () => testObject,
       setUp: () {
-        when(() => mockExplanationHelper.sentenceExplanation())
-            .thenThrow(Exception());
+        when(() => mockExplanationHelper.sentenceExplanation(
+            bare: any(named: 'bare'),
+            correctAnswer: any(named: 'correctAnswer'))).thenThrow(Exception());
       },
       act: (bloc) => bloc.add(ExerciseRetrieveRandomSentenceEvent()),
       expect: () => [
