@@ -67,7 +67,7 @@ class ExplanationHelper {
           formationExplanation =
               ' Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-вши" suffix. Alternatively, you could replace the "-ть" suffix with a "-в" suffix.';
         }
-        return 'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb.${formationExplanation ?? ''}';
+        return 'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb.${formationExplanation ?? ''}\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruVerbGerundPresent:
         bool isReflexive =
             bare.endsWith('ться') && correctAnswer.bare.endsWith('сь');
