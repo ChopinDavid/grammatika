@@ -77,7 +77,23 @@ class ExplanationHelper {
       case WordFormType.ruBase:
         return '';
       case WordFormType.ruAdjMNom:
-        return '';
+        String? formationExplanation;
+        if (bare.endsWith('ый')) {
+          formationExplanation =
+              ' The majority of Russian adjectives have a stem ending in a hard consonant, this adjective included. Since this is a masculine, nominative adjective with a hard-consonant stem, we add the "-ый" suffix after the stem.';
+        } else if (bare.endsWith('ий')) {
+          if (bare.endsWith('ний')) {
+            formationExplanation =
+                ' Masculine, nominative adjectives with stems ending in a soft "-н" get a "-ий" suffix after their stem.';
+          } else {
+            formationExplanation =
+                ' Masculine, nominative adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", or "-щ" get a "-ий" suffix after their stem.';
+          }
+        } else if (bare.endsWith('ой')) {
+          formationExplanation =
+              ' There is a small group of masculine, nominative objectives that end in "-ой" instead of "-ый" or "-ий". This is one such adjective. These adjectives ending in "-ой" are always stressed on the "о" in their suffix.';
+        }
+        return 'This word is a masculine adjective in the nominative case. This means that it is a word that modifies a masculine noun that is the subject of a verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjMGen:
         return '';
       case WordFormType.ruAdjMDat:
