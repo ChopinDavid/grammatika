@@ -13,6 +13,7 @@ import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
+import 'package:uchu/models/word_form_type.dart';
 
 import 'models/answer.dart';
 
@@ -85,10 +86,16 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
           final List<Map<String, dynamic>> answers = (await db.rawQuery(
               'SELECT form_type, position AS word_form_position, form, _form_bare FROM words_forms WHERE word_id = ${sentenceQuery['word_id']};'));
           final correctAnswer = WordForm.fromJson(sentenceQuery);
-          final explanation = GetIt.instance
-              .get<ExplanationHelper>()
-              .sentenceExplanation(
-                  correctAnswer: correctAnswer, bare: sentenceQuery['bare']);
+          final explanation =
+              GetIt.instance.get<ExplanationHelper>().sentenceExplanation(
+            correctAnswer: correctAnswer,
+            bare: sentenceQuery['bare'],
+            wordFormTypesToBareMap: <WordFormType, String>{
+              for (var answer in answers)
+                WordFormTypeExt.fromString(answer['form_type']):
+                    answer['_form_bare'],
+            },
+          );
           final json = {
             ...sentenceQuery,
             'answer_synonyms': answers.where((element) {

@@ -43,8 +43,11 @@ class ExplanationHelper {
     }
   }
 
-  String? sentenceExplanation(
-      {required String bare, required WordForm correctAnswer}) {
+  String? sentenceExplanation({
+    required String bare,
+    required WordForm correctAnswer,
+    required Map<WordFormType, String> wordFormTypesToBareMap,
+  }) {
     switch (correctAnswer.type) {
       case WordFormType.ruVerbGerundPast:
         String? formationExplanation;
@@ -66,15 +69,11 @@ class ExplanationHelper {
         }
         return 'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb.${formationExplanation ?? ''}';
       case WordFormType.ruVerbGerundPresent:
-        String? formationExplanation;
         bool isReflexive =
             bare.endsWith('ться') && correctAnswer.bare.endsWith('сь');
-        if (isReflexive) {
-          final usesSpellingRule = correctAnswer.bare.endsWith('ась');
-          formationExplanation =
-              ' Since the verb in this sentence is reflexive, you take the third person plural form of the verb and replace its suffix with either a "-ась" or "-ясь" suffix. Since "a" always follows "ж", "ш", "ч", or "щ", we will use ${usesSpellingRule ? '"-ась"' : '"-ясь"'} in this case.';
-        }
-        return 'This word is an imperfective gerund, also known as an imperfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is imperfective, meaning that the gerund denotes a process or incomplete action, taking place simultaneously with the main verb.${formationExplanation ?? ''}';
+        final usesSpellingRule = correctAnswer.bare.endsWith('ась') ||
+            correctAnswer.bare.endsWith('а');
+        return 'This word is an imperfective gerund, also known as an imperfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is imperfective, meaning that the gerund denotes a process or incomplete action, taking place simultaneously with the main verb. Since the verb in this sentence is ${isReflexive ? '' : 'not '}reflexive, you take the third person plural form of the verb and replace its suffix with either a ${isReflexive ? '"-ась" or "-ясь"' : '"-а" or "-я"'} suffix. Since "a" always follows "ж", "ш", "ч", or "щ", we will use ${usesSpellingRule ? isReflexive ? '"-ась"' : '"-а"' : isReflexive ? '"-ясь"' : '"-я"'} in this case.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}';
       case WordFormType.ruBase:
         return '';
       case WordFormType.ruAdjMNom:

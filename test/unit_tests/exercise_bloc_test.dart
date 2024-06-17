@@ -52,7 +52,8 @@ main() {
         .thenAnswer((invocation) => 'because I said so');
     when(() => mockExplanationHelper.sentenceExplanation(
             bare: any(named: 'bare'),
-            correctAnswer: any(named: 'correctAnswer')))
+            correctAnswer: any(named: 'correctAnswer'),
+            wordFormTypesToBareMap: any(named: 'wordFormTypesToBareMap')))
         .thenAnswer((invocation) => 'because I said so');
     GetIt.instance.registerSingleton<DbHelper>(mockDbHelper);
     GetIt.instance.registerSingleton<ExplanationHelper>(mockExplanationHelper);
@@ -198,7 +199,8 @@ main() {
         setUp: () {
           when(() => mockExplanationHelper.sentenceExplanation(
                   bare: any(named: 'bare'),
-                  correctAnswer: any(named: 'correctAnswer')))
+                  correctAnswer: any(named: 'correctAnswer'),
+                  wordFormTypesToBareMap: any(named: 'wordFormTypesToBareMap')))
               .thenThrow(Exception());
         },
         act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
@@ -343,8 +345,10 @@ main() {
       build: () => testObject,
       setUp: () {
         when(() => mockExplanationHelper.sentenceExplanation(
-            bare: any(named: 'bare'),
-            correctAnswer: any(named: 'correctAnswer'))).thenThrow(Exception());
+                bare: any(named: 'bare'),
+                correctAnswer: any(named: 'correctAnswer'),
+                wordFormTypesToBareMap: any(named: 'wordFormTypesToBareMap')))
+            .thenThrow(Exception());
       },
       act: (bloc) => bloc.add(ExerciseRetrieveRandomSentenceEvent()),
       expect: () => [
