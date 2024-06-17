@@ -80,18 +80,20 @@ main() {
     group('when correctAnswer.type is ruVerbGerundPast', () {
       group('and word is reflexive', () {
         test('returns correct explanation', () {
+          const bare = 'авторизоваться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbGerundPast,
+            position: 1,
+            form: "авторизовавшись",
+            bare: 'авторизовавшись',
+          );
           expect(
             testObject.sentenceExplanation(
-              bare: 'авторизоваться',
-              correctAnswer: WordForm.testValue(
-                type: WordFormType.ruVerbGerundPast,
-                position: 1,
-                form: "авторизовавшись",
-                bare: 'авторизовавшись',
-              ),
+              bare: bare,
+              correctAnswer: correctAnswer,
               wordFormTypesToBareMap: {},
             ),
-            'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb. Since the verb in this sentence is reflexive, you replace the "-ться" suffix with a "-вшись" suffix.',
+            'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb. Since the verb in this sentence is reflexive, you replace the "-ться" suffix with a "-вшись" suffix.\n\n$bare -> ${correctAnswer.bare}',
           );
         });
       });
@@ -101,36 +103,40 @@ main() {
           test(
               'and bare ends in "ть" and correctAnswer.bare ends in "в", returns correct explanation',
               () {
+            const bare = 'авторизовать';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbGerundPast,
+              position: 1,
+              form: "авторизова'в",
+              bare: 'авторизовав',
+            );
             expect(
               testObject.sentenceExplanation(
-                bare: 'авторизовать',
-                correctAnswer: WordForm.testValue(
-                  type: WordFormType.ruVerbGerundPast,
-                  position: 1,
-                  form: "авторизова'в",
-                  bare: 'авторизовав',
-                ),
+                bare: bare,
+                correctAnswer: correctAnswer,
                 wordFormTypesToBareMap: {},
               ),
-              'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb. Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-в" suffix. Alternatively, you could replace the "-ть" suffix with a "-вши" suffix, though this is marked (colloquial, dated, or humorous).',
+              'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb. Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-в" suffix. Alternatively, you could replace the "-ть" suffix with a "-вши" suffix, though this is marked (colloquial, dated, or humorous).\n\n$bare -> ${correctAnswer.bare}',
             );
           });
 
           test(
               'and bare does not end in "ть" or correctAnswer.bare does not end in "в", returns correct explanation',
               () {
+            const bare = 'агитировать';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbGerundPast,
+              position: 1,
+              form: "агитировавши",
+              bare: 'агитировавши',
+            );
             expect(
               testObject.sentenceExplanation(
-                bare: 'агитировать',
-                correctAnswer: WordForm.testValue(
-                  type: WordFormType.ruVerbGerundPast,
-                  position: 1,
-                  form: "агитировавши",
-                  bare: 'агитировавши',
-                ),
+                bare: bare,
+                correctAnswer: correctAnswer,
                 wordFormTypesToBareMap: {},
               ),
-              'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb.',
+              'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb.\n\n$bare -> ${correctAnswer.bare}',
             );
           });
         });
@@ -139,36 +145,40 @@ main() {
           test(
               'and bare ends in "ть" and correctAnswer.bare ends in "вши", returns correct explanation',
               () {
+            const bare = 'абонировать';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbGerundPast,
+              position: 2,
+              form: "абонировавши",
+              bare: 'абонировавши',
+            );
             expect(
               testObject.sentenceExplanation(
-                bare: 'абонировать',
-                correctAnswer: WordForm.testValue(
-                  type: WordFormType.ruVerbGerundPast,
-                  position: 2,
-                  form: "абонировавши",
-                  bare: 'абонировавши',
-                ),
+                bare: bare,
+                correctAnswer: correctAnswer,
                 wordFormTypesToBareMap: {},
               ),
-              'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb. Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-вши" suffix. Alternatively, you could replace the "-ть" suffix with a "-в" suffix.',
+              'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb. Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-вши" suffix. Alternatively, you could replace the "-ть" suffix with a "-в" suffix.\n\n$bare -> ${correctAnswer.bare}',
             );
           });
 
           test(
               'and bare does not end in "ть" or correctAnswer.bare does not end in "вши", returns correct explanation',
               () {
+            const bare = 'броситься';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbGerundPast,
+              position: 2,
+              form: "бро'сясь",
+              bare: 'бросясь',
+            );
             expect(
               testObject.sentenceExplanation(
-                bare: 'броситься',
-                correctAnswer: WordForm.testValue(
-                  type: WordFormType.ruVerbGerundPast,
-                  position: 2,
-                  form: "бро'сясь",
-                  bare: 'бросясь',
-                ),
+                bare: bare,
+                correctAnswer: correctAnswer,
                 wordFormTypesToBareMap: {},
               ),
-              'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb.',
+              'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb.\n\n$bare -> ${correctAnswer.bare}',
             );
           });
         });
