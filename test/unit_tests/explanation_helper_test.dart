@@ -87,8 +87,9 @@ main() {
                 type: WordFormType.ruVerbGerundPast,
                 position: 1,
                 form: "авторизовавшись",
-                formBare: 'авторизовавшись',
+                bare: 'авторизовавшись',
               ),
+              wordFormTypesToBareMap: {},
             ),
             'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb. Since the verb in this sentence is reflexive, you replace the "-ться" suffix with a "-вшись" suffix.',
           );
@@ -107,8 +108,9 @@ main() {
                   type: WordFormType.ruVerbGerundPast,
                   position: 1,
                   form: "авторизова'в",
-                  formBare: 'авторизовав',
+                  bare: 'авторизовав',
                 ),
+                wordFormTypesToBareMap: {},
               ),
               'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb. Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-в" suffix. Alternatively, you could replace the "-ть" suffix with a "-вши" suffix, though this is marked (colloquial, dated, or humorous).',
             );
@@ -124,8 +126,9 @@ main() {
                   type: WordFormType.ruVerbGerundPast,
                   position: 1,
                   form: "агитировавши",
-                  formBare: 'агитировавши',
+                  bare: 'агитировавши',
                 ),
+                wordFormTypesToBareMap: {},
               ),
               'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb.',
             );
@@ -143,8 +146,9 @@ main() {
                   type: WordFormType.ruVerbGerundPast,
                   position: 2,
                   form: "абонировавши",
-                  formBare: 'абонировавши',
+                  bare: 'абонировавши',
                 ),
+                wordFormTypesToBareMap: {},
               ),
               'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb. Since the verb in this sentence is not reflexive, you replace the "-ть" suffix with a "-вши" suffix. Alternatively, you could replace the "-ть" suffix with a "-в" suffix.',
             );
@@ -160,8 +164,9 @@ main() {
                   type: WordFormType.ruVerbGerundPast,
                   position: 2,
                   form: "бро'сясь",
-                  formBare: 'бросясь',
+                  bare: 'бросясь',
                 ),
+                wordFormTypesToBareMap: {},
               ),
               'This word is a perfective gerund, also known as a perfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is perfective, meaning that the gerund denotes a result or completed action, having taken place before the main verb.',
             );
@@ -175,42 +180,104 @@ main() {
         test(
             'returns correct explanation when not using "a" follows "ж", "ш", "ч", "щ" spelling rule',
             () {
+          const bare = 'адресоваться';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'адресуются'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbGerundPresent,
+            position: 1,
+            form: "адресу'ясь",
+            bare: 'адресуясь',
+          );
           expect(
             testObject.sentenceExplanation(
-              bare: 'адресоваться',
-              correctAnswer: WordForm.testValue(
-                type: WordFormType.ruVerbGerundPresent,
-                position: 1,
-                form: "адресу'ясь",
-                formBare: 'адресуясь',
-              ),
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
             ),
-            'This word is an imperfective gerund, also known as an imperfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is imperfective, meaning that the gerund denotes a process or incomplete action, taking place simultaneously with the main verb. Since the verb in this sentence is reflexive, you take the third person plural form of the verb and replace its suffix with either a "-ась" or "-ясь" suffix. Since "a" always follows "ж", "ш", "ч", or "щ", we will use "-ясь" in this case.',
+            'This word is an imperfective gerund, also known as an imperfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is imperfective, meaning that the gerund denotes a process or incomplete action, taking place simultaneously with the main verb. Since the verb in this sentence is reflexive, you take the third person plural form of the verb and replace its suffix with either a "-ась" or "-ясь" suffix. Since "a" always follows "ж", "ш", "ч", or "щ", we will use "-ясь" in this case.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
           );
         });
 
         test(
             'returns correct explanation when using "a" follows "ж", "ш", "ч", "щ" spelling rule',
             () {
+          const bare = 'учиться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbGerundPresent,
+            position: 1,
+            form: "уча'сь",
+            bare: 'учась',
+          );
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'учатся'
+          };
+
           expect(
             testObject.sentenceExplanation(
-              bare: 'учиться',
-              correctAnswer: WordForm.testValue(
-                type: WordFormType.ruVerbGerundPresent,
-                position: 1,
-                form: "уча'сь",
-                formBare: 'учась',
-              ),
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
             ),
-            'This word is an imperfective gerund, also known as an imperfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is imperfective, meaning that the gerund denotes a process or incomplete action, taking place simultaneously with the main verb. Since the verb in this sentence is reflexive, you take the third person plural form of the verb and replace its suffix with either a "-ась" or "-ясь" suffix. Since "a" always follows "ж", "ш", "ч", or "щ", we will use "-ась" in this case.',
+            'This word is an imperfective gerund, also known as an imperfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is imperfective, meaning that the gerund denotes a process or incomplete action, taking place simultaneously with the main verb. Since the verb in this sentence is reflexive, you take the third person plural form of the verb and replace its suffix with either a "-ась" or "-ясь" suffix. Since "a" always follows "ж", "ш", "ч", or "щ", we will use "-ась" in this case.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
           );
         });
       });
 
       group('and word is not reflexive', () {
-        group('and position is 1', () {});
+        group('and position is 1', () {
+          test(
+              'returns correct explanation when not using "a" follows "ж", "ш", "ч", "щ" spelling rule',
+              () {
+            const bare = 'алеть';
+            final wordFormTypesToBareMap = {
+              WordFormType.ruVerbPresfutPl3: 'алеют'
+            };
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbGerundPresent,
+              position: 1,
+              form: "але'я",
+              bare: 'алея',
+            );
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: wordFormTypesToBareMap,
+              ),
+              'This word is an imperfective gerund, also known as an imperfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is imperfective, meaning that the gerund denotes a process or incomplete action, taking place simultaneously with the main verb. Since the verb in this sentence is not reflexive, you take the third person plural form of the verb and replace its suffix with either a "-а" or "-я" suffix. Since "a" always follows "ж", "ш", "ч", or "щ", we will use "-я" in this case.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+            );
+          });
 
-        group('and position is 2', () {});
+          test(
+              'returns correct explanation when using "a" follows "ж", "ш", "ч", "щ" spelling rule',
+              () {
+            const bare = 'брезжить';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbGerundPresent,
+              position: 1,
+              form: "бре'зжа'",
+              bare: 'брезжа',
+            );
+            final wordFormTypesToBareMap = {
+              WordFormType.ruVerbPresfutPl3: 'брезжат'
+            };
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: wordFormTypesToBareMap,
+              ),
+              'This word is an imperfective gerund, also known as an imperfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is imperfective, meaning that the gerund denotes a process or incomplete action, taking place simultaneously with the main verb. Since the verb in this sentence is not reflexive, you take the third person plural form of the verb and replace its suffix with either a "-а" or "-я" suffix. Since "a" always follows "ж", "ш", "ч", or "щ", we will use "-а" in this case.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+            );
+          });
+        });
+
+        group('and position is 2', () {
+          // TODO(DC): explore whether imperfective gerunds with position 2 need any special handling
+        });
       });
     });
   });

@@ -55,7 +55,8 @@ const randomSentenceQueryString = '''SELECT words.*,
        sentences.tatoeba_key,
        sentences.disabled,
        sentences.level,
-       words_forms.*
+       words_forms.*,
+       words_forms.position AS word_form_position
 FROM sentences_words
 INNER JOIN sentences ON sentences.id = sentences_words.sentence_id
 INNER JOIN words_forms ON words_forms.word_id = sentences_words.word_id
