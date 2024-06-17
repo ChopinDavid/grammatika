@@ -42,13 +42,13 @@ class WordForm extends Equatable implements Answer {
           {WordFormType type = WordFormType.ruVerbGerundPast,
           int position = 1,
           String form = "сказа'в",
-          String formBare = 'сказав'}) =>
+          String bare = 'сказав'}) =>
       WordForm.fromJson(
         {
           'form_type': type.name,
           'word_form_position': position,
           'form': form,
-          '_form_bare': formBare,
+          '_form_bare': bare,
         },
       );
 }
