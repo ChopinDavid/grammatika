@@ -364,7 +364,7 @@ main() {
             correctAnswer: correctAnswer,
             wordFormTypesToBareMap: {},
           ),
-          'This word is a masculine adjective in the nominative case. This means that it is a word that modifies a masculine noun that is the subject of a verb. There is a small group of masculine, nominative objectives that end in "-ой" instead of "-ый" or "-ий". This is one such adjective. These adjectives ending in "-ой" are always stressed on the "о" in their suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          'This word is a masculine adjective in the nominative case. This means that it is a word that modifies a masculine noun that is the subject of a verb. There is a small group of masculine, nominative adjectives that end in "-ой" instead of "-ый" or "-ий". This is one such adjective. These adjectives ending in "-ой" are always stressed on the "о" in their suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
         );
       });
     });
@@ -444,6 +444,127 @@ main() {
               wordFormTypesToBareMap: {},
             ),
             'This word is a masculine adjective in the dative case. This means that it is a word that modifies a masculine noun that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb. Masculine, dative adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ему" suffix after their stem. Their nominative forms would normally have the "-ий" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
+
+      group('when correctAnswer.type is ruAdjMAcc', () {
+        test(
+            'returns correct explanation when ends in "-ый" and bare and correctAnswer.bare are identical, i.e. the noun being described is inanimate',
+            () {
+          const bare = 'адовый';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjMAcc,
+            position: 1,
+            form: "а'довый",
+            bare: 'адовый',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a masculine adjective in the accusative case. This means that it is a word that modifies a masculine noun that is the direct object of a sentence, i.e. the noun which the verb is acting on. The majority of Russian adjectives have a stem ending in a hard consonant, this adjective included. Since this is a masculine, accusative adjective with a hard-consonant stem, we add the "-ый" suffix after the stem. This form is identical to the nominative form since the noun being described is inanimate, i.e. not a person or animal.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when ends in "-ний" and bare and correctAnswer.bare are identical, i.e. the noun being described is inanimate',
+            () {
+          const bare = 'бараний';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjMAcc,
+            position: 1,
+            form: "бара'ний",
+            bare: 'бараний',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a masculine adjective in the accusative case. This means that it is a word that modifies a masculine noun that is the direct object of a sentence, i.e. the noun which the verb is acting on. Masculine, accusative adjectives with stems ending in a soft "-н" get a "-ий" suffix after their stem. This form is identical to the nominative form since the noun being described is inanimate, i.e. not a person or animal.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when ends in "-ий" and bare and correctAnswer.bare are identical, i.e. the noun being described is inanimate',
+            () {
+          const bare = 'августовский';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjMAcc,
+            position: 1,
+            form: "а'вгустовский",
+            bare: 'августовский',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a masculine adjective in the accusative case. This means that it is a word that modifies a masculine noun that is the direct object of a sentence, i.e. the noun which the verb is acting on. Masculine, accusative adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", or "-щ" get a "-ий" suffix after their stem. This form is identical to the nominative form since the noun being described is inanimate, i.e. not a person or animal.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+
+        test(
+            'returns correct explanation when ends in "-ой" and bare and correctAnswer.bare are identical, i.e. the noun being described is inanimate',
+            () {
+          const bare = 'затяжной';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjMAcc,
+            position: 1,
+            form: "затяжной",
+            bare: 'затяжной',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a masculine adjective in the accusative case. This means that it is a word that modifies a masculine noun that is the direct object of a sentence, i.e. the noun which the verb is acting on. There is a small group of masculine, accusative adjectives that end in "-ой" instead of "-ый" or "-ий". This is one such adjective. These adjectives ending in "-ой" are always stressed on the "о" in their suffix. This form is identical to the nominative form since the noun being described is inanimate, i.e. not a person or animal.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when word ends in "-ого"', () {
+          const bare = 'августовский';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjMAcc,
+            position: 1,
+            form: "а'вгустовского",
+            bare: 'августовского',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a masculine adjective in the accusative case. This means that it is a word that modifies a masculine noun that is the direct object of a sentence, i.e. the noun which the verb is acting on. The majority of Russian adjectives have a stem ending in a hard consonant, this adjective included. Since this is a masculine, accusative adjective with a hard-consonant stem, we add the "-ого" suffix after the stem. Their nominative forms would normally have the "-ый" (or, more rarely, the "-ой") suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+
+        test('returns correct explanation when word ends in "-его"', () {
+          const bare = 'акавший';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjMAcc,
+            position: 1,
+            form: "а'кавшего",
+            bare: 'акавшего',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a masculine adjective in the accusative case. This means that it is a word that modifies a masculine noun that is the direct object of a sentence, i.e. the noun which the verb is acting on. Masculine, accusative adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-его" suffix after their stem. Their nominative forms would normally have the "-ий" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
           );
         });
       });
