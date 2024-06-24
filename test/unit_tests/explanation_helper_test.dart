@@ -368,5 +368,45 @@ main() {
         );
       });
     });
+
+    group('when correctAnswer.type is ruAdjMGen', () {
+      test('returns correct explanation when word ends in "-ого"', () {
+        const bare = 'августовский';
+        final correctAnswer = WordForm.testValue(
+          type: WordFormType.ruAdjMGen,
+          position: 1,
+          form: "а'вгустовского",
+          bare: 'августовского',
+        );
+
+        expect(
+          testObject.sentenceExplanation(
+            bare: bare,
+            correctAnswer: correctAnswer,
+            wordFormTypesToBareMap: {},
+          ),
+          'This word is a masculine adjective in the genitive case. This means that it is a word that modifies a masculine noun that indicates possession, origin, or close association of or to another noun. The majority of Russian adjectives have a stem ending in a hard consonant, this adjective included. Since this is a masculine, genitive adjective with a hard-consonant stem, we add the "-ого" suffix after the stem. Their nominative forms would normally have the "-ый" (or, more rarely, the "-ой") suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+        );
+      });
+
+      test('returns correct explanation when word ends in "-его"', () {
+        const bare = 'акавший';
+        final correctAnswer = WordForm.testValue(
+          type: WordFormType.ruAdjMGen,
+          position: 1,
+          form: "а'кавшего",
+          bare: 'акавшего',
+        );
+
+        expect(
+          testObject.sentenceExplanation(
+            bare: bare,
+            correctAnswer: correctAnswer,
+            wordFormTypesToBareMap: {},
+          ),
+          'This word is a masculine adjective in the genitive case. This means that it is a word that modifies a masculine noun that indicates possession, origin, or close association of or to another noun. Masculine, genitive adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-его" suffix after their stem. Their nominative forms would normally have the "-ий" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+        );
+      });
+    });
   });
 }
