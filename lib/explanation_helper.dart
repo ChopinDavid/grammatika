@@ -105,7 +105,15 @@ class ExplanationHelper {
         }
         return 'This word is a masculine adjective in the genitive case. This means that it is a word that modifies a masculine noun that indicates possession, origin, or close association of or to another noun.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjMDat:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('ому')) {
+          formationExplanation =
+              ' The majority of Russian adjectives have a stem ending in a hard consonant, this adjective included. Since this is a masculine, dative adjective with a hard-consonant stem, we add the "-ому" suffix after the stem. Their nominative forms would normally have the "-ый" (or, more rarely, the "-ой") suffix.';
+        } else if (correctAnswer.bare.endsWith('ему')) {
+          formationExplanation =
+              ' Masculine, dative adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ему" suffix after their stem. Their nominative forms would normally have the "-ий" suffix.';
+        }
+        return 'This word is a masculine adjective in the dative case. This means that it is a word that modifies a masculine noun that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjMAcc:
         return '';
       case WordFormType.ruAdjMInst:
