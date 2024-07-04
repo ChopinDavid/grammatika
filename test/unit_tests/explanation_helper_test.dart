@@ -909,6 +909,66 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruAdjFInst', () {
+        test(
+            'returns correct explanation when ends in "-ей" and nominative form ends in "-ая"',
+            () {
+          const bare = 'общий';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjFInst,
+            position: 1,
+            form: "о'бщей",
+            bare: 'общей',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {WordFormType.ruAdjFNom: 'общая'},
+            ),
+            'This word is a feminine adjective in the instrumental case. This means that it is a word that modifies a feminine noun that is the means by or with which the subject accomplishes an action. Feminine, instrumental adjectives with stems ending in "-ж", "-ш", "-ч", or "-щ" get a "-ей" suffix after their stem. Their nominative forms would normally have the "-ая" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when ends in "-ей" and nominative form ends in "-яя"',
+            () {
+          const bare = 'последний';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjFInst,
+            position: 1,
+            form: "после'дней",
+            bare: 'последней',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {WordFormType.ruAdjFNom: 'последняя'},
+            ),
+            'This word is a feminine adjective in the instrumental case. This means that it is a word that modifies a feminine noun that is the means by or with which the subject accomplishes an action. Feminine, instrumental adjectives with stems ending in a soft "-н" get a "-ей" suffix after their stem. Their nominative forms would normally have the "-яя" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ой"', () {
+          const bare = 'некоторый';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjFInst,
+            position: 1,
+            form: "не'которой",
+            bare: 'некоторой',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a feminine adjective in the instrumental case. This means that it is a word that modifies a feminine noun that is the means by or with which the subject accomplishes an action. Feminine, instrumental adjectives with stems that do not end in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ой" suffix after their stem. Their nominative forms would normally have the "-ая" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }

@@ -219,7 +219,21 @@ class ExplanationHelper {
         }
         return 'This word is a feminine adjective in the accusative case. This means that it is a word that modifies a feminine noun that is the direct object of a sentence, i.e. the noun which the verb is acting on.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjFInst:
-        return '';
+        String? formationExplanation;
+        final nominativeForm = wordFormTypesToBareMap[WordFormType.ruAdjFNom];
+        if (correctAnswer.bare.endsWith('ей')) {
+          if (nominativeForm?.endsWith('ая') == true) {
+            formationExplanation =
+                ' Feminine, instrumental adjectives with stems ending in "-ж", "-ш", "-ч", or "-щ" get a "-ей" suffix after their stem. Their nominative forms would normally have the "-ая" suffix.';
+          } else {
+            formationExplanation =
+                ' Feminine, instrumental adjectives with stems ending in a soft "-н" get a "-ей" suffix after their stem. Their nominative forms would normally have the "-яя" suffix.';
+          }
+        } else if (correctAnswer.bare.endsWith('ой')) {
+          formationExplanation =
+              ' Feminine, instrumental adjectives with stems that do not end in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ой" suffix after their stem. Their nominative forms would normally have the "-ая" suffix.';
+        }
+        return 'This word is a feminine adjective in the instrumental case. This means that it is a word that modifies a feminine noun that is the means by or with which the subject accomplishes an action.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjFPrep:
         return '';
       case WordFormType.ruAdjNNom:
