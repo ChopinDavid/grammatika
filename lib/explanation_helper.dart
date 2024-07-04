@@ -63,6 +63,12 @@ class ExplanationHelper {
         } else if (bare.endsWith('яя')) {
           return ' Feminine, nominative adjectives with stems ending in a soft "-н" get a "-яя" suffix after their stem.';
         }
+      case Gender.n:
+        if (bare.endsWith('ое')) {
+          return ' Neuter, nominative adjectives with stems that do not end in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ое" suffix after the stem.';
+        } else if (bare.endsWith('ее')) {
+          return ' Neuter, nominative adjectives with stems ending in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ее" suffix after the stem.';
+        }
       default:
         return '';
     }
@@ -251,7 +257,10 @@ class ExplanationHelper {
         }
         return 'This word is a feminine adjective in the prepositional case. This means that it is a word that modifies a feminine noun that is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?".${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjNNom:
-        return '';
+        String? formationExplanation =
+            getAdjNomExplanation(correctAnswer.bare, gender: Gender.n);
+
+        return 'This word is a neuter adjective in the nominative case. This means that it is a word that modifies a neuter noun that is the subject of a verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjNGen:
         return '';
       case WordFormType.ruAdjNDat:

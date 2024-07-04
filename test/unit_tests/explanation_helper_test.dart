@@ -1029,6 +1029,44 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruAdjNNom', () {
+        test('returns correct explanation when ends in "-ое"', () {
+          const bare = 'который';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjNNom,
+            position: 1,
+            form: "кото'рое",
+            bare: 'которое',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a neuter adjective in the nominative case. This means that it is a word that modifies a neuter noun that is the subject of a verb. Neuter, nominative adjectives with stems that do not end in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ое" suffix after the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ее"', () {
+          const bare = 'последний';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjNNom,
+            position: 1,
+            form: "после'днее",
+            bare: 'последнее',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a neuter adjective in the nominative case. This means that it is a word that modifies a neuter noun that is the subject of a verb. Neuter, nominative adjectives with stems ending in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ее" suffix after the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
