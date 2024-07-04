@@ -43,17 +43,28 @@ class ExplanationHelper {
     }
   }
 
-  String? getAdjMNomExplanation(String bare) {
-    if (bare.endsWith('ый')) {
-      return ' The majority of Russian adjectives have a stem ending in a hard consonant, this adjective included. Since this is a masculine, nominative adjective with a hard-consonant stem, we add the "-ый" suffix after the stem.';
-    } else if (bare.endsWith('ий')) {
-      if (bare.endsWith('ний')) {
-        return ' Masculine, nominative adjectives with stems ending in a soft "-н" get a "-ий" suffix after their stem.';
-      } else {
-        return ' Masculine, nominative adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", or "-щ" get a "-ий" suffix after their stem.';
-      }
-    } else if (bare.endsWith('ой')) {
-      return ' There is a small group of masculine, nominative adjectives that end in "-ой" instead of "-ый" or "-ий". This is one such adjective. These adjectives ending in "-ой" are always stressed on the "о" in their suffix.';
+  String? getAdjNomExplanation(String bare, {required Gender gender}) {
+    switch (gender) {
+      case Gender.m:
+        if (bare.endsWith('ый')) {
+          return ' The majority of Russian adjectives have a stem ending in a hard consonant, this adjective included. Since this is a masculine, nominative adjective with a hard-consonant stem, we add the "-ый" suffix after the stem.';
+        } else if (bare.endsWith('ий')) {
+          if (bare.endsWith('ний')) {
+            return ' Masculine, nominative adjectives with stems ending in a soft "-н" get a "-ий" suffix after their stem.';
+          } else {
+            return ' Masculine, nominative adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", or "-щ" get a "-ий" suffix after their stem.';
+          }
+        } else if (bare.endsWith('ой')) {
+          return ' There is a small group of masculine, nominative adjectives that end in "-ой" instead of "-ый" or "-ий". This is one such adjective. These adjectives ending in "-ой" are always stressed on the "о" in their suffix.';
+        }
+      case Gender.f:
+        if (bare.endsWith('ая')) {
+          return ' Feminine, nominative adjectives with stems that do not end in a soft "-н" get a "-ая" suffix after the stem.';
+        } else if (bare.endsWith('яя')) {
+          return ' Feminine, nominative adjectives with stems ending in a soft "-н" get a "-яя" suffix after their stem.';
+        }
+      default:
+        return '';
     }
   }
 
@@ -91,7 +102,8 @@ class ExplanationHelper {
       case WordFormType.ruBase:
         return '';
       case WordFormType.ruAdjMNom:
-        String? formationExplanation = getAdjMNomExplanation(bare);
+        String? formationExplanation =
+            getAdjNomExplanation(bare, gender: Gender.m);
 
         return 'This word is a masculine adjective in the nominative case. This means that it is a word that modifies a masculine noun that is the subject of a verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjMGen:
@@ -118,8 +130,9 @@ class ExplanationHelper {
         String? formationExplanation;
         final bool isInanimate = bare == correctAnswer.bare;
         if (isInanimate) {
-          final nominativeExplanation = getAdjMNomExplanation(bare)
-              ?.replaceAll('nominative', 'accusative');
+          final nominativeExplanation =
+              getAdjNomExplanation(bare, gender: Gender.m)
+                  ?.replaceAll('nominative', 'accusative');
           if (nominativeExplanation != null) {
             formationExplanation =
                 '$nominativeExplanation This form is identical to the nominative form since the noun being described is inanimate, i.e. not a person or animal.';
@@ -159,7 +172,10 @@ class ExplanationHelper {
         }
         return 'This word is a masculine adjective in the prepositional case. This means that it is a word that modifies a masculine noun that is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?".${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjFNom:
-        return '';
+        String? formationExplanation =
+            getAdjNomExplanation(correctAnswer.bare, gender: Gender.f);
+
+        return 'This word is a feminine adjective in the nominative case. This means that it is a word that modifies a feminine noun that is the subject of a verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjFGen:
         return '';
       case WordFormType.ruAdjFDat:

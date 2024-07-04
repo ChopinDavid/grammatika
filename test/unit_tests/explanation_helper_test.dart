@@ -713,6 +713,44 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruAdjFNom', () {
+        test('returns correct explanation when ends in "-ая"', () {
+          const bare = 'августовский';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjFNom,
+            position: 1,
+            form: "а'вгустовская",
+            bare: 'августовская',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a feminine adjective in the nominative case. This means that it is a word that modifies a feminine noun that is the subject of a verb. Feminine, nominative adjectives with stems that do not end in a soft "-н" get a "-ая" suffix after the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-яя"', () {
+          const bare = 'бескрайний';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjFNom,
+            position: 1,
+            form: "бескра'йняя",
+            bare: 'бескрайняя',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a feminine adjective in the nominative case. This means that it is a word that modifies a feminine noun that is the subject of a verb. Feminine, nominative adjectives with stems ending in a soft "-н" get a "-яя" suffix after their stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
