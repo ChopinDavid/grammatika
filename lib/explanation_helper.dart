@@ -177,7 +177,21 @@ class ExplanationHelper {
 
         return 'This word is a feminine adjective in the nominative case. This means that it is a word that modifies a feminine noun that is the subject of a verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjFGen:
-        return '';
+        String? formationExplanation;
+        final nominativeForm = wordFormTypesToBareMap[WordFormType.ruAdjFNom];
+        if (correctAnswer.bare.endsWith('ей')) {
+          if (nominativeForm?.endsWith('ая') == true) {
+            formationExplanation =
+                ' Feminine, genitive adjectives with stems ending in "-ж", "-ш", "-ч", or "-щ" get a "-ей" suffix after their stem. Their nominative forms would normally have the "-ая" suffix.';
+          } else {
+            formationExplanation =
+                ' Feminine, genitive adjectives with stems ending in a soft "-н" get a "-ей" suffix after their stem. Their nominative forms would normally have the "-яя" suffix.';
+          }
+        } else if (correctAnswer.bare.endsWith('ой')) {
+          formationExplanation =
+              ' Feminine, genitive adjectives with stems that do not end in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ой" suffix after their stem. Their nominative forms would normally have the "-ая" suffix.';
+        }
+        return 'This word is a feminine adjective in the genitive case. This means that it is a word that modifies a feminine noun that indicates possession, origin, or close association of or to another noun.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjFDat:
         return '';
       case WordFormType.ruAdjFAcc:
