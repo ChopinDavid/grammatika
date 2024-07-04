@@ -209,7 +209,15 @@ class ExplanationHelper {
         }
         return 'This word is a feminine adjective in the dative case. This means that it is a word that modifies a masculine noun that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjFAcc:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('ую')) {
+          formationExplanation =
+              ' Feminine, accusative adjectives with stems that do not end in a soft "-н" get a "-ую" suffix after the stem. Their nominative forms would normally have the "-ая" suffix.';
+        } else if (correctAnswer.bare.endsWith('юю')) {
+          formationExplanation =
+              ' Feminine, accusative adjectives with stems ending in a soft "-н" get a "-юю" suffix after their stem. Their nominative forms would normally have the "-яя" suffix.';
+        }
+        return 'This word is a feminine adjective in the accusative case. This means that it is a word that modifies a feminine noun that is the direct object of a sentence, i.e. the noun which the verb is acting on.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjFInst:
         return '';
       case WordFormType.ruAdjFPrep:
