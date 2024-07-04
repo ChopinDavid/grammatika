@@ -871,6 +871,44 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruAdjFAcc', () {
+        test('returns correct explanation when ends in "-ую"', () {
+          const bare = 'который';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjFAcc,
+            position: 1,
+            form: "кото'рую",
+            bare: 'которую',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a feminine adjective in the accusative case. This means that it is a word that modifies a feminine noun that is the direct object of a sentence, i.e. the noun which the verb is acting on. Feminine, accusative adjectives with stems that do not end in a soft "-н" get a "-ую" suffix after the stem. Their nominative forms would normally have the "-ая" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-юю"', () {
+          const bare = 'последний';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjFAcc,
+            position: 1,
+            form: "после'днюю",
+            bare: 'последнюю',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a feminine adjective in the accusative case. This means that it is a word that modifies a feminine noun that is the direct object of a sentence, i.e. the noun which the verb is acting on. Feminine, accusative adjectives with stems ending in a soft "-н" get a "-юю" suffix after their stem. Their nominative forms would normally have the "-яя" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
