@@ -1143,6 +1143,44 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruAdjNAcc', () {
+        test('returns correct explanation when ends in "-ое"', () {
+          const bare = 'августовский';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjNAcc,
+            position: 1,
+            form: "а'вгустовское",
+            bare: 'августовское',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a neuter adjective in the accusative case. This means that it is a word that modifies a neuter noun that is the direct object of a sentence, i.e. the noun which the verb is acting on. Neuter, accusative adjectives with stems that do not end in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ое" suffix after the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ее"', () {
+          const bare = 'акавший';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjNAcc,
+            position: 1,
+            form: "а'кавшее",
+            bare: 'акавшее',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a neuter adjective in the accusative case. This means that it is a word that modifies a neuter noun that is the direct object of a sentence, i.e. the noun which the verb is acting on. Neuter, accusative adjectives with stems ending in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ее" suffix after the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
