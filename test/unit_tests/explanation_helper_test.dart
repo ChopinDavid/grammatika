@@ -1105,6 +1105,44 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruAdjNDat', () {
+        test('returns correct explanation when ends in "-ому"', () {
+          const bare = 'августовский';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjNDat,
+            position: 1,
+            form: "а'вгустовскому",
+            bare: 'августовскому',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a neuter adjective in the dative case. This means that it is a word that modifies a neuter noun that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb. Neuter, dative adjectives with stems that do not end in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ому" suffix after the stem. Their nominative forms would normally have the "-ое" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ему"', () {
+          const bare = 'акавший';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjNDat,
+            position: 1,
+            form: "а'кавшему",
+            bare: 'акавшему',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a neuter adjective in the dative case. This means that it is a word that modifies a neuter noun that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb. Neuter, dative adjectives with stems ending in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-его" suffix after their stem. Their nominative forms would normally have the "-ее" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
