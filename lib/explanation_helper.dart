@@ -282,7 +282,10 @@ class ExplanationHelper {
         }
         return 'This word is a neuter adjective in the dative case. This means that it is a word that modifies a neuter noun that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjNAcc:
-        return '';
+        String? formationExplanation =
+            getAdjNomExplanation(correctAnswer.bare, gender: Gender.n)
+                ?.replaceAll('nominative', 'accusative');
+        return 'This word is a neuter adjective in the accusative case. This means that it is a word that modifies a neuter noun that is the direct object of a sentence, i.e. the noun which the verb is acting on.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjNInst:
         return '';
       case WordFormType.ruAdjNPrep:
