@@ -262,7 +262,15 @@ class ExplanationHelper {
 
         return 'This word is a neuter adjective in the nominative case. This means that it is a word that modifies a neuter noun that is the subject of a verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjNGen:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('ого')) {
+          formationExplanation =
+              ' Neuter, genitive adjectives with stems that do not end in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ого" suffix after the stem. Their nominative forms would normally have the "-ое" suffix.';
+        } else if (correctAnswer.bare.endsWith('его')) {
+          formationExplanation =
+              ' Neuter, genitive adjectives with stems ending in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-его" suffix after their stem. Their nominative forms would normally have the "-ее" suffix.';
+        }
+        return 'This word is a neuter adjective in the genitive case. This means that it is a word that modifies a neuter noun that indicates possession, origin, or close association of or to another noun.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjNDat:
         return '';
       case WordFormType.ruAdjNAcc:
