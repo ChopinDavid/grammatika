@@ -65,9 +65,9 @@ class ExplanationHelper {
         }
       case Gender.n:
         if (bare.endsWith('ое')) {
-          return ' Neuter, nominative adjectives with stems that do not end in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ое" suffix after the stem.';
+          return ' Neuter, nominative adjectives with stems that do not end in "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ое" suffix after the stem.';
         } else if (bare.endsWith('ее')) {
-          return ' Neuter, nominative adjectives with stems ending in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ее" suffix after the stem.';
+          return ' Neuter, nominative adjectives with stems ending in "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ее" suffix after the stem.';
         }
       default:
         return '';
@@ -287,7 +287,22 @@ class ExplanationHelper {
                 ?.replaceAll('nominative', 'accusative');
         return 'This word is a neuter adjective in the accusative case. This means that it is a word that modifies a neuter noun that is the direct object of a sentence, i.e. the noun which the verb is acting on.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjNInst:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('им')) {
+          formationExplanation =
+              ' Neuter, instrumental adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", or a soft "-н" get a "-им" suffix after their stem.';
+          if (bare.endsWith('ое')) {
+            formationExplanation +=
+                ' Those ending in "-к", "-г", or "-х" have nominative forms that would normally have the "-ое" suffix.';
+          } else if (bare.endsWith('ее')) {
+            formationExplanation +=
+                ' Those not ending in "-к", "-г", or "-х" have nominative forms that would normally have the "-ее" suffix.';
+          }
+        } else if (correctAnswer.bare.endsWith('ым')) {
+          formationExplanation =
+              ' Neuter, instrumental adjectives with stems that do not end in "-к", "-г", "-х", "-ж", "-ш", "-ч", or a soft "-н" get a "-ым" suffix after their stem. Their nominative forms would normally have the "-oе" suffix.';
+        }
+        return 'This word is a neuter adjective in the instrumental case. This means that it is a word that modifies a neuter noun that is the means by or with which the subject accomplishes an action.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjNPrep:
         return '';
       case WordFormType.ruAdjPlNom:
