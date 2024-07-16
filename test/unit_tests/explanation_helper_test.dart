@@ -1279,6 +1279,44 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruAdjPlNom', () {
+        test('returns correct explanation when ends in "-ие"', () {
+          const bare = 'августовский';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjPlNom,
+            position: 1,
+            form: "а'вгустовские",
+            bare: 'августовские',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a plural adjective in the nominative case. This means that it is a word that modifies a plural noun that is the subject of a verb. Plural, nominative adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ие" suffix after the stem, no matter the gender.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ые"', () {
+          const bare = 'адовый';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjPlNom,
+            position: 1,
+            form: "а'довые",
+            bare: 'адовые',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a plural adjective in the nominative case. This means that it is a word that modifies a plural noun that is the subject of a verb. Plural, nominative adjectives with stems that do not end in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ые" suffix after the stem, no matter the gender.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
