@@ -149,8 +149,7 @@ class ExplanationHelper {
             formationExplanation =
                 '$nominativeExplanation This form is identical to the nominative form since the noun being described is inanimate, i.e. not a person or animal.';
           }
-        }
-        if (correctAnswer.bare.endsWith('ого')) {
+        } else if (correctAnswer.bare.endsWith('ого')) {
           formationExplanation =
               ' The majority of Russian adjectives have a stem ending in a hard consonant, this adjective included. Since this is a masculine, accusative adjective with a hard-consonant stem, we add the "-ого" suffix after the stem. Their nominative forms would normally have the "-ый" (or, more rarely, the "-ой") suffix.';
         } else if (correctAnswer.bare.endsWith('его')) {
@@ -345,7 +344,26 @@ class ExplanationHelper {
         }
         return 'This word is a plural adjective in the dative case. This means that it is a word that modifies a plural noun that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjPlAcc:
-        return '';
+        String? formationExplanation;
+        final bool isInanimate =
+            wordFormTypesToBareMap[WordFormType.ruAdjPlNom] ==
+                correctAnswer.bare;
+        if (isInanimate) {
+          final nominativeExplanation =
+              getAdjNomExplanation(correctAnswer.bare, gender: Gender.pl)
+                  ?.replaceAll('nominative', 'accusative');
+          if (nominativeExplanation != null) {
+            formationExplanation =
+                '$nominativeExplanation This form is identical to the nominative form since the noun being described is inanimate, i.e. not a person or animal.';
+          }
+        } else if (correctAnswer.bare.endsWith('ых')) {
+          formationExplanation =
+              ' Plural, accusative, animate adjectives with stems that do not end in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ых" suffix after the stem. Their nominative forms would normally have the "-ые" suffix.';
+        } else if (correctAnswer.bare.endsWith('их')) {
+          formationExplanation =
+              ' Plural, accusative, animate adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-их" suffix after their stem. Their nominative forms would normally have the "-ие" suffix.';
+        }
+        return 'This word is a plural adjective in the accusative case. This means that it is a word that modifies a plural noun that is the direct object of a sentence, i.e. the noun which the verb is acting on.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjPlInst:
         return '';
       case WordFormType.ruAdjPlPrep:
