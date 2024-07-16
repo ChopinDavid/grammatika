@@ -304,7 +304,15 @@ class ExplanationHelper {
         }
         return 'This word is a neuter adjective in the instrumental case. This means that it is a word that modifies a neuter noun that is the means by or with which the subject accomplishes an action.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjNPrep:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('ом')) {
+          formationExplanation =
+              ' Neuter, prepositional adjectives with stems that do not end in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ом" suffix after the stem. Their nominative forms would normally have the "-ое" suffix.';
+        } else if (correctAnswer.bare.endsWith('ем')) {
+          formationExplanation =
+              ' Neuter, prepositional adjectives with stems ending in "-ж", "-ш", "-ч", or "-щ", or a soft "-н" get a "-ем" suffix after their stem. Their nominative forms would normally have the "-ее" suffix.';
+        }
+        return 'This word is a neuter adjective in the prepositional case. This means that it is a word that modifies a neuter noun that is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?".${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjPlNom:
         return '';
       case WordFormType.ruAdjPlGen:
