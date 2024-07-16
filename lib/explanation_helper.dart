@@ -325,7 +325,15 @@ class ExplanationHelper {
 
         return 'This word is a plural adjective in the nominative case. This means that it is a word that modifies a plural noun that is the subject of a verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjPlGen:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('ых')) {
+          formationExplanation =
+              ' Plural, genitive adjectives with stems that do not end in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ых" suffix after the stem. Their nominative forms would normally have the "-ые" suffix.';
+        } else if (correctAnswer.bare.endsWith('их')) {
+          formationExplanation =
+              ' Plural, genitive adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-их" suffix after their stem. Their nominative forms would normally have the "-ие" suffix.';
+        }
+        return 'This word is a plural adjective in the genitive case. This means that it is a word that modifies a plural noun that indicates possession, origin, or close association of or to another noun.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjPlDat:
         return '';
       case WordFormType.ruAdjPlAcc:
