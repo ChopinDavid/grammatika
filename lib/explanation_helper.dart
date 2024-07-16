@@ -69,6 +69,12 @@ class ExplanationHelper {
         } else if (bare.endsWith('ее')) {
           return ' Neuter, nominative adjectives with stems ending in "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ее" suffix after the stem.';
         }
+      case Gender.pl:
+        if (bare.endsWith('ые')) {
+          return ' Plural, nominative adjectives with stems that do not end in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ые" suffix after the stem, no matter the gender.';
+        } else if (bare.endsWith('ие')) {
+          return ' Plural, nominative adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ие" suffix after the stem, no matter the gender.';
+        }
       default:
         return '';
     }
@@ -314,7 +320,10 @@ class ExplanationHelper {
         }
         return 'This word is a neuter adjective in the prepositional case. This means that it is a word that modifies a neuter noun that is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?".${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjPlNom:
-        return '';
+        String? formationExplanation =
+            getAdjNomExplanation(correctAnswer.bare, gender: Gender.pl);
+
+        return 'This word is a plural adjective in the nominative case. This means that it is a word that modifies a plural noun that is the subject of a verb.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjPlGen:
         return '';
       case WordFormType.ruAdjPlDat:
