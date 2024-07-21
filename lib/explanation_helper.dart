@@ -385,7 +385,15 @@ class ExplanationHelper {
         }
         return 'This word is a plural adjective in the prepositional case. This means that it is a word that modifies a plural noun that is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?".${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruVerbImperativeSg:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('й')) {
+          formationExplanation =
+              'Since the subject is informal and the stem ends in a vowel, we add the "-й" suffix.';
+        } else if (correctAnswer.bare.endsWith('и')) {
+          formationExplanation =
+              'Since the subject is informal and the stem doesn\'t end in a vowel, we add the "-и" suffix.';
+        }
+        return 'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruVerbImperativePl:
         return '';
       case WordFormType.ruVerbPastM:
