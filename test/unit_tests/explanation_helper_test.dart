@@ -1547,6 +1547,44 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruVerbImperativeSg', () {
+        test('returns correct explanation when ends in "-й"', () {
+          const bare = 'августовский';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjPlPrep,
+            position: 1,
+            form: "а'вгустовских",
+            bare: 'августовских',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a plural adjective in the prepositional case. This means that it is a word that modifies a plural noun that is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Plural, prepositional adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-их" suffix after their stem. Their nominative forms would normally have the "-ие" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-и"', () {
+          const bare = 'адовый';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjPlPrep,
+            position: 1,
+            form: "а'довых",
+            bare: 'адовых',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a plural adjective in the prepositional case. This means that it is a word that modifies a plural noun that is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Plural, prepositional adjectives with stems that do not end in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ых" suffix after the stem. Their nominative forms would normally have the "-ые" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
