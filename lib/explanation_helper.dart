@@ -365,7 +365,15 @@ class ExplanationHelper {
         }
         return 'This word is a plural adjective in the accusative case. This means that it is a word that modifies a plural noun that is the direct object of a sentence, i.e. the noun which the verb is acting on.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjPlInst:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('ыми')) {
+          formationExplanation =
+              ' Plural, instrumental adjectives with stems that do not end in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ыми" suffix after the stem. Their nominative forms would normally have the "-ые" suffix.';
+        } else if (correctAnswer.bare.endsWith('ими')) {
+          formationExplanation =
+              ' Plural, instrumental adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ими" suffix after their stem. Their nominative forms would normally have the "-ие" suffix.';
+        }
+        return 'This word is a plural adjective in the instrumental case. This means that it is a word that modifies a plural noun that is the means by or with which the subject accomplishes an action.${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruAdjPlPrep:
         return '';
       case WordFormType.ruVerbImperativeSg:
