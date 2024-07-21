@@ -384,6 +384,7 @@ class ExplanationHelper {
               ' Plural, prepositional adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-их" suffix after their stem. Their nominative forms would normally have the "-ие" suffix.';
         }
         return 'This word is a plural adjective in the prepositional case. This means that it is a word that modifies a plural noun that is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?".${formationExplanation ?? ''}\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
+      // TODO(DC): Add handling of reflexive imperatives
       case WordFormType.ruVerbImperativeSg:
         String? formationExplanation;
         if (correctAnswer.bare.endsWith('й')) {
@@ -397,8 +398,20 @@ class ExplanationHelper {
               ' To create the imperative form, we first take the stem from the first-person singular form of the verb. Since this stem ends in a vowel, the stress does not fall on the last syllable in the first-person singular form, and the subject is informal, we add the "-ь" suffix to the stem to get the imperative form. Were the stress to fall on the last syllable in the first-person singular form, we would add a "-и" suffix to the stem.';
         }
         return 'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice.${formationExplanation ?? ''}\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutSg1]} -> ${correctAnswer.bare}';
+      // TODO(DC): Add handling of reflexive imperatives
       case WordFormType.ruVerbImperativePl:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('йте')) {
+          formationExplanation =
+              ' To create the imperative form, we first take the stem from the first-person singular form of the verb. Since this stem ends in a vowel and the subject is formal or plural, we add the "-йте" suffix to the stem to get the imperative form.';
+        } else if (correctAnswer.bare.endsWith('ите')) {
+          formationExplanation =
+              ' To create the imperative form, we first take the stem from the first-person singular form of the verb. Since this stem ends in a vowel, the stress falls on the last syllable in the first-person singular form, and the subject is formal or plural, we add the "-ите" suffix to the stem to get the imperative form. Were the stress not to fall on the last syllable in the first-person singular form, we would add a "-ьте" suffix to the stem.';
+        } else if (correctAnswer.bare.endsWith('ьте')) {
+          formationExplanation =
+              ' To create the imperative form, we first take the stem from the first-person singular form of the verb. Since this stem ends in a vowel, the stress does not fall on the last syllable in the first-person singular form, and the subject is formal or plural, we add the "-ьте" suffix to the stem to get the imperative form. Were the stress to fall on the last syllable in the first-person singular form, we would add a "-ите" suffix to the stem.';
+        }
+        return 'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice.${formationExplanation ?? ''}\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutSg1]} -> ${correctAnswer.bare}';
       case WordFormType.ruVerbPastM:
         return '';
       case WordFormType.ruVerbPastF:
