@@ -1471,6 +1471,44 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruAdjPlInst', () {
+        test('returns correct explanation when ends in "-ими"', () {
+          const bare = 'общий';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjPlInst,
+            position: 1,
+            form: "о'бщими",
+            bare: 'общими',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a plural adjective in the instrumental case. This means that it is a word that modifies a plural noun that is the means by or with which the subject accomplishes an action. Plural, instrumental adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ими" suffix after their stem. Their nominative forms would normally have the "-ие" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ыми"', () {
+          const bare = 'который';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruAdjPlInst,
+            position: 1,
+            form: "кото'рыми",
+            bare: 'которыми',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a plural adjective in the instrumental case. This means that it is a word that modifies a plural noun that is the means by or with which the subject accomplishes an action. Plural, instrumental adjectives with stems that do not end in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ыми" suffix after the stem. Their nominative forms would normally have the "-ые" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
