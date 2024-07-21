@@ -1547,6 +1547,71 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruVerbImperativeSg', () {
+        test('returns correct explanation when ends in "-й"', () {
+          const bare = 'знать';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutSg1: 'знаю'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbImperativeSg,
+            position: 1,
+            form: "зна'й",
+            bare: 'знай',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form, we first take the stem from the first-person singular form of the verb. Since this stem ends in a vowel and the subject is informal, we add the "-й" suffix to the stem to get the imperative form.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutSg1]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-и"', () {
+          const bare = 'сказать';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutSg1: 'скажу'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbImperativeSg,
+            position: 1,
+            form: "скажи'",
+            bare: 'скажи',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form, we first take the stem from the first-person singular form of the verb. Since this stem ends in a vowel, the stress falls on the last syllable in the first-person singular form, and the subject is informal, we add the "-и" suffix to the stem to get the imperative form. Were the stress not to fall on the last syllable in the first-person singular form, we would add a "-ь" suffix to the stem.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutSg1]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ь"', () {
+          const bare = 'слышать';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutSg1: 'слышу'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbImperativeSg,
+            position: 1,
+            form: "слы'шь",
+            bare: 'слышь',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form, we first take the stem from the first-person singular form of the verb. Since this stem ends in a vowel, the stress does not fall on the last syllable in the first-person singular form, and the subject is informal, we add the "-ь" suffix to the stem to get the imperative form. Were the stress to fall on the last syllable in the first-person singular form, we would add a "-и" suffix to the stem.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutSg1]} -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
