@@ -1549,39 +1549,194 @@ main() {
       });
       group('when correctAnswer.type is ruVerbImperativeSg', () {
         test('returns correct explanation when ends in "-й"', () {
-          const bare = 'августовский';
+          const bare = 'знать';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutSg1: 'знают'
+          };
           final correctAnswer = WordForm.testValue(
-            type: WordFormType.ruAdjPlPrep,
+            type: WordFormType.ruVerbImperativeSg,
             position: 1,
-            form: "а'вгустовских",
-            bare: 'августовских',
+            form: "зна'й",
+            bare: 'знай',
           );
 
           expect(
             testObject.sentenceExplanation(
               bare: bare,
               correctAnswer: correctAnswer,
-              wordFormTypesToBareMap: {},
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
             ),
-            'This word is a plural adjective in the prepositional case. This means that it is a word that modifies a plural noun that is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Plural, prepositional adjectives with stems ending in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-их" suffix after their stem. Their nominative forms would normally have the "-ие" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form, we first take the stem from the third-person plural form of the verb. Since this stem ends in a vowel and the subject is informal, we add the "-й" suffix to the stem to get the imperative form.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
           );
         });
         test('returns correct explanation when ends in "-и"', () {
-          const bare = 'адовый';
+          const bare = 'сказать';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'скажут'
+          };
           final correctAnswer = WordForm.testValue(
-            type: WordFormType.ruAdjPlPrep,
+            type: WordFormType.ruVerbImperativeSg,
             position: 1,
-            form: "а'довых",
-            bare: 'адовых',
+            form: "скажи'",
+            bare: 'скажи',
           );
 
           expect(
             testObject.sentenceExplanation(
               bare: bare,
               correctAnswer: correctAnswer,
-              wordFormTypesToBareMap: {},
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
             ),
-            'This word is a plural adjective in the prepositional case. This means that it is a word that modifies a plural noun that is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Plural, prepositional adjectives with stems that do not end in "-к", "-г", "-х", "-ж", "-ш", "-ч", "-щ", or a soft "-н" get a "-ых" suffix after the stem. Their nominative forms would normally have the "-ые" suffix.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form, we first take the stem from the third-person plural form of the verb. Since this stem does not end in a vowel, the stress falls on the last syllable in the first-person singular form, and the subject is informal, we add the "-и" suffix to the stem to get the imperative form. Were the stress not to fall on the last syllable in the first-person singular form, we would add a "-ь" suffix to the stem.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ись"', () {
+          const bare = 'казаться';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'кажутся'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbImperativeSg,
+            position: 1,
+            form: "кажи'сь",
+            bare: 'кажись',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form for reflexive verbs with an informal subject, we take the stem from the third-person plural form and add the "-ись" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ь"', () {
+          const bare = 'слышать';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'слышат'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbImperativeSg,
+            position: 1,
+            form: "слы'шь",
+            bare: 'слышь',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form, we first take the stem from the third-person plural form of the verb. Since this stem does not end in a vowel, the stress does not fall on the last syllable in the first-person singular form, and the subject is informal, we add the "-ь" suffix to the stem to get the imperative form. Were the stress to fall on the last syllable in the first-person singular form, we would add a "-и" suffix to the stem.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+          );
+        });
+      });
+      group('when correctAnswer.type is ruVerbImperativePl', () {
+        test('returns correct explanation when ends in "-йте"', () {
+          const bare = 'знать';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'знают'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbImperativePl,
+            position: 1,
+            form: "зна'йте",
+            bare: 'знайте',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form, we first take the stem from the third-person plural form of the verb. Since this stem ends in a vowel and the subject is formal or plural, we add the "-йте" suffix to the stem to get the imperative form.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ите"', () {
+          const bare = 'сказать';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'скажут'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbImperativePl,
+            position: 1,
+            form: "скажи'те",
+            bare: 'скажите',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form, we first take the stem from the third-person plural form of the verb. Since this stem does not end in a vowel, the stress falls on the last syllable in the first-person singular form, and the subject is formal or plural, we add the "-ите" suffix to the stem to get the imperative form. Were the stress not to fall on the last syllable in the first-person singular form, we would add a "-ьте" suffix to the stem.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-йтесь"', () {
+          const bare = 'бояться';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'боятся'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbImperativePl,
+            position: 1,
+            form: "бо'йтесь",
+            bare: 'бойтесь',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form for reflexive verbs with a formal or plural subject, we first take the stem from the third-person plural form. Since this stem ends in a vowel, we add the "-йтесь" suffix to the stem to get the imperative form.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-итесь"', () {
+          const bare = 'казаться';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'кажутся'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbImperativePl,
+            position: 1,
+            form: "кажи'тесь",
+            bare: 'кажитесь',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form for reflexive verbs with a formal or plural subject, we first take the stem from the third-person plural form. Since this stem does not end in a vowel, we add the "-итесь" suffix to the stem to get the imperative form.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ьте"', () {
+          const bare = 'слышать';
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'слышат'
+          };
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbImperativePl,
+            position: 1,
+            form: "слы'шьте",
+            bare: 'слышьте',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice. To create the imperative form, we first take the stem from the third-person plural form of the verb. Since this stem does not end in a vowel, the stress does not fall on the last syllable in the first-person singular form, and the subject is formal or plural, we add the "-ьте" suffix to the stem to get the imperative form. Were the stress to fall on the last syllable in the first-person singular form, we would add a "-ите" suffix to the stem.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
           );
         });
       });
