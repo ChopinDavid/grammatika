@@ -1882,6 +1882,77 @@ main() {
           );
         },
       );
+
+      group(
+        'when correctAnswer.type is ruVerbPastN',
+        () {
+          test(
+            'returns correct explanation when ends in "-ло"',
+            () {
+              const bare = 'акать';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastN,
+                position: 1,
+                form: "а'кало",
+                bare: 'акало',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a neuter verb in the past tense. This means it describes an action taken by a neuter subject at any point in the past. To form the past tense of a neuter verb, we take the infinitive form of the verb and add the "-ло" suffix to the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+              );
+            },
+          );
+
+          test(
+            'returns correct explanation when ends in "-лось"',
+            () {
+              const bare = 'абсолютизироваться';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastN,
+                position: 1,
+                form: "абсолютизи'ровалось",
+                bare: 'абсолютизировалось',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a neuter verb in the past tense. This means it describes an action taken by a neuter subject at any point in the past. To form the past tense of a neuter, reflexive verb, we take the infinitive form of the verb and add the "-лось" suffix to the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+              );
+            },
+          );
+
+          test(
+            'returns correct explanation when does not end in "-ла" or "-лась"',
+            () {
+              const bare = 'олицетворить';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastF,
+                position: 1,
+                form: "олицетвори'л",
+                bare: 'олицетворил',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a feminine verb in the past tense. This means it describes an action taken by a feminine subject at any point in the past.',
+              );
+            },
+          );
+        },
+      );
     });
   });
 }
