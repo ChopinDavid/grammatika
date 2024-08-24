@@ -2024,6 +2024,81 @@ main() {
           );
         },
       );
+
+      group('when correctAnswer.type is ruVerbPresfutSg1', () {
+        // TODO(DC): write these
+      });
+
+      group(
+        'when correctAnswer.type is ruVerbPresfutSg2',
+        () {
+          test(
+            'returns correct explanation when ends in "-шь"',
+            () {
+              const bare = 'акать';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPresfutSg2,
+                position: 1,
+                form: "а'каешь",
+                bare: 'акаешь',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a 2nd-person verb in the present or future tense. This means it describes an action that has not already been taken by the person being addressed. To form the present or future tense of a 2nd-person verb, we take the infinitive form of the verb and add the "-шь" suffix to the stem.\n\n$bare -> ${correctAnswer.bare}',
+              );
+            },
+          );
+
+          test(
+            'returns correct explanation when ends in "-шься"',
+            () {
+              const bare = 'абстрагироваться';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPresfutSg2,
+                position: 1,
+                form: "абстраги'руешься",
+                bare: 'абстрагируешься',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a 2nd-person, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by the person being addressed and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 2nd-person, reflexive verb, we take the infinitive form of the verb and add the "-шься" suffix to the stem.\n\n$bare -> ${correctAnswer.bare}',
+              );
+            },
+          );
+
+          test(
+            'returns correct explanation when does not end in "-шь" or "-шься"',
+            () {
+              const bare = 'быть';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPresfutSg2,
+                position: 1,
+                form: "есть",
+                bare: 'есть',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a 2nd-person verb in the present or future tense. This means it describes an action that has not already been taken by the person being addressed.',
+              );
+            },
+          );
+        },
+      );
     });
   });
 }
