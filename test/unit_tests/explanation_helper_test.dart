@@ -1953,6 +1953,77 @@ main() {
           );
         },
       );
+
+      group(
+        'when correctAnswer.type is ruVerbPastPl',
+        () {
+          test(
+            'returns correct explanation when ends in "-ли"',
+            () {
+              const bare = 'акать';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastPl,
+                position: 1,
+                form: "а'кали",
+                bare: 'акали',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a plural verb in the past tense. This means it describes an action taken by a plural subject at any point in the past. To form the past tense of a plural verb, we take the infinitive form of the verb and add the "-ли" suffix to the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+              );
+            },
+          );
+
+          test(
+            'returns correct explanation when ends in "-лись"',
+            () {
+              const bare = 'абсолютизироваться';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastPl,
+                position: 1,
+                form: "абсолютизи'ровались",
+                bare: 'абсолютизировались',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a plural verb in the past tense. This means it describes an action taken by a plural subject at any point in the past. To form the past tense of a plural, reflexive verb, we take the infinitive form of the verb and add the "-лись" suffix to the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+              );
+            },
+          );
+
+          test(
+            'returns correct explanation when does not end in "-ли" or "-лись"',
+            () {
+              const bare = 'накалять';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastPl,
+                position: 1,
+                form: "накаля'й",
+                bare: 'накаляй',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a plural verb in the past tense. This means it describes an action taken by a plural subject at any point in the past.',
+              );
+            },
+          );
+        },
+      );
     });
   });
 }
