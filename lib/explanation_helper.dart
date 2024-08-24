@@ -420,7 +420,13 @@ class ExplanationHelper {
         }
         return 'This word is an imperative verb. This means it is a verb used to give commands, express requests, or provide advice.${formationExplanation ?? ''}\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}';
       case WordFormType.ruVerbPastM:
-        return '';
+        String? formationExplanation;
+        bool isReflexive = correctAnswer.bare.endsWith('лся');
+        if (isReflexive || correctAnswer.bare.endsWith('л')) {
+          formationExplanation =
+              ' To form the past tense of a masculine${isReflexive ? ', reflexive' : ''} verb, we take the infinitive form of the verb and add the "-${isReflexive ? 'лся' : 'л'}" suffix to the stem.';
+        }
+        return 'This word is a masculine verb in the past tense. This means it describes an action taken by a masculine subject at any point in the past.${formationExplanation != null ? '$formationExplanation\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPastF:
         return '';
       case WordFormType.ruVerbPastN:

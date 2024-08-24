@@ -64,5 +64,6 @@ INNER JOIN words ON words.id = sentences_words.word_id
 WHERE sentences_words.form_type IS NOT NULL
   AND sentences_words.form_type IS NOT 'ru_base'
   AND words_forms.form_type = sentences_words.form_type
+  AND words_forms.form_type = 'ru_verb_imperative_sg'
 ORDER BY RANDOM()
 LIMIT 1;''';

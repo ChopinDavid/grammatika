@@ -1740,6 +1740,77 @@ main() {
           );
         });
       });
+
+      group(
+        'when correctAnswer.type is ruVerbPastM',
+        () {
+          test(
+            'returns correct explanation when ends in "-л"',
+            () {
+              const bare = 'бежать';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastM,
+                position: 1,
+                form: "бежа'л",
+                bare: 'бежал',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a masculine verb in the past tense. This means it describes an action taken by a masculine subject at any point in the past. To form the past tense of a masculine verb, we take the infinitive form of the verb and add the "-л" suffix to the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+              );
+            },
+          );
+
+          test(
+            'returns correct explanation when ends in "-лся"',
+            () {
+              const bare = 'бояться';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastM,
+                position: 1,
+                form: "боя'лся",
+                bare: 'боялся',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a masculine verb in the past tense. This means it describes an action taken by a masculine subject at any point in the past. To form the past tense of a masculine, reflexive verb, we take the infinitive form of the verb and add the "-лся" suffix to the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+              );
+            },
+          );
+
+          test(
+            'returns correct explanation when does not end in "-л" or "-лся"',
+            () {
+              const bare = 'возникнуть';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastM,
+                position: 1,
+                form: "возни'к",
+                bare: 'возник',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a masculine verb in the past tense. This means it describes an action taken by a masculine subject at any point in the past.',
+              );
+            },
+          );
+        },
+      );
     });
   });
 }
