@@ -1811,6 +1811,77 @@ main() {
           );
         },
       );
+
+      group(
+        'when correctAnswer.type is ruVerbPastF',
+        () {
+          test(
+            'returns correct explanation when ends in "-ла"',
+            () {
+              const bare = 'акать';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastF,
+                position: 1,
+                form: "а'кала",
+                bare: 'акала',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a feminine verb in the past tense. This means it describes an action taken by a feminine subject at any point in the past. To form the past tense of a feminine verb, we take the infinitive form of the verb and add the "-ла" suffix to the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+              );
+            },
+          );
+
+          test(
+            'returns correct explanation when ends in "-лась"',
+            () {
+              const bare = 'абсолютизироваться';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastF,
+                position: 1,
+                form: "абсолютизи'ровалась",
+                bare: 'абсолютизировалась',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a feminine verb in the past tense. This means it describes an action taken by a feminine subject at any point in the past. To form the past tense of a feminine, reflexive verb, we take the infinitive form of the verb and add the "-лась" suffix to the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+              );
+            },
+          );
+
+          test(
+            'returns correct explanation when does not end in "-ла" or "-лась"',
+            () {
+              const bare = 'олицетворить';
+              final correctAnswer = WordForm.testValue(
+                type: WordFormType.ruVerbPastF,
+                position: 1,
+                form: "олицетвори'л",
+                bare: 'олицетворил',
+              );
+
+              expect(
+                testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                ),
+                'This word is a feminine verb in the past tense. This means it describes an action taken by a feminine subject at any point in the past.',
+              );
+            },
+          );
+        },
+      );
     });
   });
 }
