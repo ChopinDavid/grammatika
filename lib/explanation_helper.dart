@@ -444,7 +444,13 @@ class ExplanationHelper {
         }
         return 'This word is a neuter verb in the past tense. This means it describes an action taken by a neuter subject at any point in the past.${formationExplanation != null ? '$formationExplanation\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPastPl:
-        return '';
+        String? formationExplanation;
+        bool isReflexive = correctAnswer.bare.endsWith('лись');
+        if (isReflexive || correctAnswer.bare.endsWith('ли')) {
+          formationExplanation =
+              ' To form the past tense of a plural${isReflexive ? ', reflexive' : ''} verb, we take the infinitive form of the verb and add the "-${isReflexive ? 'лись' : 'ли'}" suffix to the stem.';
+        }
+        return 'This word is a plural verb in the past tense. This means it describes an action taken by a plural subject at any point in the past.${formationExplanation != null ? '$formationExplanation\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPresfutSg1:
         return '';
       case WordFormType.ruVerbPresfutSg2:
