@@ -428,7 +428,13 @@ class ExplanationHelper {
         }
         return 'This word is a masculine verb in the past tense. This means it describes an action taken by a masculine subject at any point in the past.${formationExplanation != null ? '$formationExplanation\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPastF:
-        return '';
+        String? formationExplanation;
+        bool isReflexive = correctAnswer.bare.endsWith('лась');
+        if (isReflexive || correctAnswer.bare.endsWith('ла')) {
+          formationExplanation =
+              ' To form the past tense of a feminine${isReflexive ? ', reflexive' : ''} verb, we take the infinitive form of the verb and add the "-${isReflexive ? 'лась' : 'ла'}" suffix to the stem.';
+        }
+        return 'This word is a feminine verb in the past tense. This means it describes an action taken by a feminine subject at any point in the past.${formationExplanation != null ? '$formationExplanation\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPastN:
         return '';
       case WordFormType.ruVerbPastPl:
