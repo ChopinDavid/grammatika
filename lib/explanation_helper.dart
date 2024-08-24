@@ -436,7 +436,13 @@ class ExplanationHelper {
         }
         return 'This word is a feminine verb in the past tense. This means it describes an action taken by a feminine subject at any point in the past.${formationExplanation != null ? '$formationExplanation\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPastN:
-        return '';
+        String? formationExplanation;
+        bool isReflexive = correctAnswer.bare.endsWith('лось');
+        if (isReflexive || correctAnswer.bare.endsWith('ло')) {
+          formationExplanation =
+              ' To form the past tense of a neuter${isReflexive ? ', reflexive' : ''} verb, we take the infinitive form of the verb and add the "-${isReflexive ? 'лось' : 'ло'}" suffix to the stem.';
+        }
+        return 'This word is a neuter verb in the past tense. This means it describes an action taken by a neuter subject at any point in the past.${formationExplanation != null ? '$formationExplanation\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPastPl:
         return '';
       case WordFormType.ruVerbPresfutSg1:
