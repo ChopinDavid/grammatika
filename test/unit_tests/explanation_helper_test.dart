@@ -2680,6 +2680,42 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is fuVerbParticipleActivePast', () {
+        test('returns correct explanation when does not end in -ся', () {
+          const bare = 'думать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticipleActivePast,
+            form: "ду'мавший",
+            bare: 'думавший',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is an active past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that performed said action. Active past participles are generally formed by taking the infinitive form of the verb and adding the "-вший" suffix to the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in -ся', () {
+          const bare = 'казаться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticipleActivePast,
+            form: "каза'вшийся",
+            bare: 'казавшийся',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a reflexive active past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that performed said action. This form is also reflexive, meaning the completed verb\'s object is either the same as the subject or doesn\'t exist. Reflexive active past participles are generally formed by taking the infinitive form of the verb and adding the "-вшийся" suffix to the stem.\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
