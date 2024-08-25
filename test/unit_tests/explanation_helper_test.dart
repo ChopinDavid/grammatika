@@ -2203,6 +2203,117 @@ main() {
           );
         },
       );
+
+      group('when correctAnswer.type is ruVerbPresfutSg3', () {
+        test('returns correct explanation when ends in "-ет"', () {
+          const bare = 'думать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutSg3,
+            position: 1,
+            form: "ду'мает",
+            bare: 'думает',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person verb in the present or future tense. This means it describes an action that has not already been taken by somebody or something other than the speaker or person being addressed. To form the present or future tense of a 3rd-person verb, we generally take the infinitive form of the verb and add a "-ет", "-ёт" or "-ит" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ёт"', () {
+          const bare = 'войти';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutSg3,
+            position: 1,
+            form: "войдёт",
+            bare: 'войдёт',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person verb in the present or future tense. This means it describes an action that has not already been taken by somebody or something other than the speaker or person being addressed. To form the present or future tense of a 3rd-person verb, we generally take the infinitive form of the verb and add a "-ет", "-ёт" or "-ит" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ит"', () {
+          const bare = 'выходить';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutSg3,
+            position: 1,
+            form: "выхо'дит",
+            bare: 'выходит',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person verb in the present or future tense. This means it describes an action that has not already been taken by somebody or something other than the speaker or person being addressed. To form the present or future tense of a 3rd-person verb, we generally take the infinitive form of the verb and add a "-ет", "-ёт" or "-ит" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ется"', () {
+          const bare = 'казаться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutSg3,
+            position: 1,
+            form: "ка'жется",
+            bare: 'кажется',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by somebody or something other than the speaker or person being addressed, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 3rd-person, reflexive verb, we generally take the infinitive form of the verb and add a "-ется", "-ётся" or "-ится" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ётся"', () {
+          const bare = 'вернуться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutSg3,
+            position: 1,
+            form: "вернётся",
+            bare: 'вернётся',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by somebody or something other than the speaker or person being addressed, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 3rd-person, reflexive verb, we generally take the infinitive form of the verb and add a "-ется", "-ётся" or "-ится" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ится"', () {
+          const bare = 'появиться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutSg3,
+            position: 1,
+            form: "поя'вится",
+            bare: 'появится',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by somebody or something other than the speaker or person being addressed, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 3rd-person, reflexive verb, we generally take the infinitive form of the verb and add a "-ется", "-ётся" or "-ится" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
