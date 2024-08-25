@@ -468,7 +468,7 @@ class ExplanationHelper {
           formationExplanation =
               ' To form the present or future tense of a 2nd-person${isReflexive ? ', reflexive' : ''} verb, we take the infinitive form of the verb and add the "-${isReflexive ? 'шься' : 'шь'}" suffix to the stem.';
         }
-        return 'This word is a 2nd-person${isReflexive ? ', reflexive' : ''} verb in the present or future tense. This means it describes an action that has not already been taken by the person being addressed${isReflexive ? " and whose object is either the same as the subject or doesn't exist" : ''}.${formationExplanation != null ? '$formationExplanation\n\n$bare -> ${correctAnswer.bare}' : ''}';
+        return 'This word is a 2nd-person${isReflexive ? ', reflexive' : ''} verb in the present or future tense. This means it describes an action that has not already been taken by the person being informally addressed${isReflexive ? " and whose object is either the same as the subject or doesn't exist" : ''}.${formationExplanation != null ? '$formationExplanation\n\n$bare -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPresfutSg3:
         String? formationExplanation;
         final bool isReflexive = correctAnswer.bare.endsWith('ся');
@@ -482,7 +482,11 @@ class ExplanationHelper {
             ' To form the present or future tense of a 1st-person, plural${isReflexive ? ', reflexive' : ''} verb, we generally take the infinitive form of the verb and add a "-ем${isReflexive ? 'ся' : ''}", "-ём${isReflexive ? 'ся' : ''}" or "-им${isReflexive ? 'ся' : ''}" suffix depending on the ending of the stem.';
         return 'This word is a 1st-person, plural${isReflexive ? ', reflexive' : ''} verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the speaker${isReflexive ? ", and whose object is either the same as the subject or doesn't exist" : ''}.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruVerbPresfutPl2:
-        return '';
+        String? formationExplanation;
+        final bool isReflexive = correctAnswer.bare.endsWith('сь');
+        formationExplanation =
+            ' To form the present or future tense of a 2nd-person, plural${isReflexive ? ', reflexive' : ''} verb, we generally take the infinitive form of the verb and add a "-ете${isReflexive ? 'сь' : ''}", "-ёте${isReflexive ? 'сь' : ''}" or "-ите${isReflexive ? 'сь' : ''}" suffix depending on the ending of the stem.';
+        return 'This word is a 2nd-person, plural${isReflexive ? ', reflexive' : ''} verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the person being addressed, or by an individual being formally addressed${isReflexive ? ". This form is also reflexive, meaning the verb's object is either the same as the subject or doesn't exist" : ''}.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruVerbPresfutPl3:
         return '';
       case WordFormType.ruVerbParticipleActivePast:
