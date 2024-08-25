@@ -2716,6 +2716,149 @@ main() {
           );
         });
       });
+
+      group('when correctAnswer.type is ruVerbParticiplePassivePast', () {
+        test(
+            'returns correct explanation when correct answer ends in "-ённый" and past tense ends with "-л"',
+            () {
+          const bare = 'говорить';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticiplePassivePast,
+            form: "говорённый",
+            bare: 'говорённый',
+          );
+          final wordFormTypesToBareMap = {WordFormType.ruVerbPastM: 'говорил'};
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is a passive past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that experienced said action. To form a passive past participle whose past tense form does not end in "-л", we generally take the past tense form and add a "-ённый" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPastM]} -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when correct answer ends in "-тый" and nominative form ends with "-уть"',
+            () {
+          const bare = 'протянуть';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticiplePassivePast,
+            form: "протя'нутый",
+            bare: 'протянутый',
+          );
+          final wordFormTypesToBareMap = {WordFormType.ruVerbPastM: 'протянул'};
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is a passive past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that experienced said action. To form a passive past participle whose infinitive form ends in "-уть", "-оть", or "-ыть", we generally take the past tense form and replace the "-л" suffix with a "-тый" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPastM]} -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when correct answer ends in "-тый" and nominative form ends with "-оть"',
+            () {
+          const bare = 'колоть';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticiplePassivePast,
+            form: "ко'лотый",
+            bare: 'колотый',
+          );
+          final wordFormTypesToBareMap = {WordFormType.ruVerbPastM: 'колол'};
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is a passive past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that experienced said action. To form a passive past participle whose infinitive form ends in "-уть", "-оть", or "-ыть", we generally take the past tense form and replace the "-л" suffix with a "-тый" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPastM]} -> ${correctAnswer.bare}',
+          );
+        });
+
+        test(
+            'returns correct explanation when correct answer ends in "-тый" and nominative form ends with "-ыть"',
+            () {
+          const bare = 'открыть';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticiplePassivePast,
+            form: "откры'тый",
+            bare: 'открытый',
+          );
+          final wordFormTypesToBareMap = {WordFormType.ruVerbPastM: 'открыл'};
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is a passive past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that experienced said action. To form a passive past participle whose infinitive form ends in "-уть", "-оть", or "-ыть", we generally take the past tense form and replace the "-л" suffix with a "-тый" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPastM]} -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when correct answer ends in "-тый" and nominative form ends with "-ереть"',
+            () {
+          const bare = 'вытереть';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticiplePassivePast,
+            form: "вы'тертый",
+            bare: 'вытертый',
+          );
+          final wordFormTypesToBareMap = {WordFormType.ruVerbPastM: 'вытер'};
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is a passive past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that experienced said action. To form a passive past participle whose infinitive form ends in "-ереть", we generally take the past tense form and replace the "-р" suffix with a "-тый" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPastM]} -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when correct answer ends in "-енный" and nominative form ends with "-ить"',
+            () {
+          const bare = 'служить';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticiplePassivePast,
+            form: "слу'женный",
+            bare: 'служенный',
+          );
+          final wordFormTypesToBareMap = {WordFormType.ruVerbPastM: 'служил'};
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is a passive past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that experienced said action. To form a passive past participle whose infinitive form ends in "ить", we generally take the past tense form and replace the "-ил" suffix with an "-енный" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPastM]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation for typical passive past participle',
+            () {
+          const bare = 'читать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticiplePassivePast,
+            form: "счи'танный",
+            bare: 'читанный',
+          );
+          final wordFormTypesToBareMap = {WordFormType.ruVerbPastM: 'читал'};
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is a passive past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that experienced said action. To form a passive past participle, we generally take the past tense form and replace the "-л" suffix with a "-нный" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPastM]} -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
