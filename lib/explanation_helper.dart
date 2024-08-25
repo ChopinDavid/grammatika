@@ -494,7 +494,10 @@ class ExplanationHelper {
             ' To form the present or future tense of a 3rd-person, plural${isReflexive ? ', reflexive' : ''} verb, we generally take the infinitive form of the verb and add a "-ют${isReflexive ? 'ся' : ''}", "-ут${isReflexive ? 'ся' : ''}", "-ат${isReflexive ? 'ся' : ''}", or "-ят${isReflexive ? 'ся' : ''}" suffix depending on the ending of the stem.';
         return 'This word is a 3rd-person, plural${isReflexive ? ', reflexive' : ''} verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that does not include the speaker or person being addressed${isReflexive ? ", and whose object is either the same as the subject or doesn't exist" : ''}.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruVerbParticipleActivePast:
-        return '';
+        final bool isReflexive = correctAnswer.bare.endsWith('ся');
+        final String formationExplanation =
+            ' ${isReflexive ? 'Reflexive a' : 'A'}ctive past participles are generally formed by taking the infinitive form of the verb and adding the "-вший${isReflexive ? 'ся' : ''}" suffix to the stem.';
+        return 'This word is a${isReflexive ? ' reflexive' : 'n'} active past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that performed said action${isReflexive ? ". This form is also reflexive, meaning the completed verb's object is either the same as the subject or doesn't exist" : ''}.$formationExplanation\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruVerbParticiplePassivePast:
         return '';
       case WordFormType.ruVerbParticipleActivePresent:
