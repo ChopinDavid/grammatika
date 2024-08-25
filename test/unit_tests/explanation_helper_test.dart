@@ -2534,6 +2534,152 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruVerbPresfutPl3', () {
+        test('returns correct explanation when ends in "-ют"', () {
+          const bare = 'думать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl3,
+            position: 1,
+            form: "ду'мают",
+            bare: 'думают',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, plural verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that does not include the speaker or person being addressed. To form the present or future tense of a 3rd-person, plural verb, we generally take the infinitive form of the verb and add a "-ют", "-ут", "-ат", or "-ят" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ут"', () {
+          const bare = 'показать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl3,
+            position: 1,
+            form: "пока'жут",
+            bare: 'покажут',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, plural verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that does not include the speaker or person being addressed. To form the present or future tense of a 3rd-person, plural verb, we generally take the infinitive form of the verb and add a "-ют", "-ут", "-ат", or "-ят" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ат"', () {
+          const bare = 'лежать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl3,
+            position: 1,
+            form: "лежа'т",
+            bare: 'лежат',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, plural verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that does not include the speaker or person being addressed. To form the present or future tense of a 3rd-person, plural verb, we generally take the infinitive form of the verb and add a "-ют", "-ут", "-ат", or "-ят" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ят"', () {
+          const bare = 'любить';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl3,
+            position: 1,
+            form: "лю'бят",
+            bare: 'любят',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, plural verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that does not include the speaker or person being addressed. To form the present or future tense of a 3rd-person, plural verb, we generally take the infinitive form of the verb and add a "-ют", "-ут", "-ат", or "-ят" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ются"', () {
+          const bare = 'оставаться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl3,
+            position: 1,
+            form: "остаю'тся",
+            bare: 'остаются',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that does not include the speaker or person being addressed, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 3rd-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-ются", "-утся", "-атся", or "-ятся" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-утся"', () {
+          const bare = 'казаться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl3,
+            position: 1,
+            form: "ка'жутся",
+            bare: 'кажутся',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that does not include the speaker or person being addressed, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 3rd-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-ются", "-утся", "-атся", or "-ятся" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-атся"', () {
+          const bare = 'случиться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl3,
+            position: 1,
+            form: "случа'тся",
+            bare: 'случатся',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that does not include the speaker or person being addressed, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 3rd-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-ются", "-утся", "-атся", or "-ятся" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ятся"', () {
+          const bare = 'бояться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl3,
+            position: 1,
+            form: "боя'тся",
+            bare: 'боятся',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 3rd-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that does not include the speaker or person being addressed, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 3rd-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-ются", "-утся", "-атся", or "-ятся" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
