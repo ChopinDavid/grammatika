@@ -2859,6 +2859,68 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruVerbParticipleActivePresent', () {
+        test('returns correct explanation when does not end in "-ся"', () {
+          const bare = 'знать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticipleActivePresent,
+            form: "зна'ющий",
+            bare: 'знающий',
+          );
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'знают'
+          };
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an active present participle. This means it is a verb form of a uncompleted action that can be used as an adjective to describe the subject of a sentence that is or will be performing said action. Active present participles are generally formed by taking the third-person plural form of the verb and replacing the "-т" suffix with a "-щий" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when does not end in "-ся"', () {
+          const bare = 'знать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticipleActivePresent,
+            form: "зна'ющий",
+            bare: 'знающий',
+          );
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'знают'
+          };
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is an active present participle. This means it is a verb form of a uncompleted action that can be used as an adjective to describe the subject of a sentence that is or will be performing said action. Active present participles are generally formed by taking the third-person plural form of the verb and replacing the "-т" suffix with a "-щий" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-тся"', () {
+          const bare = 'оставаться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbParticipleActivePresent,
+            form: "остаю'щийся",
+            bare: 'остающийся',
+          );
+          final wordFormTypesToBareMap = {
+            WordFormType.ruVerbPresfutPl3: 'остаются'
+          };
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: wordFormTypesToBareMap,
+            ),
+            'This word is a reflexive active present participle. This means it is a verb form of a uncompleted action that can be used as an adjective to describe the subject of a sentence that is or will be performing said action. This form is also reflexive, meaning the uncompleted verb\'s object is either the same as the subject or doesn\'t exist. Reflexive active present participles are generally formed by taking the third-person plural form of the verb and replacing the "-тся" suffix with a "-щийся" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
