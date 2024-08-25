@@ -452,7 +452,15 @@ class ExplanationHelper {
         }
         return 'This word is a plural verb in the past tense. This means it describes an action taken by a plural subject at any point in the past.${formationExplanation != null ? '$formationExplanation\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPresfutSg1:
-        return '';
+        String? formationExplanation;
+        final bool isReflexive = correctAnswer.bare.endsWith('сь');
+        if (isReflexive ||
+            correctAnswer.bare.endsWith('ю') ||
+            correctAnswer.bare.endsWith('у')) {
+          formationExplanation =
+              ' To form the present or future tense of a 1st-person${isReflexive ? ', reflexive' : ''} verb, we generally take the infinitive form of the verb and add a "-у${isReflexive ? 'сь' : ''}" or "-ю${isReflexive ? 'сь' : ''}" suffix depending on the ending of the stem.';
+        }
+        return 'This word is a 1st-person${isReflexive ? ', reflexive' : ''} verb in the present or future tense. This means it describes an action that has not already been taken by the speaker${isReflexive ? " and whose object is either the same as the subject or doesn't exist" : ''}.${formationExplanation != null ? '$formationExplanation\n\n$bare -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPresfutSg2:
         String? formationExplanation;
         bool isReflexive = correctAnswer.bare.endsWith('шься');
