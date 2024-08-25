@@ -2314,6 +2314,116 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruVerbPresfutPl1', () {
+        test('returns correct explanation when ends in "-ем"', () {
+          const bare = 'думать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl1,
+            position: 1,
+            form: "ду'маем",
+            bare: 'думаем',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 1st-person, plural verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the speaker. To form the present or future tense of a 1st-person, plural verb, we generally take the infinitive form of the verb and add a "-ем", "-ём" or "-им" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ём"', () {
+          const bare = 'давать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl1,
+            position: 1,
+            form: "даём",
+            bare: 'даём',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 1st-person, plural verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the speaker. To form the present or future tense of a 1st-person, plural verb, we generally take the infinitive form of the verb and add a "-ем", "-ём" or "-им" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-им"', () {
+          const bare = 'лежать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl1,
+            position: 1,
+            form: "лежи'м",
+            bare: 'лежим',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 1st-person, plural verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the speaker. To form the present or future tense of a 1st-person, plural verb, we generally take the infinitive form of the verb and add a "-ем", "-ём" or "-им" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-емся"', () {
+          const bare = 'казаться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl1,
+            position: 1,
+            form: "ка'жемся",
+            bare: 'кажемся',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 1st-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the speaker, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 1st-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-емся", "-ёмся" or "-имся" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ёмся"', () {
+          const bare = 'вернуться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl1,
+            position: 1,
+            form: "вернёмся",
+            bare: 'вернёмся',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 1st-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the speaker, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 1st-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-емся", "-ёмся" or "-имся" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-имся"', () {
+          const bare = 'появиться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl1,
+            position: 1,
+            form: "поя'вимся",
+            bare: 'появимся',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 1st-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the speaker, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 1st-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-емся", "-ёмся" or "-имся" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
