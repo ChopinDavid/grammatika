@@ -522,7 +522,10 @@ class ExplanationHelper {
         }
         return 'This word is a passive past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that experienced said action.$formationExplanation\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPastM]} -> ${correctAnswer.bare}';
       case WordFormType.ruVerbParticipleActivePresent:
-        return '';
+        final bool isReflexive = correctAnswer.bare.endsWith('ся');
+        String formationExplanation =
+            ' ${isReflexive ? 'Reflexive a' : 'A'}ctive present participles are generally formed by taking the third-person plural form of the verb and replacing the "-${isReflexive ? 'тся' : 'т'}" suffix with a "-щий${isReflexive ? 'ся' : ''}" suffix.';
+        return 'This word is a${isReflexive ? ' reflexive' : 'n'} active present participle. This means it is a verb form of a uncompleted action that can be used as an adjective to describe the subject of a sentence that is or will be performing said action${isReflexive ? ". This form is also reflexive, meaning the uncompleted verb's object is either the same as the subject or doesn't exist" : ''}.$formationExplanation\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}';
       case WordFormType.ruVerbParticiplePassivePresent:
         return '';
       case WordFormType.ruNounSgNom:
