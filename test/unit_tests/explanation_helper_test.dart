@@ -2942,6 +2942,25 @@ main() {
             );
           });
         });
+        group('when correctAnswer.type is ruNounSgNom', () {
+          test('returns correct explanation', () {
+            const bare = 'книга';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgNom,
+              form: 'книга',
+              bare: 'книга',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a singular, nominative noun. This means it is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. This is the form of the noun that is listed in dictionaries.',
+            );
+          });
+        });
       });
     });
   });
