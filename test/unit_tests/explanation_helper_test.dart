@@ -2153,7 +2153,7 @@ main() {
                   correctAnswer: correctAnswer,
                   wordFormTypesToBareMap: {},
                 ),
-                'This word is a 2nd-person verb in the present or future tense. This means it describes an action that has not already been taken by the person being addressed. To form the present or future tense of a 2nd-person verb, we take the infinitive form of the verb and add the "-шь" suffix to the stem.\n\n$bare -> ${correctAnswer.bare}',
+                'This word is a 2nd-person verb in the present or future tense. This means it describes an action that has not already been taken by the person being informally addressed. To form the present or future tense of a 2nd-person verb, we take the infinitive form of the verb and add the "-шь" suffix to the stem.\n\n$bare -> ${correctAnswer.bare}',
               );
             },
           );
@@ -2175,7 +2175,7 @@ main() {
                   correctAnswer: correctAnswer,
                   wordFormTypesToBareMap: {},
                 ),
-                'This word is a 2nd-person, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by the person being addressed and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 2nd-person, reflexive verb, we take the infinitive form of the verb and add the "-шься" suffix to the stem.\n\n$bare -> ${correctAnswer.bare}',
+                'This word is a 2nd-person, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by the person being informally addressed and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 2nd-person, reflexive verb, we take the infinitive form of the verb and add the "-шься" suffix to the stem.\n\n$bare -> ${correctAnswer.bare}',
               );
             },
           );
@@ -2197,7 +2197,7 @@ main() {
                   correctAnswer: correctAnswer,
                   wordFormTypesToBareMap: {},
                 ),
-                'This word is a 2nd-person verb in the present or future tense. This means it describes an action that has not already been taken by the person being addressed.',
+                'This word is a 2nd-person verb in the present or future tense. This means it describes an action that has not already been taken by the person being informally addressed.',
               );
             },
           );
@@ -2421,6 +2421,116 @@ main() {
               wordFormTypesToBareMap: {},
             ),
             'This word is a 1st-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the speaker, and whose object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 1st-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-емся", "-ёмся" or "-имся" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+      });
+      group('when correctAnswer.type is ruVerbPresfutPl2', () {
+        test('returns correct explanation when ends in "-ете"', () {
+          const bare = 'думать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl2,
+            position: 1,
+            form: "ду'маете",
+            bare: 'думаете',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 2nd-person, plural verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the person being addressed, or by an individual being formally addressed. To form the present or future tense of a 2nd-person, plural verb, we generally take the infinitive form of the verb and add a "-ете", "-ёте" or "-ите" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ёте"', () {
+          const bare = 'давать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl2,
+            position: 1,
+            form: "даёте",
+            bare: 'даёте',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 2nd-person, plural verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the person being addressed, or by an individual being formally addressed. To form the present or future tense of a 2nd-person, plural verb, we generally take the infinitive form of the verb and add a "-ете", "-ёте" or "-ите" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ите"', () {
+          const bare = 'смотреть';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl2,
+            position: 1,
+            form: "смо'трите",
+            bare: 'смотрите',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 2nd-person, plural verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the person being addressed, or by an individual being formally addressed. To form the present or future tense of a 2nd-person, plural verb, we generally take the infinitive form of the verb and add a "-ете", "-ёте" or "-ите" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-етесь"', () {
+          const bare = 'казаться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl2,
+            position: 1,
+            form: "ка'жетесь",
+            bare: 'кажетесь',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 2nd-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the person being addressed, or by an individual being formally addressed. This form is also reflexive, meaning the verb\'s object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 2nd-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-етесь", "-ётесь" or "-итесь" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-ётесь"', () {
+          const bare = 'вернуться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl2,
+            position: 1,
+            form: "вернётесь",
+            bare: 'вернётесь',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 2nd-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the person being addressed, or by an individual being formally addressed. This form is also reflexive, meaning the verb\'s object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 2nd-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-етесь", "-ётесь" or "-итесь" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when ends in "-итесь"', () {
+          const bare = 'появиться';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruVerbPresfutPl2,
+            position: 1,
+            form: "поя'витесь",
+            bare: 'появитесь',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+            ),
+            'This word is a 2nd-person, plural, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by a group of people that includes the person being addressed, or by an individual being formally addressed. This form is also reflexive, meaning the verb\'s object is either the same as the subject or doesn\'t exist. To form the present or future tense of a 2nd-person, plural, reflexive verb, we generally take the infinitive form of the verb and add a "-етесь", "-ётесь" or "-итесь" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
           );
         });
       });
