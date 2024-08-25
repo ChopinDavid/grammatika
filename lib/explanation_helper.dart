@@ -527,7 +527,7 @@ class ExplanationHelper {
             ' ${isReflexive ? 'Reflexive a' : 'A'}ctive present participles are generally formed by taking the third-person plural form of the verb and replacing the "-${isReflexive ? 'тся' : 'т'}" suffix with a "-щий${isReflexive ? 'ся' : ''}" suffix.';
         return 'This word is a${isReflexive ? ' reflexive' : 'n'} active present participle. This means it is a verb form of a uncompleted action that can be used as an adjective to describe the subject of a sentence that is or will be performing said action${isReflexive ? ". This form is also reflexive, meaning the uncompleted verb's object is either the same as the subject or doesn't exist" : ''}.$formationExplanation\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}';
       case WordFormType.ruVerbParticiplePassivePresent:
-        return '';
+        return 'This word is a passive present participle. This means it is a verb form of an uncompleted action that can be used as an adjective to describe the subject of a sentence that experienced said action. To form a passive present participle, we generally take the 1st-person plural form of the verb and replace the "-м" suffix with a "-мый" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl1]} -> ${correctAnswer.bare}';
       case WordFormType.ruNounSgNom:
         return '';
       case WordFormType.ruNounSgGen:
