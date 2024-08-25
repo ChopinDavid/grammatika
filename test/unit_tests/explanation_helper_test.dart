@@ -2026,7 +2026,111 @@ main() {
       );
 
       group('when correctAnswer.type is ruVerbPresfutSg1', () {
-        // TODO(DC): write these
+        test(
+          'returns correct explanation when ends in "-у"',
+          () {
+            const bare = 'идти';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbPresfutSg1,
+              position: 1,
+              form: "иду'",
+              bare: 'иду',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a 1st-person verb in the present or future tense. This means it describes an action that has not already been taken by the speaker. To form the present or future tense of a 1st-person verb, we generally take the infinitive form of the verb and add a "-у" or "-ю" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          },
+        );
+        test(
+          'returns correct explanation when ends in "-ю"',
+          () {
+            const bare = 'думать';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbPresfutSg1,
+              position: 1,
+              form: "ду'маю",
+              bare: 'думаю',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a 1st-person verb in the present or future tense. This means it describes an action that has not already been taken by the speaker. To form the present or future tense of a 1st-person verb, we generally take the infinitive form of the verb and add a "-у" or "-ю" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          },
+        );
+        test(
+          'returns correct explanation when ends in "-усь"',
+          () {
+            const bare = 'казаться';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbPresfutSg1,
+              position: 1,
+              form: "кажу'сь",
+              bare: 'кажусь',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              "This word is a 1st-person, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by the speaker and whose object is either the same as the subject or doesn't exist. To form the present or future tense of a 1st-person, reflexive verb, we generally take the infinitive form of the verb and add a \"-усь\" or \"-юсь\" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}",
+            );
+          },
+        );
+        test(
+          'returns correct explanation when ends in "-юсь"',
+          () {
+            const bare = 'казаться';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbPresfutSg1,
+              position: 1,
+              form: "остаю'сь",
+              bare: 'остаюсь',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              "This word is a 1st-person, reflexive verb in the present or future tense. This means it describes an action that has not already been taken by the speaker and whose object is either the same as the subject or doesn't exist. To form the present or future tense of a 1st-person, reflexive verb, we generally take the infinitive form of the verb and add a \"-усь\" or \"-юсь\" suffix depending on the ending of the stem.\n\n$bare -> ${correctAnswer.bare}",
+            );
+          },
+        );
+        test(
+          'returns correct explanation when does not end in "-у", "-ю", "-усь", or "-юсь"',
+          () {
+            const bare = 'быть';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbPresfutSg1,
+              position: 1,
+              form: "есть",
+              bare: 'есть',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              "This word is a 1st-person verb in the present or future tense. This means it describes an action that has not already been taken by the speaker.",
+            );
+          },
+        );
       });
 
       group(
