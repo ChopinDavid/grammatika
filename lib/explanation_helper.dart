@@ -499,7 +499,28 @@ class ExplanationHelper {
             ' ${isReflexive ? 'Reflexive a' : 'A'}ctive past participles are generally formed by taking the infinitive form of the verb and adding the "-вший${isReflexive ? 'ся' : ''}" suffix to the stem.';
         return 'This word is a${isReflexive ? ' reflexive' : 'n'} active past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that performed said action${isReflexive ? ". This form is also reflexive, meaning the completed verb's object is either the same as the subject or doesn't exist" : ''}.$formationExplanation\n\n${bare.substring(0, bare.length - 2)}- -> ${correctAnswer.bare}';
       case WordFormType.ruVerbParticiplePassivePast:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('ённый') &&
+            wordFormTypesToBareMap[WordFormType.ruVerbPastM]?.endsWith('л') ==
+                true) {
+          formationExplanation =
+              ' To form a passive past participle whose past tense form does not end in "-л", we generally take the past tense form and add a "-ённый" suffix.';
+        } else if (correctAnswer.bare.endsWith('тый') &&
+            (bare.endsWith('уть') ||
+                bare.endsWith('оть') ||
+                bare.endsWith('ыть') ||
+                bare.endsWith('ереть'))) {
+          formationExplanation =
+              ' To form a passive past participle whose infinitive form ends in ${bare.endsWith('ереть') ? '"-ереть"' : '"-уть", "-оть", or "-ыть"'}, we generally take the past tense form and replace the ${bare.endsWith('ереть') ? '"-р"' : '"-л"'} suffix with a "-тый" suffix.';
+        } else if (correctAnswer.bare.endsWith('енный') &&
+            bare.endsWith('ить')) {
+          formationExplanation =
+              ' To form a passive past participle whose infinitive form ends in "ить", we generally take the past tense form and replace the "-ил" suffix with an "-енный" suffix.';
+        } else {
+          formationExplanation =
+              ' To form a passive past participle, we generally take the past tense form and replace the "-л" suffix with a "-нный" suffix.';
+        }
+        return 'This word is a passive past participle. This means it is a verb form of a completed action that can be used as an adjective to describe the subject of a sentence that experienced said action.$formationExplanation\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPastM]} -> ${correctAnswer.bare}';
       case WordFormType.ruVerbParticipleActivePresent:
         return '';
       case WordFormType.ruVerbParticiplePassivePresent:
