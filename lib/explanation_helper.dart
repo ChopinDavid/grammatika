@@ -470,7 +470,11 @@ class ExplanationHelper {
         }
         return 'This word is a 2nd-person${isReflexive ? ', reflexive' : ''} verb in the present or future tense. This means it describes an action that has not already been taken by the person being addressed${isReflexive ? " and whose object is either the same as the subject or doesn't exist" : ''}.${formationExplanation != null ? '$formationExplanation\n\n$bare -> ${correctAnswer.bare}' : ''}';
       case WordFormType.ruVerbPresfutSg3:
-        return '';
+        String? formationExplanation;
+        final bool isReflexive = correctAnswer.bare.endsWith('ся');
+        formationExplanation =
+            ' To form the present or future tense of a 3rd-person${isReflexive ? ', reflexive' : ''} verb, we generally take the infinitive form of the verb and add a "-ет${isReflexive ? 'ся' : ''}", "-ёт${isReflexive ? 'ся' : ''}" or "-ит${isReflexive ? 'ся' : ''}" suffix depending on the ending of the stem.';
+        return 'This word is a 3rd-person${isReflexive ? ', reflexive' : ''} verb in the present or future tense. This means it describes an action that has not already been taken by somebody or something other than the speaker or person being addressed${isReflexive ? ", and whose object is either the same as the subject or doesn't exist" : ''}.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruVerbPresfutPl1:
         return '';
       case WordFormType.ruVerbPresfutPl2:
