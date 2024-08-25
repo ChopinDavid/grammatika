@@ -2920,6 +2920,28 @@ main() {
             'This word is a reflexive active present participle. This means it is a verb form of a uncompleted action that can be used as an adjective to describe the subject of a sentence that is or will be performing said action. This form is also reflexive, meaning the uncompleted verb\'s object is either the same as the subject or doesn\'t exist. Reflexive active present participles are generally formed by taking the third-person plural form of the verb and replacing the "-тся" suffix with a "-щийся" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}',
           );
         });
+        group('when correctAnswer.type is ruVerbParticiplePassivePresent', () {
+          test('returns correct explanation', () {
+            const bare = 'знать';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruVerbParticiplePassivePresent,
+              form: "зна'емый",
+              bare: 'знаемый',
+            );
+            final wordFormTypesToBareMap = {
+              WordFormType.ruVerbPresfutPl1: 'знаем'
+            };
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: wordFormTypesToBareMap,
+              ),
+              'This word is a passive present participle. This means it is a verb form of an uncompleted action that can be used as an adjective to describe the subject of a sentence that experienced said action. To form a passive present participle, we generally take the 1st-person plural form of the verb and replace the "-м" suffix with a "-мый" suffix.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl1]} -> ${correctAnswer.bare}',
+            );
+          });
+        });
       });
     });
   });
