@@ -577,7 +577,45 @@ class ExplanationHelper {
 
         return 'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounSgDat:
-        return '';
+        String? formationExplanation;
+        if (gender == null) {
+          throw Exception(
+              'Cannot explain formation of singular dative noun if gender is not provided.');
+        }
+
+        switch (gender) {
+          case Gender.m:
+            if (correctAnswer.bare.endsWith('у')) {
+              formationExplanation =
+                  ' Masculine, dative nouns with nominative forms ending in a consonant get an "-у" suffix after the stem.';
+            } else if (correctAnswer.bare.endsWith('ю')) {
+              formationExplanation =
+                  ' Masculine, dative nouns with nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by a "-ю" suffix.';
+            } else if (correctAnswer.bare.endsWith('е')) {
+              formationExplanation =
+                  ' Masculine, dative nouns with nominative forms ending in "-а" or "-я" have their "-а" or "-я" suffix replaced by an "-ы" suffix.';
+            }
+          case Gender.f:
+            if (correctAnswer.bare.endsWith('е')) {
+              formationExplanation =
+                  ' Feminine, dative nouns with nominative forms ending in "-а" or "-я" have their "-а" or "-я" suffix replaced by an "-е" suffix.';
+            } else if (correctAnswer.bare.endsWith('и')) {
+              formationExplanation =
+                  ' Feminine, dative nouns with nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-и" suffix.';
+            }
+          case Gender.n:
+            if (correctAnswer.bare.endsWith('у')) {
+              formationExplanation =
+                  ' Neuter, dative nouns with nominative forms ending in "-o" have their "-o" suffix replaced by an "-у" suffix.';
+            } else if (correctAnswer.bare.endsWith('ю')) {
+              formationExplanation =
+                  ' Neuter, dative nouns with nominative forms ending in "-е" have their "-е" suffix replaced by an "-ю" suffix.';
+            }
+          default:
+            throw Exception('Expected a masculine, feminine, or neuter noun.');
+        }
+
+        return 'This word is a singular, dative noun. This means it is a noun describing a single thing that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounSgAcc:
         return '';
       case WordFormType.ruNounSgInst:
