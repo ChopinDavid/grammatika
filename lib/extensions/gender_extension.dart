@@ -15,4 +15,23 @@ extension GenderExtension on Gender {
         return 'Both';
     }
   }
+
+  static Gender? fromString(String? string) {
+    switch (string) {
+      case null:
+        return null;
+      case 'm':
+        return Gender.m;
+      case 'f':
+        return Gender.f;
+      case 'n':
+        return Gender.n;
+      case 'pl':
+        return Gender.pl;
+      case 'both':
+        return Gender.both;
+      default:
+        throw Exception('String id did not match any Gender.');
+    }
+  }
 }

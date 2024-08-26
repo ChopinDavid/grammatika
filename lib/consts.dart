@@ -56,7 +56,11 @@ const randomSentenceQueryString = '''SELECT words.*,
        sentences.disabled,
        sentences.level,
        words_forms.*,
-       words_forms.position AS word_form_position
+       words_forms.position AS word_form_position,
+       (SELECT nouns.gender
+        FROM nouns
+        WHERE nouns.word_id = words.id AND words.type = 'noun'
+        LIMIT 1) AS gender
 FROM sentences_words
 INNER JOIN sentences ON sentences.id = sentences_words.sentence_id
 INNER JOIN words_forms ON words_forms.word_id = sentences_words.word_id
@@ -64,6 +68,5 @@ INNER JOIN words ON words.id = sentences_words.word_id
 WHERE sentences_words.form_type IS NOT NULL
   AND sentences_words.form_type IS NOT 'ru_base'
   AND words_forms.form_type = sentences_words.form_type
-  AND words_forms.form_type = 'ru_verb_imperative_sg'
 ORDER BY RANDOM()
 LIMIT 1;''';
