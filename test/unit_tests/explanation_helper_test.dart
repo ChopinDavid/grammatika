@@ -2961,6 +2961,245 @@ main() {
             );
           });
         });
+        group('when correctAnswer.type is ruNounSgGen', () {
+          test('throws when gender is not provided', () {
+            try {
+              testObject.sentenceExplanation(
+                bare: 'книга',
+                correctAnswer: WordForm.testValue(
+                  type: WordFormType.ruNounSgGen,
+                  form: 'книги',
+                  bare: 'книга',
+                ),
+                wordFormTypesToBareMap: {},
+              );
+              fail('Expected an exception to be thrown');
+            } catch (e) {
+              expect(e, isA<Exception>());
+              expect(e.toString(),
+                  'Exception: Cannot explain formation of singular genitive noun if gender is not provided.');
+            }
+          });
+          test('throws when gender is not masculine, feminine, or neuter', () {
+            try {
+              testObject.sentenceExplanation(
+                bare: 'книга',
+                correctAnswer: WordForm.testValue(
+                  type: WordFormType.ruNounSgGen,
+                  form: 'книги',
+                  bare: 'книга',
+                ),
+                wordFormTypesToBareMap: {},
+                gender: Gender.pl,
+              );
+              fail('Expected an exception to be thrown');
+            } catch (e) {
+              expect(e, isA<Exception>());
+              expect(e.toString(),
+                  'Exception: Expected a masculine, feminine, or neuter noun.');
+            }
+          });
+          test(
+              'returns correct explanation when masculine and correctAnswer ends in "-а"',
+              () {
+            const bare = 'брат';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgGen,
+              form: "бра'та",
+              bare: 'брата',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun. Masculine, genitive nouns with nominative forms ending in a consonant get an "-а" suffix after the stem.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when masculine, bare ends in "-й", and correctAnswer ends in "-я"',
+              () {
+            const bare = 'музей';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgGen,
+              form: "музе'я",
+              bare: 'музея',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun. Masculine, genitive nouns with nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by a "-я" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when masculine, bare ends in "-ь", and correctAnswer ends in "-я"',
+              () {
+            const bare = 'огонь';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgGen,
+              form: "огня'",
+              bare: 'огня',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun. Masculine, genitive nouns with nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by a "-я" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when masculine and correctAnswer ends in "-ы"',
+              () {
+            const bare = 'мужчина';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgGen,
+              form: "мужчи'ны",
+              bare: 'мужчины',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun. Masculine, genitive nouns with nominative forms ending in "-а" have their "-а" suffix replaced by an "-ы" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when masculine and correctAnswer ends in "-и"',
+              () {
+            const bare = 'дядя';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgGen,
+              form: "дя'ди",
+              bare: 'дяди',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun. Masculine, genitive nouns with nominative forms ending in "-я" have their "-я" suffix replaced by an "-и" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when feminine, bare ends in "-ь", and correctAnswer ends in "-и"',
+              () {
+            const bare = 'стать';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgGen,
+              form: "ста'ти",
+              bare: 'стати',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun. Feminine, genitive nouns with nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-и" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when feminine, bare ends in "-я", and correctAnswer ends in "-и"',
+              () {
+            const bare = 'земля';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgGen,
+              form: "земли'",
+              bare: 'земли',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun. Feminine, genitive nouns with nominative forms ending in "-я" have their "-я" suffix replaced by an "-и" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when feminine and correctAnswer ends in "-ы"',
+              () {
+            const bare = 'голова';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgGen,
+              form: "головы'",
+              bare: 'головы',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun. Feminine, genitive nouns with nominative forms ending in "-а" have their "-а" suffix replaced by an "-ы" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when neuter and correctAnswer ends in "-а"',
+              () {
+            const bare = 'дело';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgGen,
+              form: "де'ла",
+              bare: 'дела',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun. Neuter, genitive nouns with nominative forms ending in "-o" have their "-o" suffix replaced by an "-а" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when neuter and correctAnswer ends in "-я"',
+              () {
+            const bare = 'отношение';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgGen,
+              form: "отноше'ния",
+              bare: 'отношения',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun. Neuter, genitive nouns with nominative forms ending in "-е" have their "-е" suffix replaced by an "-я" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+        });
       });
     });
   });
