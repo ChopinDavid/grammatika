@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:uchu/consts.dart';
 import 'package:uchu/db_helper.dart';
 import 'package:uchu/explanation_helper.dart';
+import 'package:uchu/extensions/gender_extension.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
@@ -88,14 +89,15 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
           final correctAnswer = WordForm.fromJson(sentenceQuery);
           final explanation =
               GetIt.instance.get<ExplanationHelper>().sentenceExplanation(
-            correctAnswer: correctAnswer,
-            bare: sentenceQuery['bare'],
-            wordFormTypesToBareMap: <WordFormType, String>{
-              for (var answer in answers)
-                WordFormTypeExt.fromString(answer['form_type']):
-                    answer['_form_bare'],
-            },
-          );
+                    correctAnswer: correctAnswer,
+                    bare: sentenceQuery['bare'],
+                    wordFormTypesToBareMap: <WordFormType, String>{
+                      for (var answer in answers)
+                        WordFormTypeExt.fromString(answer['form_type']):
+                            answer['_form_bare'],
+                    },
+                    gender: GenderExtension.fromString(sentenceQuery['gender']),
+                  );
           final json = {
             ...sentenceQuery,
             'answer_synonyms': answers.where((element) {

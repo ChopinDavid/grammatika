@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
 
@@ -84,6 +85,7 @@ class ExplanationHelper {
     required String bare,
     required WordForm correctAnswer,
     required Map<WordFormType, String> wordFormTypesToBareMap,
+    Gender? gender,
   }) {
     switch (correctAnswer.type) {
       case WordFormType.ruVerbGerundPast:
@@ -531,7 +533,49 @@ class ExplanationHelper {
       case WordFormType.ruNounSgNom:
         return 'This word is a singular, nominative noun. This means it is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. This is the form of the noun that is listed in dictionaries.';
       case WordFormType.ruNounSgGen:
-        return '';
+        String? formationExplanation;
+        if (gender == null) {
+          throw Exception(
+              'Cannot explain formation of singular genitive noun if gender is not provided.');
+        }
+
+        switch (gender) {
+          case Gender.m:
+            if (correctAnswer.bare.endsWith('а')) {
+              formationExplanation =
+                  ' Masculine, genitive nouns with nominative forms ending in a consonant get an "-а" suffix after the stem.';
+            } else if (correctAnswer.bare.endsWith('я')) {
+              formationExplanation =
+                  ' Masculine, genitive nouns with nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by a "-я" suffix.';
+            } else if (correctAnswer.bare.endsWith('ы')) {
+              formationExplanation =
+                  ' Masculine, genitive nouns with nominative forms ending in "-а" have their "-а" suffix replaced by an "-ы" suffix.';
+            } else if (correctAnswer.bare.endsWith('и')) {
+              formationExplanation =
+                  ' Masculine, genitive nouns with nominative forms ending in "-я" have their "-я" suffix replaced by an "-и" suffix.';
+            }
+          case Gender.f:
+            if (correctAnswer.bare.endsWith('и') &&
+                (bare.endsWith('ь') || bare.endsWith('я'))) {
+              formationExplanation =
+                  ' Feminine, genitive nouns with nominative forms ending in "-${bare.characters.last}" have their "-${bare.characters.last}" suffix replaced by an "-и" suffix.';
+            } else if (correctAnswer.bare.endsWith('ы')) {
+              formationExplanation =
+                  ' Feminine, genitive nouns with nominative forms ending in "-а" have their "-а" suffix replaced by an "-ы" suffix.';
+            }
+          case Gender.n:
+            if (correctAnswer.bare.endsWith('а')) {
+              formationExplanation =
+                  ' Neuter, genitive nouns with nominative forms ending in "-o" have their "-o" suffix replaced by an "-а" suffix.';
+            } else if (correctAnswer.bare.endsWith('я')) {
+              formationExplanation =
+                  ' Neuter, genitive nouns with nominative forms ending in "-е" have their "-е" suffix replaced by an "-я" suffix.';
+            }
+          default:
+            throw Exception('Expected a masculine, feminine, or neuter noun.');
+        }
+
+        return 'This word is a singular, genitive noun. This means it is a noun that indicates possession, origin, or close association of or to another noun.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounSgDat:
         return '';
       case WordFormType.ruNounSgAcc:
