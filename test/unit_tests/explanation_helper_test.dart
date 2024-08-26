@@ -3200,6 +3200,184 @@ main() {
             );
           });
         });
+        group('when correctAnswer.type is ruNounSgDat', () {
+          test('throws when gender is not provided', () {
+            try {
+              testObject.sentenceExplanation(
+                bare: 'книга',
+                correctAnswer: WordForm.testValue(
+                  type: WordFormType.ruNounSgDat,
+                  form: "кни'ге",
+                  bare: 'книге',
+                ),
+                wordFormTypesToBareMap: {},
+              );
+              fail('Expected an exception to be thrown');
+            } catch (e) {
+              expect(e, isA<Exception>());
+              expect(e.toString(),
+                  'Exception: Cannot explain formation of singular dative noun if gender is not provided.');
+            }
+          });
+          test('throws when gender is not masculine, feminine, or neuter', () {
+            try {
+              testObject.sentenceExplanation(
+                bare: 'книга',
+                correctAnswer: WordForm.testValue(
+                  type: WordFormType.ruNounSgDat,
+                  form: "кни'ге",
+                  bare: 'книге',
+                ),
+                wordFormTypesToBareMap: {},
+                gender: Gender.pl,
+              );
+              fail('Expected an exception to be thrown');
+            } catch (e) {
+              expect(e, isA<Exception>());
+              expect(e.toString(),
+                  'Exception: Expected a masculine, feminine, or neuter noun.');
+            }
+          });
+          test(
+              'returns correct explanation when masculine and correctAnswer ends in "-у"',
+              () {
+            const bare = 'брат';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgDat,
+              form: "бра'ту",
+              bare: 'брату',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a singular, dative noun. This means it is a noun describing a single thing that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb. Masculine, dative nouns with nominative forms ending in a consonant get an "-у" suffix after the stem.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test('returns correct explanation when masculine, bare ends in "-ю"',
+              () {
+            const bare = 'музей';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgDat,
+              form: "музе'ю",
+              bare: 'музею',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a singular, dative noun. This means it is a noun describing a single thing that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb. Masculine, dative nouns with nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by a "-ю" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when masculine and correctAnswer ends in "-е"',
+              () {
+            const bare = 'мужчина';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgDat,
+              form: "мужчи'не",
+              bare: 'мужчине',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a singular, dative noun. This means it is a noun describing a single thing that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb. Masculine, dative nouns with nominative forms ending in "-а" or "-я" have their "-а" or "-я" suffix replaced by an "-ы" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when feminine and correctAnswer ends in "-е"',
+              () {
+            const bare = 'земля';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgDat,
+              form: "земле'",
+              bare: 'земле',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a singular, dative noun. This means it is a noun describing a single thing that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb. Feminine, dative nouns with nominative forms ending in "-а" or "-я" have their "-а" or "-я" suffix replaced by an "-е" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+          test(
+              'returns correct explanation when feminine and correctAnswer ends in "-и"',
+              () {
+            const bare = 'стать';
+            final correctAnswer = WordForm.testValue(
+              type: WordFormType.ruNounSgDat,
+              form: "ста'ти",
+              bare: 'стати',
+            );
+
+            expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a singular, dative noun. This means it is a noun describing a single thing that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb. Feminine, dative nouns with nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-и" suffix.\n\n$bare -> ${correctAnswer.bare}',
+            );
+          });
+        });
+        test(
+            'returns correct explanation when neuter and correctAnswer ends in "-у"',
+            () {
+          const bare = 'дело';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgDat,
+            form: "де'лу",
+            bare: 'делу',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.n,
+            ),
+            'This word is a singular, dative noun. This means it is a noun describing a single thing that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb. Neuter, dative nouns with nominative forms ending in "-o" have their "-o" suffix replaced by an "-у" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when neuter and correctAnswer ends in "-ю"',
+            () {
+          const bare = 'отношение';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgDat,
+            form: "отноше'нию",
+            bare: 'отношению',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.n,
+            ),
+            'This word is a singular, dative noun. This means it is a noun describing a single thing that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb. Neuter, dative nouns with nominative forms ending in "-е" have their "-е" suffix replaced by an "-ю" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
       });
     });
   });
