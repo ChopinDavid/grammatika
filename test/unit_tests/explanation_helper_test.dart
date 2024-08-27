@@ -3555,6 +3555,204 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruNounSgInst', () {
+        test('throws when gender is not provided', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounSgInst,
+                form: "кни'гой",
+                bare: 'книгой',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Cannot explain formation of singular instrumental noun if gender is not provided.');
+          }
+        });
+        test('throws when gender is not masculine, feminine, or neuter', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounSgInst,
+                form: "кни'гой",
+                bare: 'книгой',
+              ),
+              wordFormTypesToBareMap: {},
+              gender: Gender.pl,
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Expected a masculine, feminine, or neuter noun.');
+          }
+        });
+        test(
+            'returns correct explanation when masculine and correctAnswer ends in "-а"',
+            () {
+          const bare = 'брат';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgInst,
+            form: "бра'том",
+            bare: 'братом',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.m,
+            ),
+            'This word is a singular, instrumental noun. This means it is a noun describing a single thing that is the means by or with which the subject accomplishes an action. Masculine, instrumental nouns with nominative forms ending in a consonant get an "-ом" suffix after the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when masculine, bare ends in "-ю"',
+            () {
+          const bare = 'музей';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgInst,
+            form: "музе'ем",
+            bare: 'музеем',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.m,
+            ),
+            'This word is a singular, instrumental noun. This means it is a noun describing a single thing that is the means by or with which the subject accomplishes an action. Masculine, instrumental nouns with nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by a "-ем" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-ой"',
+            () {
+          const bare = 'рука';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgInst,
+            form: "руко'й",
+            bare: 'рукой',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.f,
+            ),
+            'This word is a singular, instrumental noun. This means it is a noun describing a single thing that is the means by or with which the subject accomplishes an action. Feminine, instrumental nouns with nominative forms ending in "-а" have their "-а" suffix replaced by an "-ой" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-ей"',
+            () {
+          const bare = 'акция';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgInst,
+            form: "а'кцией",
+            bare: 'акцией',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.f,
+            ),
+            'This word is a singular, instrumental noun. This means it is a noun describing a single thing that is the means by or with which the subject accomplishes an action. Feminine, instrumental nouns with nominative forms ending in "-я" have their "-я" suffix replaced by a "-ей" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-ю"',
+            () {
+          const bare = 'алчность';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgInst,
+            form: "а'лчностю",
+            bare: 'алчностю',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.f,
+            ),
+            'This word is a singular, instrumental noun. This means it is a noun describing a single thing that is the means by or with which the subject accomplishes an action. Feminine, instrumental nouns with nominative forms ending in "-ь" have their "-ь" suffix replaced by a "-ю" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when neuter and correct answer ends in "-менем"',
+            () {
+          const bare = 'время';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgInst,
+            form: "вре'менем",
+            bare: 'временем',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.n,
+            ),
+            'This word is a singular, instrumental noun. This means it is a noun describing a single thing that is the means by or with which the subject accomplishes an action. Neuter, instrumental nouns with nominative forms ending in "-мя" have their "-мя" suffix replaced by a "-менем" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when neuter and correct answer ends in "-ом"',
+            () {
+          const bare = 'дело';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgInst,
+            form: "де'лом",
+            bare: 'делом',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.n,
+            ),
+            'This word is a singular, instrumental noun. This means it is a noun describing a single thing that is the means by or with which the subject accomplishes an action. Neuter, instrumental nouns with nominative forms ending in "-о" have their "-о" suffix replaced by a "-ом" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when neuter and correct answer ends in "-ем" (but not "-менем")',
+            () {
+          const bare = 'солнце';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgInst,
+            form: "со'лнцем",
+            bare: 'солнцем',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.n,
+            ),
+            'This word is a singular, instrumental noun. This means it is a noun describing a single thing that is the means by or with which the subject accomplishes an action. Neuter, instrumental nouns with nominative forms ending in "-е" have their "-е" suffix replaced by a "-ем" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
