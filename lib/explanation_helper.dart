@@ -655,7 +655,48 @@ class ExplanationHelper {
 
         return 'This word is a singular, accusative noun. This means it is a noun describing a single thing that is the direct object of a sentence, i.e. the thing that is acted on by the main verb.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounSgInst:
-        return '';
+        String? formationExplanation;
+        if (gender == null) {
+          throw Exception(
+              'Cannot explain formation of singular instrumental noun if gender is not provided.');
+        }
+
+        switch (gender) {
+          case Gender.m:
+            if (correctAnswer.bare.endsWith('ом')) {
+              formationExplanation =
+                  ' Masculine, instrumental nouns with nominative forms ending in a consonant get an "-ом" suffix after the stem.';
+            } else if (correctAnswer.bare.endsWith('ем')) {
+              formationExplanation =
+                  ' Masculine, instrumental nouns with nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by a "-ем" suffix.';
+            }
+          case Gender.f:
+            if (correctAnswer.bare.endsWith('ой')) {
+              formationExplanation =
+                  ' Feminine, instrumental nouns with nominative forms ending in "-а" have their "-а" suffix replaced by an "-ой" suffix.';
+            } else if (correctAnswer.bare.endsWith('ей')) {
+              formationExplanation =
+                  ' Feminine, instrumental nouns with nominative forms ending in "-я" have their "-я" suffix replaced by a "-ей" suffix.';
+            } else if (correctAnswer.bare.endsWith('ю')) {
+              formationExplanation =
+                  ' Feminine, instrumental nouns with nominative forms ending in "-ь" have their "-ь" suffix replaced by a "-ю" suffix.';
+            }
+          case Gender.n:
+            if (correctAnswer.bare.endsWith('менем') && bare.endsWith('мя')) {
+              formationExplanation =
+                  ' Neuter, instrumental nouns with nominative forms ending in "-мя" have their "-мя" suffix replaced by a "-менем" suffix.';
+            } else if (correctAnswer.bare.endsWith('ом')) {
+              formationExplanation =
+                  ' Neuter, instrumental nouns with nominative forms ending in "-о" have their "-о" suffix replaced by a "-ом" suffix.';
+            } else if (correctAnswer.bare.endsWith('ем')) {
+              formationExplanation =
+                  ' Neuter, instrumental nouns with nominative forms ending in "-е" have their "-е" suffix replaced by a "-ем" suffix.';
+            }
+          default:
+            throw Exception('Expected a masculine, feminine, or neuter noun.');
+        }
+
+        return 'This word is a singular, instrumental noun. This means it is a noun describing a single thing that is the means by or with which the subject accomplishes an action.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounSgPrep:
         return '';
       case WordFormType.ruNounPlNom:
