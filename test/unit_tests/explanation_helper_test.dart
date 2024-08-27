@@ -3379,6 +3379,182 @@ main() {
           );
         });
       });
+      group('when correctAnswer.type is ruNounSgAcc', () {
+        test('throws when gender is not provided', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounSgAcc,
+                form: "кни'гу",
+                bare: 'книгу',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Cannot explain formation of singular accusative noun if gender is not provided.');
+          }
+        });
+        test('throws when gender is not masculine, feminine, or neuter', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounSgAcc,
+                form: "кни'гу",
+                bare: 'книгу',
+              ),
+              wordFormTypesToBareMap: {},
+              gender: Gender.pl,
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Expected a masculine, feminine, or neuter noun.');
+          }
+        });
+        test(
+            'returns correct explanation when masculine and correctAnswer ends in "-а"',
+            () {
+          const bare = 'брат';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgAcc,
+            form: "бра'та",
+            bare: 'брата',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.m,
+            ),
+            'This word is a singular, accusative noun. This means it is a noun describing a single thing that is the direct object of a sentence, i.e. the thing that is acted on by the main verb. Masculine, animate, accusative nouns with nominative forms ending in a consonant get an "-а" suffix after the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when masculine, bare ends in "-ю"',
+            () {
+          const bare = 'музей';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgAcc,
+            form: "музе'я",
+            bare: 'музея',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.m,
+            ),
+            'This word is a singular, accusative noun. This means it is a noun describing a single thing that is the direct object of a sentence, i.e. the thing that is acted on by the main verb. Masculine, animate, accusative nouns with nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by a "-я" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when masculine and correctAnswer is identical to bare',
+            () {
+          const bare = 'камень';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgAcc,
+            form: "ка'мень",
+            bare: 'камень',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.m,
+            ),
+            'This word is a singular, accusative noun. This means it is a noun describing a single thing that is the direct object of a sentence, i.e. the thing that is acted on by the main verb. Masculine, inanimate, accusative nouns are identical to their nominative forms.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-У"',
+            () {
+          const bare = 'ага';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgAcc,
+            form: "а'гу'",
+            bare: 'агу',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.f,
+            ),
+            'This word is a singular, accusative noun. This means it is a noun describing a single thing that is the direct object of a sentence, i.e. the thing that is acted on by the main verb. Feminine, accusative nouns with nominative forms ending in "-а" have their "-а" suffix replaced by an "-у" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-ю"',
+            () {
+          const bare = 'акция';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgAcc,
+            form: "а'кцию",
+            bare: 'акцию',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.f,
+            ),
+            'This word is a singular, accusative noun. This means it is a noun describing a single thing that is the direct object of a sentence, i.e. the thing that is acted on by the main verb. Feminine, accusative nouns with nominative forms ending in "-я" have their "-я" suffix replaced by a "-ю" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-ь"',
+            () {
+          const bare = 'алчность';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgAcc,
+            form: "а'лчность",
+            bare: 'алчность',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.f,
+            ),
+            'This word is a singular, accusative noun. This means it is a noun describing a single thing that is the direct object of a sentence, i.e. the thing that is acted on by the main verb. Feminine, accusative nouns are identical to their nominative forms when their nominative forms end in a "-ь" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test('returns correct explanation when neuter', () {
+          const bare = 'слово';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgAcc,
+            form: "сло'во",
+            bare: 'слово',
+          );
+
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.n,
+            ),
+            'This word is a singular, accusative noun. This means it is a noun describing a single thing that is the direct object of a sentence, i.e. the thing that is acted on by the main verb. Neuter, accusative nouns are identical to their nominative forms.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
