@@ -617,7 +617,43 @@ class ExplanationHelper {
 
         return 'This word is a singular, dative noun. This means it is a noun describing a single thing that is the indirect object of a sentence, i.e. the recipient or beneficiary of the main verb.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounSgAcc:
-        return '';
+        String? formationExplanation;
+        if (gender == null) {
+          throw Exception(
+              'Cannot explain formation of singular accusative noun if gender is not provided.');
+        }
+
+        switch (gender) {
+          case Gender.m:
+            if (correctAnswer.bare.endsWith('а')) {
+              formationExplanation =
+                  ' Masculine, animate, accusative nouns with nominative forms ending in a consonant get an "-а" suffix after the stem.';
+            } else if (correctAnswer.bare.endsWith('я')) {
+              formationExplanation =
+                  ' Masculine, animate, accusative nouns with nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by a "-я" suffix.';
+            } else if (bare == correctAnswer.bare) {
+              formationExplanation =
+                  ' Masculine, inanimate, accusative nouns are identical to their nominative forms.';
+            }
+          case Gender.f:
+            if (correctAnswer.bare.endsWith('у')) {
+              formationExplanation =
+                  ' Feminine, accusative nouns with nominative forms ending in "-а" have their "-а" suffix replaced by an "-у" suffix.';
+            } else if (correctAnswer.bare.endsWith('ю')) {
+              formationExplanation =
+                  ' Feminine, accusative nouns with nominative forms ending in "-я" have their "-я" suffix replaced by a "-ю" suffix.';
+            } else if (correctAnswer.bare.endsWith('ь')) {
+              formationExplanation =
+                  ' Feminine, accusative nouns are identical to their nominative forms when their nominative forms end in a "-ь" suffix.';
+            }
+          case Gender.n:
+            formationExplanation =
+                ' Neuter, accusative nouns are identical to their nominative forms.';
+          default:
+            throw Exception('Expected a masculine, feminine, or neuter noun.');
+        }
+
+        return 'This word is a singular, accusative noun. This means it is a noun describing a single thing that is the direct object of a sentence, i.e. the thing that is acted on by the main verb.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounSgInst:
         return '';
       case WordFormType.ruNounSgPrep:
