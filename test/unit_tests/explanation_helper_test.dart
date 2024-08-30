@@ -4177,6 +4177,230 @@ main() {
               'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. Neuter, plural, nominative nouns with singular nominative forms ending in "-e" have their "-e" suffix replaced by an "-я" suffix.\n\n$bare -> ${correctAnswer.bare}');
         });
       });
+
+      group('when correctAnswer.type is ruNounPlGen', () {
+        test('throws when gender is not provided', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounPlGen,
+                form: "кни'г",
+                bare: 'книг',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Cannot explain formation of plural genitive noun if gender is not provided.');
+          }
+        });
+        test('throws when gender is not masculine, feminine, or neuter', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounPlGen,
+                form: "кни'г",
+                bare: 'книг',
+              ),
+              wordFormTypesToBareMap: {},
+              gender: Gender.pl,
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Expected a masculine, feminine, or neuter noun.');
+          }
+        });
+        test(
+            'returns correct explanation when masculine and correctAnswer ends in "-ов"',
+            () {
+          const bare = 'брат';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlGen,
+            form: "бра'тов",
+            bare: 'братов',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                  gender: Gender.m),
+              'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Masculine, plural, genitive nouns with singular nominative forms ending in a consonant get an "-ов" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when masculine and correctAnswer ends in "-ев"',
+            () {
+          const bare = 'музей';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlGen,
+            form: "музе'ев",
+            bare: 'музеев',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                  gender: Gender.m),
+              'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Masculine, plural, genitive nouns with singular nominative forms ending in "-й" have their "-й" suffix replaced by an "-ев" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when masculine and correctAnswer ends in "-ей" and bare ends in "-ь"',
+            () {
+          const bare = 'парень';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlGen,
+            form: "парне'й",
+            bare: 'парней',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Masculine, plural, genitive nouns with singular nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-ей" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test('returns correct explanation when feminine and bare ends in "-a"',
+            () {
+          const bare = 'рука';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlGen,
+            form: "ру'к",
+            bare: 'рук',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                  gender: Gender.f),
+              'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Feminine, plural, genitive nouns with singular nominative forms ending in "-а" have their "-а" suffix dropped.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-ь"',
+            () {
+          const bare = 'земля';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlGen,
+            form: "земе'ль",
+            bare: 'земель',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Feminine, plural, genitive nouns with singular nominative forms ending in "-я" have their "-я" suffix replaced by a "-ь" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-ий"',
+            () {
+          const bare = 'акция';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlGen,
+            form: "а'кций",
+            bare: 'акций',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Feminine, plural, genitive nouns with singular nominative forms ending in "-ия" have their "-ия" suffix replaced by an "-ий" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-ей"',
+            () {
+          const bare = 'алчность';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlGen,
+            form: "а'лчностей",
+            bare: 'алчностей',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Feminine, plural, genitive nouns with singular nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-ей" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test('returns correct explanation when neuter and bare ends in "-o"',
+            () {
+          const bare = 'словo';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlGen,
+            form: "слов",
+            bare: 'слов',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                  bare: bare,
+                  correctAnswer: correctAnswer,
+                  wordFormTypesToBareMap: {},
+                  gender: Gender.n),
+              'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Neuter, plural, genitive nouns with singular nominative forms ending in "-o" have their "-o" suffix dropped.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when neuter and correctAnswer ends in "-ей"',
+            () {
+          const bare = 'море';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlGen,
+            form: "море'й",
+            bare: 'морей',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Neuter, plural, genitive nouns with singular nominative forms ending in "-е" have their "-е" suffix replaced by an "-ей" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when neuter and correctAnswer ends in "-ий"',
+            () {
+          const bare = 'отношение';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlGen,
+            form: "отноше'ний",
+            bare: 'отношений',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Neuter, plural, genitive nouns with singular nominative forms ending in "-ие" have their "-ие" suffix replaced by an "-ий" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+      });
     });
   });
 }
