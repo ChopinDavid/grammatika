@@ -698,7 +698,58 @@ class ExplanationHelper {
 
         return 'This word is a singular, instrumental noun. This means it is a noun describing a single thing that is the means by or with which the subject accomplishes an action.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounSgPrep:
-        return '';
+        String? formationExplanation;
+        if (gender == null) {
+          throw Exception(
+              'Cannot explain formation of singular prepositional noun if gender is not provided.');
+        }
+
+        switch (gender) {
+          case Gender.m:
+            if (correctAnswer.bare.endsWith('е')) {
+              if (bare.endsWith('й')) {
+                formationExplanation =
+                    ' Masculine, prepositional nouns with nominative forms ending in "-й" have their "-й" suffix replaced by an "-е" suffix.';
+              } else {
+                formationExplanation =
+                    ' Masculine, prepositional nouns with nominative forms ending in a consonant get an "-е" suffix after the stem.';
+              }
+            }
+          case Gender.f:
+            if (correctAnswer.bare.endsWith('е') &&
+                (bare.endsWith('а') || bare.endsWith('я'))) {
+              formationExplanation =
+                  ' Feminine, prepositional nouns with nominative forms ending in "-${bare.characters.last}" have their "-${bare.characters.last}" suffix replaced by an "-е" suffix.';
+            } else if (correctAnswer.bare.endsWith('ии') &&
+                bare.endsWith('ия')) {
+              formationExplanation =
+                  ' Feminine, prepositional nouns with nominative forms ending in "-ия" have their "-ия" suffix replaced by an "-ии" suffix.';
+            } else if (correctAnswer.bare.endsWith('и') && bare.endsWith('ь')) {
+              formationExplanation =
+                  ' Feminine, prepositional nouns with nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-и" suffix.';
+            }
+          case Gender.n:
+            if (correctAnswer.bare.endsWith('е')) {
+              if (bare.endsWith('о')) {
+                formationExplanation =
+                    ' Neuter, prepositional nouns with nominative forms ending in "-о" have their "-о" suffix replaced by an "-е" suffix.';
+              } else if (bare.endsWith('е')) {
+                formationExplanation =
+                    ' Neuter, prepositional nouns are identical to their nominative forms when their nominative forms end in an "-е" suffix.';
+              }
+            } else if (correctAnswer.bare.endsWith('ии') &&
+                bare.endsWith('ие')) {
+              formationExplanation =
+                  ' Neuter, prepositional nouns with nominative forms ending in "-ие" have their "-ие" suffix replaced by an "-ии" suffix.';
+            } else if (correctAnswer.bare.endsWith('мени') &&
+                bare.endsWith('мя')) {
+              formationExplanation =
+                  ' Neuter, prepositional nouns with nominative forms ending in "-мя" have their "-мя" suffix replaced by an "-мени" suffix.';
+            }
+          default:
+            throw Exception('Expected a masculine, feminine, or neuter noun.');
+        }
+        return 'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?".$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlNom:
         return '';
       case WordFormType.ruNounPlGen:
