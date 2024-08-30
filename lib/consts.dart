@@ -50,7 +50,7 @@ const randomSentenceQueryString = '''SELECT words.*,
        words.id AS word_id,
        words.disabled AS word_disabled,
        words.level AS word_level,
-       sentences.id,
+       sentences.id AS sentence_id,
        sentences.ru,
        sentences.tatoeba_key,
        sentences.disabled,
@@ -59,7 +59,7 @@ const randomSentenceQueryString = '''SELECT words.*,
        words_forms.position AS word_form_position,
        (SELECT nouns.gender
         FROM nouns
-        WHERE nouns.word_id = words.id AND words.type = 'noun'
+        WHERE nouns.word_id = words.id AND words.type = 'noun' AND nouns.gender IS NOT NULL AND nouns.gender != ""
         LIMIT 1) AS gender
 FROM sentences_words
 INNER JOIN sentences ON sentences.id = sentences_words.sentence_id

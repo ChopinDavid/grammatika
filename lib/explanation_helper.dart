@@ -751,7 +751,56 @@ class ExplanationHelper {
         }
         return 'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?".$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlNom:
-        return '';
+        String? formationExplanation;
+        if (gender == null) {
+          throw Exception(
+              'Cannot explain formation of plural nominative noun if gender is not provided.');
+        }
+
+        switch (gender) {
+          case Gender.m:
+            if (correctAnswer.bare.endsWith('ы')) {
+              formationExplanation =
+                  ' Masculine, plural, nominative nouns with singular nominative forms ending in a consonant get a "-ы" suffix.';
+            } else if (correctAnswer.bare.endsWith('и') &&
+                (bare.endsWith('й') || bare.endsWith('ь'))) {
+              formationExplanation =
+                  ' Masculine, plural, nominative nouns with singular nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by an "-и" suffix.';
+            }
+          case Gender.f:
+            if (correctAnswer.bare.endsWith('ы') && bare.endsWith('а')) {
+              formationExplanation =
+                  ' Feminine, plural, nominative nouns with singular nominative forms ending in "-а" have their "-а" suffix replaced by a "-ы" suffix.';
+            } else if (correctAnswer.bare.endsWith('ии') &&
+                bare.endsWith('ия')) {
+              formationExplanation =
+                  ' Feminine, plural, nominative nouns with singular nominative forms ending in "-ия" have their "-ия" suffix replaced by an "-ии" suffix.';
+            } else if (correctAnswer.bare.endsWith('и') &&
+                (bare.endsWith('я') || bare.endsWith('ь'))) {
+              formationExplanation =
+                  ' Feminine, plural, nominative nouns with singular nominative forms ending in "-я" or "-ь" have their "-я" or "-ь" suffix replaced by an "-и" suffix.';
+            }
+          case Gender.n:
+            if (correctAnswer.bare.endsWith('a') && bare.endsWith('o')) {
+              formationExplanation =
+                  ' Neuter, plural, nominative nouns with singular nominative forms ending in "-o" have their "-o" suffix replaced by an "-a" suffix.';
+            } else if (correctAnswer.bare.endsWith('ия') &&
+                bare.endsWith('ие')) {
+              formationExplanation =
+                  ' Neuter, plural, nominative nouns with singular nominative forms ending in "-ие" have their "-ие" suffix replaced by an "-ия" suffix.';
+            } else if (correctAnswer.bare.endsWith('мена') &&
+                bare.endsWith('мя')) {
+              formationExplanation =
+                  ' Neuter, plural, nominative nouns with singular nominative forms ending in "-мя" have their "-мя" suffix replaced by an "-мена" suffix.';
+            } else if (correctAnswer.bare.endsWith('я') && bare.endsWith('е')) {
+              formationExplanation =
+                  ' Neuter, plural, nominative nouns with singular nominative forms ending in "-e" have their "-e" suffix replaced by an "-я" suffix.';
+            }
+          default:
+            throw Exception('Expected a masculine, feminine, or neuter noun.');
+        }
+
+        return 'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlGen:
         return '';
       case WordFormType.ruNounPlDat:
