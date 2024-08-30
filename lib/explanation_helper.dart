@@ -802,7 +802,59 @@ class ExplanationHelper {
 
         return 'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlGen:
-        return '';
+        String? formationExplanation;
+        if (gender == null) {
+          throw Exception(
+              'Cannot explain formation of plural genitive noun if gender is not provided.');
+        }
+
+        switch (gender) {
+          case Gender.m:
+            if (correctAnswer.bare.endsWith('ов')) {
+              formationExplanation =
+                  ' Masculine, plural, genitive nouns with singular nominative forms ending in a consonant get an "-ов" suffix.';
+            } else if (correctAnswer.bare.endsWith('ев') &&
+                bare.endsWith('й')) {
+              formationExplanation =
+                  ' Masculine, plural, genitive nouns with singular nominative forms ending in "-й" have their "-й" suffix replaced by an "-ев" suffix.';
+            } else if (correctAnswer.bare.endsWith('ей') &&
+                bare.endsWith('ь')) {
+              formationExplanation =
+                  ' Masculine, plural, genitive nouns with singular nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-ей" suffix.';
+            }
+          case Gender.f:
+            if (bare.endsWith('а')) {
+              formationExplanation =
+                  ' Feminine, plural, genitive nouns with singular nominative forms ending in "-а" have their "-а" suffix dropped.';
+            } else if (correctAnswer.bare.endsWith('ь') && bare.endsWith('я')) {
+              formationExplanation =
+                  ' Feminine, plural, genitive nouns with singular nominative forms ending in "-я" have their "-я" suffix replaced by a "-ь" suffix.';
+            } else if (correctAnswer.bare.endsWith('ий') &&
+                bare.endsWith('ия')) {
+              formationExplanation =
+                  ' Feminine, plural, genitive nouns with singular nominative forms ending in "-ия" have their "-ия" suffix replaced by an "-ий" suffix.';
+            } else if (correctAnswer.bare.endsWith('ей') &&
+                bare.endsWith('ь')) {
+              formationExplanation =
+                  ' Feminine, plural, genitive nouns with singular nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-ей" suffix.';
+            }
+          case Gender.n:
+            if (bare.endsWith('o')) {
+              formationExplanation =
+                  ' Neuter, plural, genitive nouns with singular nominative forms ending in "-o" have their "-o" suffix dropped.';
+            } else if (correctAnswer.bare.endsWith('ей') &&
+                bare.endsWith('е')) {
+              formationExplanation =
+                  ' Neuter, plural, genitive nouns with singular nominative forms ending in "-е" have their "-е" suffix replaced by an "-ей" suffix.';
+            } else if (correctAnswer.bare.endsWith('ий') &&
+                bare.endsWith('ие')) {
+              formationExplanation =
+                  ' Neuter, plural, genitive nouns with singular nominative forms ending in "-ие" have their "-ие" suffix replaced by an "-ий" suffix.';
+            }
+          default:
+            throw Exception('Expected a masculine, feminine, or neuter noun.');
+        }
+        return 'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlDat:
         return '';
       case WordFormType.ruNounPlAcc:
