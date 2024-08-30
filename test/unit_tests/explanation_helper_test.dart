@@ -3753,6 +3753,212 @@ main() {
           );
         });
       });
+
+      group('when correctAnswer.type is ruNounSgPrep', () {
+        test('throws when gender is not provided', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounSgPrep,
+                form: "кни'ге",
+                bare: 'книге',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Cannot explain formation of singular prepositional noun if gender is not provided.');
+          }
+        });
+        test('throws when gender is not masculine, feminine, or neuter', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounSgPrep,
+                form: "кни'ге",
+                bare: 'книге',
+              ),
+              wordFormTypesToBareMap: {},
+              gender: Gender.pl,
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Expected a masculine, feminine, or neuter noun.');
+          }
+        });
+        test(
+            'returns correct explanation when masculine, correctAnswer ends in "-е", and bare ends in "-й"',
+            () {
+          const bare = 'случай';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgPrep,
+            form: "слу'чае",
+            bare: 'случае',
+          );
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.m,
+            ),
+            'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Masculine, prepositional nouns with nominative forms ending in "-й" have their "-й" suffix replaced by an "-е" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when masculine, correctAnswer ends in "-е", and bare ends in a consonant',
+            () {
+          const bare = 'брат';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgPrep,
+            form: "бра'те",
+            bare: 'брате',
+          );
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.m,
+            ),
+            'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Masculine, prepositional nouns with nominative forms ending in a consonant get an "-е" suffix after the stem.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when feminine, correctAnswer ends in "-е", and bare ends in "-а" or "-я"',
+            () {
+          const bare = 'земля';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgPrep,
+            form: "земле'",
+            bare: 'земле',
+          );
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.f,
+            ),
+            'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Feminine, prepositional nouns with nominative forms ending in "-я" have their "-я" suffix replaced by an "-е" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+        test(
+            'returns correct explanation when feminine, correctAnswer ends in "-ии", and bare ends in "-ия"',
+            () {
+          const bare = 'акция';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgPrep,
+            form: "а'кции",
+            bare: 'акции',
+          );
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Feminine, prepositional nouns with nominative forms ending in "-ия" have their "-ия" suffix replaced by an "-ии" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when feminine, correctAnswer ends in "-и", and bare ends in "-ь"',
+            () {
+          const bare = 'алчность';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgPrep,
+            form: "а'лчности",
+            bare: 'алчности',
+          );
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Feminine, prepositional nouns with nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-и" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when neuter, correctAnswer ends in "-е", and bare ends in "-о"',
+            () {
+          const bare = 'дело';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgPrep,
+            form: "де'ле",
+            bare: 'деле',
+          );
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Neuter, prepositional nouns with nominative forms ending in "-о" have their "-о" suffix replaced by an "-е" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when neuter, correctAnswer ends in "-е", and bare ends in "-е"',
+            () {
+          const bare = 'море';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgPrep,
+            form: "мо'ре",
+            bare: 'море',
+          );
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Neuter, prepositional nouns are identical to their nominative forms when their nominative forms end in an "-е" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when neuter, correctAnswer ends in "-ии", and bare ends in "-ие"',
+            () {
+          const bare = 'отношение';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgPrep,
+            form: "отноше'нии",
+            bare: 'отношении',
+          );
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Neuter, prepositional nouns with nominative forms ending in "-ие" have their "-ие" suffix replaced by an "-ии" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when neuter, correctAnswer ends in "-мени", and bare ends in "-мя"',
+            () {
+          const bare = 'имя';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounSgPrep,
+            form: "и'мени",
+            bare: 'имени',
+          );
+          expect(
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: correctAnswer,
+              wordFormTypesToBareMap: {},
+              gender: Gender.n,
+            ),
+            'This word is a singular, prepositional noun. This means it is the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Neuter, prepositional nouns with nominative forms ending in "-мя" have their "-мя" suffix replaced by an "-мени" suffix.\n\n$bare -> ${correctAnswer.bare}',
+          );
+        });
+      });
     });
   });
 }
