@@ -3959,6 +3959,224 @@ main() {
           );
         });
       });
+
+      group('when correctAnswer.type is ruNounPlNom', () {
+        test('throws when gender is not provided', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounPlNom,
+                form: "кни'гы",
+                bare: 'книгы',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Cannot explain formation of plural nominative noun if gender is not provided.');
+          }
+        });
+        test('throws when gender is not masculine, feminine, or neuter', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounPlNom,
+                form: "кни'гы",
+                bare: 'книгы',
+              ),
+              wordFormTypesToBareMap: {},
+              gender: Gender.pl,
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Expected a masculine, feminine, or neuter noun.');
+          }
+        });
+        test(
+            'returns correct explanation when masculine and correctAnswer ends in "-ы"',
+            () {
+          const bare = 'брат';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlNom,
+            form: "бра'ты",
+            bare: 'браты',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. Masculine, plural, nominative nouns with singular nominative forms ending in a consonant get a "-ы" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+
+        test(
+            'returns correct explanation when masculine and correctAnswer ends in "-и"',
+            () {
+          const bare = 'музей';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlNom,
+            form: "музе'и",
+            bare: 'музеи',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.m,
+              ),
+              'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. Masculine, plural, nominative nouns with singular nominative forms ending in "-й" or "-ь" have their "-й" or "-ь" suffix replaced by an "-и" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-ы"',
+            () {
+          const bare = 'рука';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlNom,
+            form: "ру'кы",
+            bare: 'рукы',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. Feminine, plural, nominative nouns with singular nominative forms ending in "-а" have their "-а" suffix replaced by a "-ы" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-ии"',
+            () {
+          const bare = 'акция';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlNom,
+            form: "а'кции",
+            bare: 'акции',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. Feminine, plural, nominative nouns with singular nominative forms ending in "-ия" have their "-ия" suffix replaced by an "-ии" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends in "-и"',
+            () {
+          const bare = 'алчность';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlNom,
+            form: "а'лчности",
+            bare: 'алчности',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.f,
+              ),
+              'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. Feminine, plural, nominative nouns with singular nominative forms ending in "-я" or "-ь" have their "-я" or "-ь" suffix replaced by an "-и" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+
+        test(
+            'returns correct explanation when neuter and correct answer ends in "-а"',
+            () {
+          const bare = 'словo';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlNom,
+            form: "сло'вa",
+            bare: 'словa',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. Neuter, plural, nominative nouns with singular nominative forms ending in "-o" have their "-o" suffix replaced by an "-a" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+
+        test(
+            'returns correct explanation when neuter and correct answer ends in "-ия"',
+            () {
+          const bare = 'отношение';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlNom,
+            form: "отноше'ния",
+            bare: 'отношения',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. Neuter, plural, nominative nouns with singular nominative forms ending in "-ие" have their "-ие" suffix replaced by an "-ия" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+
+        test(
+            'returns correct explanation when neuter and correct answer ends in "-мена"',
+            () {
+          const bare = 'имя';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlNom,
+            form: "и'мена",
+            bare: 'имена',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. Neuter, plural, nominative nouns with singular nominative forms ending in "-мя" have their "-мя" suffix replaced by an "-мена" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+
+        test(
+            'returns correct explanation when neuter and correct answer ends in "-я"',
+            () {
+          const bare = 'море';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlNom,
+            form: "мо'ря",
+            bare: 'моря',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+                gender: Gender.n,
+              ),
+              'This word is a plural, nominative noun. This means it describes multiple things and is typically the noun that is performing the verb in a sentence, i.e. the sentence\'s subject. Neuter, plural, nominative nouns with singular nominative forms ending in "-e" have their "-e" suffix replaced by an "-я" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+      });
     });
   });
 }
