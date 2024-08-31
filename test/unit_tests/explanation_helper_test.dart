@@ -4530,6 +4530,301 @@ main() {
               'This word is a plural, dative noun. This means it is a noun describing multiple things that are the indirect object of a sentence, i.e. the recipients or beneficiaries of the main verb. Plural, dative nouns with singular nominative forms ending in "-я" have their "-я" suffix replaced by an "-ям" suffix.\n\n$bare -> ${correctAnswer.bare}');
         });
       });
+
+      group('when correctAnswer.type is ruNounPlAcc', () {
+        test('throws when gender is not provided', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounPlAcc,
+                form: "кни'г",
+                bare: 'книг',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Cannot explain formation of plural accusative noun if gender is not provided.');
+          }
+        });
+        test('throws when gender is not masculine, feminine, or neuter', () {
+          try {
+            testObject.sentenceExplanation(
+              bare: 'книга',
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounPlAcc,
+                form: "кни'г",
+                bare: 'книг',
+              ),
+              wordFormTypesToBareMap: {},
+              gender: Gender.pl,
+            );
+            fail('Expected an exception to be thrown');
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Expected a masculine, feminine, or neuter noun.');
+          }
+        });
+        test(
+            'returns correct explanation when masculine and correctAnswer ends in "-ов"',
+            () {
+          const bare = 'брат';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlAcc,
+            form: "бра'тов",
+            bare: 'братов',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {WordFormType.ruNounPlNom: 'браты'},
+                gender: Gender.m,
+              ),
+              'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb. Masculine, plural, animate, accusative nouns with singular nominative forms ending in a consonant get an "-ов" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when masculine and correctAnswer ends in "-ев"',
+            () {
+          const bare = 'музей';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlAcc,
+            form: "музе'ев",
+            bare: 'музеев',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {WordFormType.ruNounPlNom: 'музеи'},
+                gender: Gender.m,
+              ),
+              'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb. Masculine, plural, animate, accusative nouns with singular nominative forms ending in "-й" have their "-й" suffix replaced by an "-ев" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when masculine and correct answer ends in "-ей"',
+            () {
+          const bare = 'парень';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlAcc,
+            form: "парне'й",
+            bare: 'парней',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {WordFormType.ruNounPlNom: 'парни'},
+                gender: Gender.m,
+              ),
+              'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb. Masculine, plural, animate, accusative nouns with singular nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-ей" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when masculine and correctAnswer.bare is equal to bare',
+            () {
+          const bare = 'стол';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlAcc,
+            form: "сто'лы",
+            bare: 'столы',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {WordFormType.ruNounPlNom: 'столы'},
+                gender: Gender.m,
+              ),
+              'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb. Masculine, plural, inanimate, accusative nouns are identical to their plural nominative forms.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'throws when masculine, is not animate and ruNounPlNom is not provided in wordFormTypesToBareMap',
+            () {
+          const bare = 'стол';
+
+          try {
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounPlAcc,
+                form: "сто'лы",
+                bare: 'столы',
+              ),
+              wordFormTypesToBareMap: {},
+              gender: Gender.m,
+            );
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Cannot explain formation of plural accusative noun if plural nominative form is not provided.');
+          }
+        });
+        test('returns correct explanation when feminine and bare ends in "-a"',
+            () {
+          const bare = 'рука';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlAcc,
+            form: "ру'к",
+            bare: 'рук',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {WordFormType.ruNounPlNom: 'руки'},
+                gender: Gender.f,
+              ),
+              'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb. Feminine, plural, accusative nouns with singular nominative forms ending in "-а" have their "-а" suffix dropped.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends with "-ь"',
+            () {
+          const bare = 'земля';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlAcc,
+            form: "земе'ль",
+            bare: 'земель',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {WordFormType.ruNounPlNom: 'земли'},
+                gender: Gender.f,
+              ),
+              'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb. Feminine, plural, accusative nouns with singular nominative forms ending in "-я" have their "-я" suffix replaced by a "-ь" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends with "-ий"',
+            () {
+          const bare = 'акция';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlAcc,
+            form: "а'кций",
+            bare: 'акций',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {WordFormType.ruNounPlNom: 'акции'},
+                gender: Gender.f,
+              ),
+              'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb. Feminine, plural, accusative nouns with singular nominative forms ending in "-ия" have their "-ия" suffix replaced by an "-ий" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer ends with "-ей"',
+            () {
+          const bare = 'алчность';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlAcc,
+            form: "а'лчностей",
+            bare: 'алчностей',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {WordFormType.ruNounPlNom: 'алчности'},
+                gender: Gender.f,
+              ),
+              'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb. Feminine, plural, accusative nouns with singular nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-ей" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when feminine and correctAnswer.bare is equal to bare',
+            () {
+          const bare = 'рука';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlAcc,
+            form: "ру'ки",
+            bare: 'руки',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {WordFormType.ruNounPlNom: 'руки'},
+                gender: Gender.f,
+              ),
+              'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb. Feminine, plural, inanimate, accusative nouns are identical to their plural nominative forms.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'throws when feminine, is not animate and ruNounPlNom is not provided in wordFormTypesToBareMap',
+            () {
+          const bare = 'рука';
+
+          try {
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounPlAcc,
+                form: "ру'ки",
+                bare: 'руки',
+              ),
+              wordFormTypesToBareMap: {},
+              gender: Gender.f,
+            );
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Cannot explain formation of plural accusative noun if plural nominative form is not provided.');
+          }
+        });
+        test(
+            'returns correct explanation when neuter and correctAnswer.bare is equal to bare',
+            () {
+          const bare = 'дело';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlAcc,
+            form: "дела'",
+            bare: 'дела',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {WordFormType.ruNounPlNom: 'дела'},
+                gender: Gender.n,
+              ),
+              'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb. Neuter, plural, accusative nouns are identical to their plural nominative forms.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'throws when neuter and ruNounPlNom is not provided in wordFormTypesToBareMap',
+            () {
+          const bare = 'дело';
+
+          try {
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruNounPlAcc,
+                form: "дела'",
+                bare: 'дела',
+              ),
+              wordFormTypesToBareMap: {},
+              gender: Gender.f,
+            );
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Cannot explain formation of plural accusative noun if plural nominative form is not provided.');
+          }
+        });
+      });
     });
   });
 }

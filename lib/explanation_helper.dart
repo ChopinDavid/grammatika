@@ -881,7 +881,76 @@ class ExplanationHelper {
         }
         return 'This word is a plural, dative noun. This means it is a noun describing multiple things that are the indirect object of a sentence, i.e. the recipients or beneficiaries of the main verb.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlAcc:
-        return '';
+        String? formationExplanation;
+        if (gender == null) {
+          throw Exception(
+              'Cannot explain formation of plural accusative noun if gender is not provided.');
+        }
+
+        switch (gender) {
+          case Gender.m:
+            final String? pluralNominative =
+                wordFormTypesToBareMap[WordFormType.ruNounPlNom];
+
+            if (pluralNominative == null) {
+              throw Exception(
+                  'Cannot explain formation of plural accusative noun if plural nominative form is not provided.');
+            } else if (correctAnswer.bare == pluralNominative) {
+              formationExplanation =
+                  ' Masculine, plural, inanimate, accusative nouns are identical to their plural nominative forms.';
+            } else if (correctAnswer.bare.endsWith('ов')) {
+              formationExplanation =
+                  ' Masculine, plural, animate, accusative nouns with singular nominative forms ending in a consonant get an "-ов" suffix.';
+            } else if (correctAnswer.bare.endsWith('ев') &&
+                bare.endsWith('й')) {
+              formationExplanation =
+                  ' Masculine, plural, animate, accusative nouns with singular nominative forms ending in "-й" have their "-й" suffix replaced by an "-ев" suffix.';
+            } else if (correctAnswer.bare.endsWith('ей') &&
+                bare.endsWith('ь')) {
+              formationExplanation =
+                  ' Masculine, plural, animate, accusative nouns with singular nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-ей" suffix.';
+            }
+          case Gender.f:
+            final String? pluralNominative =
+                wordFormTypesToBareMap[WordFormType.ruNounPlNom];
+
+            if (pluralNominative == null) {
+              throw Exception(
+                  'Cannot explain formation of plural accusative noun if plural nominative form is not provided.');
+            } else if (correctAnswer.bare == pluralNominative) {
+              formationExplanation =
+                  ' Feminine, plural, inanimate, accusative nouns are identical to their plural nominative forms.';
+            } else if (bare.endsWith('а')) {
+              formationExplanation =
+                  ' Feminine, plural, accusative nouns with singular nominative forms ending in "-а" have their "-а" suffix dropped.';
+            } else if (correctAnswer.bare.endsWith('ь') && bare.endsWith('я')) {
+              formationExplanation =
+                  ' Feminine, plural, accusative nouns with singular nominative forms ending in "-я" have their "-я" suffix replaced by a "-ь" suffix.';
+            } else if (correctAnswer.bare.endsWith('ий') &&
+                bare.endsWith('ия')) {
+              formationExplanation =
+                  ' Feminine, plural, accusative nouns with singular nominative forms ending in "-ия" have their "-ия" suffix replaced by an "-ий" suffix.';
+            } else if (correctAnswer.bare.endsWith('ей') &&
+                bare.endsWith('ь')) {
+              formationExplanation =
+                  ' Feminine, plural, accusative nouns with singular nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-ей" suffix.';
+            }
+          case Gender.n:
+            final String? pluralNominative =
+                wordFormTypesToBareMap[WordFormType.ruNounPlNom];
+
+            if (pluralNominative == null) {
+              throw Exception(
+                  'Cannot explain formation of plural accusative noun if plural nominative form is not provided.');
+            } else if (correctAnswer.bare == pluralNominative) {
+              formationExplanation =
+                  ' Neuter, plural, accusative nouns are identical to their plural nominative forms.';
+            }
+          default:
+            throw Exception('Expected a masculine, feminine, or neuter noun.');
+        }
+
+        return 'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlInst:
         return '';
       case WordFormType.ruNounPlPrep:
