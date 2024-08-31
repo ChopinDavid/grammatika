@@ -4401,6 +4401,135 @@ main() {
               'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun. Neuter, plural, genitive nouns with singular nominative forms ending in "-ие" have their "-ие" suffix replaced by an "-ий" suffix.\n\n$bare -> ${correctAnswer.bare}');
         });
       });
+      group('when correctAnswer.type is ruNounPlDat', () {
+        test(
+            'returns correct explanation when correctAnswer ends with "-ам" and bare ends in "-а"',
+            () {
+          const bare = 'рука';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlDat,
+            form: "ру'кам",
+            bare: 'рукам',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, dative noun. This means it is a noun describing multiple things that are the indirect object of a sentence, i.e. the recipients or beneficiaries of the main verb. Plural, dative nouns with singular nominative forms ending in "-а" have their "-а" suffix replaced by an "-ам" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ам" and bare ends in "-о"',
+            () {
+          const bare = 'дело';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlDat,
+            form: "де'лам",
+            bare: 'делам',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, dative noun. This means it is a noun describing multiple things that are the indirect object of a sentence, i.e. the recipients or beneficiaries of the main verb. Plural, dative nouns with singular nominative forms ending in "-о" have their "-о" suffix replaced by an "-ам" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ам" and bare ends in a consonant',
+            () {
+          const bare = 'брат';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlDat,
+            form: "бра'там",
+            bare: 'братам',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, dative noun. This means it is a noun describing multiple things that are the indirect object of a sentence, i.e. the recipients or beneficiaries of the main verb. Plural, dative nouns with singular nominative forms ending in a consonant get an "-ам" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+
+        test(
+            'returns correct explanation when correctAnswer ends with "-ям" and bare ends in "-й"',
+            () {
+          const bare = 'случай';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlDat,
+            form: "слу'чаям",
+            bare: 'случаям',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, dative noun. This means it is a noun describing multiple things that are the indirect object of a sentence, i.e. the recipients or beneficiaries of the main verb. Plural, dative nouns with singular nominative forms ending in "-й" have their "-й" suffix replaced by an "-ям" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ям" and bare ends in "-ь"',
+            () {
+          const bare = 'стать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlDat,
+            form: "ста'тям",
+            bare: 'статьям',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, dative noun. This means it is a noun describing multiple things that are the indirect object of a sentence, i.e. the recipients or beneficiaries of the main verb. Plural, dative nouns with singular nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-ям" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ям" and bare ends in "-е"',
+            () {
+          const bare = 'море';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlDat,
+            form: "мо'рям",
+            bare: 'морям',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, dative noun. This means it is a noun describing multiple things that are the indirect object of a sentence, i.e. the recipients or beneficiaries of the main verb. Plural, dative nouns with singular nominative forms ending in "-е" have their "-е" suffix replaced by an "-ям" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ям" and bare ends in "-я"',
+            () {
+          const bare = 'акция';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlDat,
+            form: "а'кциям",
+            bare: 'акциям',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, dative noun. This means it is a noun describing multiple things that are the indirect object of a sentence, i.e. the recipients or beneficiaries of the main verb. Plural, dative nouns with singular nominative forms ending in "-я" have their "-я" suffix replaced by an "-ям" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+      });
     });
   });
 }

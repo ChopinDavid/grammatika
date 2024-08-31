@@ -856,7 +856,30 @@ class ExplanationHelper {
         }
         return 'This word is a plural, genitive noun. This means it is a noun that describes multiple things and indicates possession, origin, or close association of or to another noun.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlDat:
-        return '';
+        String? formationExplanation;
+
+        if (correctAnswer.bare.endsWith('ам')) {
+          if (bare.endsWith('а')) {
+            formationExplanation =
+                ' Plural, dative nouns with singular nominative forms ending in "-а" have their "-а" suffix replaced by an "-ам" suffix.';
+          } else if (bare.endsWith('о')) {
+            formationExplanation =
+                ' Plural, dative nouns with singular nominative forms ending in "-о" have their "-о" suffix replaced by an "-ам" suffix.';
+          } else {
+            formationExplanation =
+                ' Plural, dative nouns with singular nominative forms ending in a consonant get an "-ам" suffix.';
+          }
+        } else if (correctAnswer.bare.endsWith('ям')) {
+          if (bare.endsWith('й') ||
+              bare.endsWith('ь') ||
+              bare.endsWith('е') ||
+              bare.endsWith('я')) {
+            final lastCharacter = bare.substring(bare.length - 1);
+            formationExplanation =
+                ' Plural, dative nouns with singular nominative forms ending in "-$lastCharacter" have their "-$lastCharacter" suffix replaced by an "-ям" suffix.';
+          }
+        }
+        return 'This word is a plural, dative noun. This means it is a noun describing multiple things that are the indirect object of a sentence, i.e. the recipients or beneficiaries of the main verb.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlAcc:
         return '';
       case WordFormType.ruNounPlInst:
