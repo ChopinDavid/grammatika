@@ -952,7 +952,27 @@ class ExplanationHelper {
 
         return 'This word is a plural, accusative noun. This means it is a noun describing multiple things that are the direct object of a sentence, i.e. the things that are acted on by the main verb.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlInst:
-        return '';
+        String? formationExplanation;
+
+        if (correctAnswer.bare.endsWith('ами')) {
+          if (bare.endsWith('а') || bare.endsWith('о')) {
+            formationExplanation =
+                ' Plural, instrumental nouns with singular nominative forms ending in "-а" or "-о" have their "-а" or "-о" suffix replaced by an "-ами" suffix.';
+          } else {
+            formationExplanation =
+                ' Plural, instrumental nouns with singular nominative forms ending in a consonant get an "-ами" suffix.';
+          }
+        } else if (correctAnswer.bare.endsWith('ями') &&
+            (bare.endsWith('й') ||
+                bare.endsWith('ь') ||
+                bare.endsWith('е') ||
+                bare.endsWith('я'))) {
+          final lastCharacter = bare.substring(bare.length - 1);
+          formationExplanation =
+              ' Plural, instrumental nouns with singular nominative forms ending in "-$lastCharacter" have their "-$lastCharacter" suffix replaced by an "-ями" suffix.';
+        }
+
+        return 'This word is a plural, instrumental noun. This means it is a noun describing multiple things that are the means by or with which the subject accomplishes an action.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlPrep:
         return '';
       case WordFormType.ruAdjComparative:
