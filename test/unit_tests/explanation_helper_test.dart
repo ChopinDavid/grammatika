@@ -4825,6 +4825,135 @@ main() {
           }
         });
       });
+
+      group('when correctAnswer.type is ruNounPlInst', () {
+        test(
+            'returns correct explanation when correctAnswer ends with "-ами" and bare ends in "-а"',
+            () {
+          const bare = 'рука';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlInst,
+            form: "ру'ками",
+            bare: 'руками',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, instrumental noun. This means it is a noun describing multiple things that are the means by or with which the subject accomplishes an action. Plural, instrumental nouns with singular nominative forms ending in "-а" or "-о" have their "-а" or "-о" suffix replaced by an "-ами" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ами" and bare ends in "-о"',
+            () {
+          const bare = 'дело';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlInst,
+            form: "де'лами",
+            bare: 'делами',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, instrumental noun. This means it is a noun describing multiple things that are the means by or with which the subject accomplishes an action. Plural, instrumental nouns with singular nominative forms ending in "-а" or "-о" have their "-а" or "-о" suffix replaced by an "-ами" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ами" and bare ends in a consonant',
+            () {
+          const bare = 'брат';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlInst,
+            form: "бра'тами",
+            bare: 'братами',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, instrumental noun. This means it is a noun describing multiple things that are the means by or with which the subject accomplishes an action. Plural, instrumental nouns with singular nominative forms ending in a consonant get an "-ами" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ями" and bare ends in "-й"',
+            () {
+          const bare = 'случай';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlInst,
+            form: "слу'чаями",
+            bare: 'случаями',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, instrumental noun. This means it is a noun describing multiple things that are the means by or with which the subject accomplishes an action. Plural, instrumental nouns with singular nominative forms ending in "-й" have their "-й" suffix replaced by an "-ями" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ями" and bare ends in "-ь"',
+            () {
+          const bare = 'стать';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlInst,
+            form: "ста'тьями",
+            bare: 'статьями',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, instrumental noun. This means it is a noun describing multiple things that are the means by or with which the subject accomplishes an action. Plural, instrumental nouns with singular nominative forms ending in "-ь" have their "-ь" suffix replaced by an "-ями" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ями" and bare ends in "-е"',
+            () {
+          const bare = 'море';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlInst,
+            form: "мо'рями",
+            bare: 'морями',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, instrumental noun. This means it is a noun describing multiple things that are the means by or with which the subject accomplishes an action. Plural, instrumental nouns with singular nominative forms ending in "-е" have their "-е" suffix replaced by an "-ями" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correctAnswer ends with "-ями" and bare ends in "-я"',
+            () {
+          const bare = 'акция';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlInst,
+            form: "а'кциями",
+            bare: 'акциями',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, instrumental noun. This means it is a noun describing multiple things that are the means by or with which the subject accomplishes an action. Plural, instrumental nouns with singular nominative forms ending in "-я" have their "-я" suffix replaced by an "-ями" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+      });
     });
   });
 }
