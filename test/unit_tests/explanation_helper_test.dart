@@ -4954,6 +4954,62 @@ main() {
               'This word is a plural, instrumental noun. This means it is a noun describing multiple things that are the means by or with which the subject accomplishes an action. Plural, instrumental nouns with singular nominative forms ending in "-я" have their "-я" suffix replaced by an "-ями" suffix.\n\n$bare -> ${correctAnswer.bare}');
         });
       });
+      group('when correctAnswer.type is ruNounPlPrep', () {
+        test(
+            'returns correct explanation when correct answer ends with "-ах" and bare ends with "-а" or "-о"',
+            () {
+          const bare = 'ага';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlPrep,
+            form: "а'гах",
+            bare: 'агах',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, prepositional noun. This means it describes multiple things that are the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Plural, prepositional nouns with singular nominative forms ending in "-а" have their "-а" suffix replaced by an "-ах" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correct answer ends with "-ах" and bare ends with "-а" or "-о"',
+            () {
+          const bare = 'абрис';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlPrep,
+            form: "а'брисах",
+            bare: 'абрисах',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, prepositional noun. This means it describes multiple things that are the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Plural, prepositional nouns ending in a consonant get an "-ах" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+        test(
+            'returns correct explanation when correct answer ends with "-ях" and bare ends with "-й", "-ь", "-е", "-я"',
+            () {
+          const bare = 'аканье';
+          final correctAnswer = WordForm.testValue(
+            type: WordFormType.ruNounPlPrep,
+            form: "а'каньях",
+            bare: 'аканьях',
+          );
+
+          expect(
+              testObject.sentenceExplanation(
+                bare: bare,
+                correctAnswer: correctAnswer,
+                wordFormTypesToBareMap: {},
+              ),
+              'This word is a plural, prepositional noun. This means it describes multiple things that are the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Plural, prepositional nouns with singular nominative forms ending in "-е" have their "-е" suffix replaced by an "-ях" suffix.\n\n$bare -> ${correctAnswer.bare}');
+        });
+      });
     });
   });
 }
