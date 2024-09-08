@@ -35,15 +35,83 @@ class SentenceExerciseWidget extends StatelessWidget {
         .firstWhere(
             (element) => element.type == exercise.question.correctAnswer.type)
         .bare;
+    List<TextSpan> sentenceTextSpans = [];
+    final sentenceWords = exercise.question.ru
+        .replaceAll('\'', '')
+        .replaceFirst(baseWord, '______')
+        .replaceFirst(baseWord.capitalized(), '______')
+        .split(' ');
+    final sentenceSegmentsCount = sentenceWords.length * 2 - 1;
+    for (int i = 0; i < sentenceSegmentsCount; i++) {
+      if (i % 2 == 0) {
+        sentenceTextSpans.add(
+          TextSpan(
+            text: i == 0 || i == sentenceSegmentsCount - 1 ? '' : ' ',
+          ),
+        );
+      } else {
+        sentenceTextSpans.add(
+          TextSpan(
+              text: sentenceWords[i ~/ 2],
+              style: const TextStyle(
+                decoration: TextDecoration.underline,
+                decorationStyle: TextDecorationStyle.dashed,
+                color: Colors.black,
+              )),
+        );
+      }
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-            'What is the correct form of the word ${exercise.question.word.bare} in the sentence:'),
+        RichText(
+          text: TextSpan(
+            children: [
+              const TextSpan(
+                text: 'What is the correct form of the word ',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              TextSpan(
+                text: exercise.question.word.bare,
+                style: const TextStyle(
+                  decoration: TextDecoration.underline,
+                  decorationStyle: TextDecorationStyle.dashed,
+                  color: Colors.black,
+                ),
+              ),
+              const TextSpan(
+                text: ' in the sentence:',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: UchuSpacing.M),
         //  TODO(DC): Write test around scenarios when the base word is the first word in the sentence and is capitalized.
-        Text(
-          '«${exercise.question.ru.replaceAll('\'', '').replaceFirst(baseWord, '______').replaceFirst(baseWord.capitalized(), '______')}»',
+
+        RichText(
+          text: TextSpan(
+            children: [
+              const TextSpan(
+                text: '«',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              ...sentenceTextSpans,
+              const TextSpan(
+                text: '»',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: UchuSpacing.L),
         Wrap(
