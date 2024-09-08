@@ -974,7 +974,27 @@ class ExplanationHelper {
 
         return 'This word is a plural, instrumental noun. This means it is a noun describing multiple things that are the means by or with which the subject accomplishes an action.$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruNounPlPrep:
-        return '';
+        String? formationExplanation;
+        if (correctAnswer.bare.endsWith('ах')) {
+          if (bare.endsWith('а') || bare.endsWith('о')) {
+            final lastCharacter = bare.substring(bare.length - 1);
+            formationExplanation =
+                ' Plural, prepositional nouns with singular nominative forms ending in "-$lastCharacter" have their "-$lastCharacter" suffix replaced by an "-ах" suffix.';
+          } else {
+            formationExplanation =
+                ' Plural, prepositional nouns ending in a consonant get an "-ах" suffix.';
+          }
+        } else if (correctAnswer.bare.endsWith('ях')) {
+          if (bare.endsWith('й') ||
+              bare.endsWith('ь') ||
+              bare.endsWith('е') ||
+              bare.endsWith('я')) {
+            final lastCharacter = bare.substring(bare.length - 1);
+            formationExplanation =
+                ' Plural, prepositional nouns with singular nominative forms ending in "-$lastCharacter" have their "-$lastCharacter" suffix replaced by an "-ях" suffix.';
+          }
+        }
+        return 'This word is a plural, prepositional noun. This means it describes multiple things that are the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?".$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
       case WordFormType.ruAdjComparative:
         return '';
       case WordFormType.ruAdjSuperlative:
