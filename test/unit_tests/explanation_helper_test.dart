@@ -5010,6 +5010,153 @@ main() {
               'This word is a plural, prepositional noun. This means it describes multiple things that are the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?". Plural, prepositional nouns with singular nominative forms ending in "-е" have their "-е" suffix replaced by an "-ях" suffix.\n\n$bare -> ${correctAnswer.bare}');
         });
       });
+      group('when correctAnswer.type is ruBase', () {
+        test('should throw', () {
+          const bare = 'и';
+
+          try {
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruBase,
+                form: "и",
+                bare: 'и',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Sentence explanations not supported for word form type ${WordFormType.ruBase.name}.');
+          }
+        });
+      });
+      group('when correctAnswer.type is ruAdjComparative', () {
+        test('should throw', () {
+          const bare = 'и';
+
+          try {
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruAdjComparative,
+                form: "и",
+                bare: 'и',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Sentence explanations not supported for word form type ${WordFormType.ruAdjComparative.name}.');
+          }
+        });
+      });
+      group('when correctAnswer.type is ruAdjSuperlative', () {
+        test('should throw', () {
+          const bare = 'и';
+
+          try {
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruAdjSuperlative,
+                form: "и",
+                bare: 'и',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Sentence explanations not supported for word form type ${WordFormType.ruAdjSuperlative.name}.');
+          }
+        });
+      });
+      group('when correctAnswer.type is ruAdjShortM', () {
+        test('should throw', () {
+          const bare = 'и';
+
+          try {
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruAdjShortM,
+                form: "и",
+                bare: 'и',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Sentence explanations not supported for word form type ${WordFormType.ruAdjShortM.name}.');
+          }
+        });
+      });
+      group('when correctAnswer.type is ruAdjShortF', () {
+        test('should throw', () {
+          const bare = 'и';
+
+          try {
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruAdjShortF,
+                form: "и",
+                bare: 'и',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Sentence explanations not supported for word form type ${WordFormType.ruAdjShortF.name}.');
+          }
+        });
+      });
+      group('when correctAnswer.type is ruAdjShortN', () {
+        test('should throw', () {
+          const bare = 'и';
+
+          try {
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruAdjShortN,
+                form: "и",
+                bare: 'и',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Sentence explanations not supported for word form type ${WordFormType.ruAdjShortN.name}.');
+          }
+        });
+      });
+      group('when correctAnswer.type is ruAdjShortPl', () {
+        test('should throw', () {
+          const bare = 'и';
+
+          try {
+            testObject.sentenceExplanation(
+              bare: bare,
+              correctAnswer: WordForm.testValue(
+                type: WordFormType.ruAdjShortPl,
+                form: "и",
+                bare: 'и',
+              ),
+              wordFormTypesToBareMap: {},
+            );
+          } catch (e) {
+            expect(e, isA<Exception>());
+            expect(e.toString(),
+                'Exception: Sentence explanations not supported for word form type ${WordFormType.ruAdjShortPl.name}.');
+          }
+        });
+      });
     });
   });
 }
