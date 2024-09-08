@@ -113,8 +113,6 @@ class ExplanationHelper {
         final usesSpellingRule = correctAnswer.bare.endsWith('ась') ||
             correctAnswer.bare.endsWith('а');
         return 'This word is an imperfective gerund, also known as an imperfective adverbial participle. Gerunds are formed from verbs and are used to describe an action, preceding the action expressed by the main verb. This gerund is imperfective, meaning that the gerund denotes a process or incomplete action, taking place simultaneously with the main verb. Since the verb in this sentence is ${isReflexive ? '' : 'not '}reflexive, you take the third person plural form of the verb and replace its suffix with either a ${isReflexive ? '"-ась" or "-ясь"' : '"-а" or "-я"'} suffix. Since "a" always follows "ж", "ш", "ч", or "щ", we will use ${usesSpellingRule ? isReflexive ? '"-ась"' : '"-а"' : isReflexive ? '"-ясь"' : '"-я"'} in this case.\n\n$bare -> ${wordFormTypesToBareMap[WordFormType.ruVerbPresfutPl3]} -> ${correctAnswer.bare}';
-      case WordFormType.ruBase:
-        return '';
       case WordFormType.ruAdjMNom:
         String? formationExplanation =
             getAdjNomExplanation(bare, gender: Gender.m);
@@ -995,18 +993,16 @@ class ExplanationHelper {
           }
         }
         return 'This word is a plural, prepositional noun. This means it describes multiple things that are the object of a preposition, the preposition generally being "в"/"во", "на", "о"/"об", "при", or "по", forming a phrase answering "about who?", "about what?", "in whose presence?", "where?", or "in/on what?".$formationExplanation\n\n$bare -> ${correctAnswer.bare}';
+
+      case WordFormType.ruBase:
       case WordFormType.ruAdjComparative:
-        return '';
       case WordFormType.ruAdjSuperlative:
-        return '';
       case WordFormType.ruAdjShortM:
-        return '';
       case WordFormType.ruAdjShortF:
-        return '';
       case WordFormType.ruAdjShortN:
-        return '';
       case WordFormType.ruAdjShortPl:
-        return '';
+        throw Exception(
+            'Sentence explanations not supported for word form type ${correctAnswer.type.name}.');
     }
     return 'This is the explanation for the sentence exercise.';
   }
