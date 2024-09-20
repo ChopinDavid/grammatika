@@ -5,6 +5,7 @@ import 'package:uchu/extensions/string_extension.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
+import 'package:uchu/utilities/exercise_helper.dart';
 
 import 'answer_card.dart';
 
@@ -12,25 +13,17 @@ class SentenceExerciseWidget extends StatelessWidget {
   const SentenceExerciseWidget({
     super.key,
     required this.exercise,
+    this.exerciseHelper = const ExerciseHelper(),
   });
 
   final Exercise<WordForm, Sentence> exercise;
+  final ExerciseHelper exerciseHelper;
 
   @override
   Widget build(BuildContext context) {
-    final possibleAnswers = exercise.question.possibleAnswers;
+    final answerGroups = exerciseHelper.getAnswerGroupsForSentenceExercise(
+        sentenceExercise: exercise);
     final givenAnswers = exercise.answers;
-    Map<String, List<WordForm>> answerGroups = {};
-    for (var element in possibleAnswers) {
-      final listOfAnswers = answerGroups[element.bare];
-      final answerToAdd = element;
-      if (listOfAnswers != null) {
-        listOfAnswers.add(answerToAdd);
-        answerGroups[element.bare] = listOfAnswers;
-      } else {
-        answerGroups[element.bare] = [answerToAdd];
-      }
-    }
     final baseWord = exercise.question.possibleAnswers
         .firstWhere(
             (element) => element.type == exercise.question.correctAnswer.type)
