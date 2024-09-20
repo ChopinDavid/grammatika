@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uchu/explanation_helper.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
+import 'package:uchu/utilities/explanation_helper.dart';
 
 main() {
   late ExplanationHelper testObject;

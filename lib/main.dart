@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/db_helper.dart';
-import 'package:uchu/explanation_helper.dart';
 import 'package:uchu/screens/exercise_page.dart';
+import 'package:uchu/utilities/db_helper.dart';
+import 'package:uchu/utilities/explanation_helper.dart';
 
 import 'exercise_bloc.dart';
 
