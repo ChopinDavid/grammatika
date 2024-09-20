@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:uchu/consts.dart';
-import 'package:uchu/extensions/list_extension.dart';
-import 'package:uchu/extensions/string_extension.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
@@ -21,39 +19,7 @@ class SentenceExerciseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final answerGroups = exerciseHelper.getAnswerGroupsForSentenceExercise(
-        sentenceExercise: exercise);
     final givenAnswers = exercise.answers;
-    final baseWord = exercise.question.possibleAnswers
-        .firstWhere(
-            (element) => element.type == exercise.question.correctAnswer.type)
-        .bare;
-    List<TextSpan> sentenceTextSpans = [];
-    final sentenceWords = exercise.question.ru
-        .replaceAll('\'', '')
-        .replaceFirst(baseWord, '______')
-        .replaceFirst(baseWord.capitalized(), '______')
-        .split(' ');
-    final sentenceSegmentsCount = sentenceWords.length * 2 - 1;
-    for (int i = 0; i < sentenceSegmentsCount; i++) {
-      if (i % 2 == 0) {
-        sentenceTextSpans.add(
-          TextSpan(
-            text: i == 0 || i == sentenceSegmentsCount - 1 ? '' : ' ',
-          ),
-        );
-      } else {
-        sentenceTextSpans.add(
-          TextSpan(
-              text: sentenceWords[i ~/ 2],
-              style: const TextStyle(
-                decoration: TextDecoration.underline,
-                decorationStyle: TextDecorationStyle.dashed,
-                color: Colors.black,
-              )),
-        );
-      }
-    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -69,11 +35,7 @@ class SentenceExerciseWidget extends StatelessWidget {
               ),
               TextSpan(
                 text: exercise.question.word.bare,
-                style: const TextStyle(
-                  decoration: TextDecoration.underline,
-                  decorationStyle: TextDecorationStyle.dashed,
-                  color: Colors.black,
-                ),
+                style: translatableTextStyle,
               ),
               const TextSpan(
                 text: ' in the sentence:',
@@ -88,6 +50,7 @@ class SentenceExerciseWidget extends StatelessWidget {
         //  TODO(DC): Write test around scenarios when the base word is the first word in the sentence and is capitalized.
 
         RichText(
+          key: const Key('sentence-rich-text'),
           text: TextSpan(
             children: [
               const TextSpan(
@@ -96,7 +59,10 @@ class SentenceExerciseWidget extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              ...sentenceTextSpans,
+              ...exerciseHelper.getTextSpansFromSentence(
+                sentenceExercise: exercise,
+                defaultTextStyle: DefaultTextStyle.of(context).style,
+              ),
               const TextSpan(
                 text: '»',
                 style: TextStyle(
@@ -107,33 +73,28 @@ class SentenceExerciseWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: UchuSpacing.L),
-        Wrap(
-            children: answerGroups
-                .map<String, Widget>((key, listOfAnswers) {
-                  final answerIsCorrect = givenAnswers == null ||
-                          (listOfAnswers.duplicates(givenAnswers).isEmpty &&
-                              !listOfAnswers
-                                  .contains(exercise.question.correctAnswer) &&
-                              listOfAnswers
-                                  .duplicates(exercise.question.answerSynonyms)
-                                  .isEmpty)
-                      ? null
-                      : listOfAnswers
-                              .contains(exercise.question.correctAnswer) ||
-                          exercise.question.answerSynonyms
-                              .duplicates(listOfAnswers)
-                              .isNotEmpty;
 
-                  return MapEntry(
-                      key,
-                      AnswerCard<WordForm>(
-                        answers: listOfAnswers,
-                        displayString: key,
-                        isCorrect: answerIsCorrect,
-                      ));
-                })
-                .values
-                .toList()),
+        Wrap(
+          children: exerciseHelper
+              .getAnswerGroupsForSentenceExercise(sentenceExercise: exercise)
+              .map<String, Widget>((key, listOfAnswers) {
+                final answerIsCorrect = exerciseHelper.getAnswerIsCorrect(
+                    sentenceExercise: exercise,
+                    givenAnswers: givenAnswers,
+                    listOfAnswers: listOfAnswers);
+
+                return MapEntry(
+                  key,
+                  AnswerCard<WordForm>(
+                    answers: listOfAnswers,
+                    displayString: key,
+                    isCorrect: answerIsCorrect,
+                  ),
+                );
+              })
+              .values
+              .toList(),
+        ),
       ],
     );
   }
