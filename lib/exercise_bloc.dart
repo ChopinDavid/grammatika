@@ -6,8 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:uchu/consts.dart';
-import 'package:uchu/db_helper.dart';
-import 'package:uchu/explanation_helper.dart';
 import 'package:uchu/extensions/gender_extension.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
@@ -15,6 +13,8 @@ import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
+import 'package:uchu/utilities/db_helper.dart';
+import 'package:uchu/utilities/explanation_helper.dart';
 
 import 'models/answer.dart';
 
