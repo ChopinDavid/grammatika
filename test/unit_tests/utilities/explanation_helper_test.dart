@@ -76,7 +76,6 @@ main() {
   });
 
   group('sentenceExplanation', () {
-    // TODO(DC): write sentenceExplanation tests
     group('when correctAnswer.type is ruVerbGerundPast', () {
       group('and word is reflexive', () {
         test('returns correct explanation', () {
