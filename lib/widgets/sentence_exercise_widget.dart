@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:uchu/consts.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/utilities/exercise_helper.dart';
+import 'package:uchu/utilities/url_helper.dart';
 
 import 'answer_card.dart';
 
@@ -33,9 +35,18 @@ class SentenceExerciseWidget extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              TextSpan(
-                text: exercise.question.word.bare,
-                style: translatableTextStyle,
+              WidgetSpan(
+                child: InkWell(
+                  child: Text(
+                    exercise.question.word.bare,
+                    style: translatableTextStyle,
+                  ),
+                  onTap: () async {
+                    await GetIt.instance
+                        .get<UrlHelper>()
+                        .launchWiktionaryPageFor(exercise.question.word.bare);
+                  },
+                ),
               ),
               const TextSpan(
                 text: ' in the sentence:',
@@ -59,7 +70,7 @@ class SentenceExerciseWidget extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              ...exerciseHelper.getTextSpansFromSentence(
+              ...exerciseHelper.getSpansFromSentence(
                 sentenceExercise: exercise,
                 defaultTextStyle: DefaultTextStyle.of(context).style,
               ),
