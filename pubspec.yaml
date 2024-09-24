@@ -35,6 +35,7 @@ dependencies:
   equatable: ^2.0.5
   path: ^1.9.0
   get_it: ^7.6.7
+  url_launcher: ^6.3.0
 
 
 dev_dependencies:
@@ -42,6 +43,8 @@ dev_dependencies:
     sdk: flutter
   mocktail: ^1.0.3
   bloc_test: ^9.1.7
+  plugin_platform_interface: ^2.1.8
+  url_launcher_platform_interface: ^2.3.2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -4,12 +4,15 @@ import 'package:get_it/get_it.dart';
 import 'package:uchu/screens/exercise_page.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
+import 'package:uchu/utilities/url_helper.dart';
 
 import 'exercise_bloc.dart';
 
 void main() {
   GetIt.instance.registerSingleton<DbHelper>(DbHelper());
   GetIt.instance.registerSingleton<ExplanationHelper>(ExplanationHelper());
+  GetIt.instance.registerSingleton<UrlHelper>(const UrlHelper());
+
   runApp(const MyApp());
 }
 

@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:uchu/consts.dart';
 import 'package:uchu/exercise_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
 import 'package:uchu/utilities/exercise_helper.dart';
+import 'package:uchu/utilities/url_helper.dart';
 import 'package:uchu/widgets/answer_card.dart';
 import 'package:uchu/widgets/sentence_exercise_widget.dart';
 
@@ -19,11 +21,14 @@ import '../mocks.dart';
 main() {
   late ExerciseBloc mockExerciseBloc;
   late ExerciseHelper mockExerciseHelper;
+  late UrlHelper mockUrlHelper;
 
   setUpAll(TestUtils.registerFallbackValues);
 
   setUp(
-    () {
+    () async {
+      await GetIt.instance.reset();
+
       mockExerciseBloc = MockExerciseBloc();
 
       whenListen(
@@ -33,6 +38,12 @@ main() {
       );
 
       mockExerciseHelper = MockExerciseHelper();
+
+      mockUrlHelper = MockUrlHelper();
+      when(() => mockUrlHelper.launchWiktionaryPageFor(any())).thenAnswer(
+        (invocation) async => true,
+      );
+      GetIt.instance.registerSingleton<UrlHelper>(mockUrlHelper);
     },
   );
 
@@ -91,19 +102,28 @@ main() {
           ((sentenceRichText.text as TextSpan).children![0] as TextSpan).text,
           '«');
       expect(
-          ((sentenceRichText.text as TextSpan).children![1] as TextSpan).text,
+          ((((sentenceRichText.text as TextSpan).children![1] as WidgetSpan)
+                      .child as InkWell)
+                  .child as Text)
+              .data,
           'Что');
       expect(
           ((sentenceRichText.text as TextSpan).children![2] as TextSpan).text,
           '  ');
       expect(
-          ((sentenceRichText.text as TextSpan).children![3] as TextSpan).text,
+          ((((sentenceRichText.text as TextSpan).children![3] as WidgetSpan)
+                      .child as InkWell)
+                  .child as Text)
+              .data,
           'ты');
       expect(
           ((sentenceRichText.text as TextSpan).children![4] as TextSpan).text,
           '  ');
       expect(
-          ((sentenceRichText.text as TextSpan).children![5] as TextSpan).text,
+          ((((sentenceRichText.text as TextSpan).children![5] as WidgetSpan)
+                      .child as InkWell)
+                  .child as Text)
+              .data,
           'делаешь?');
       expect(
           ((sentenceRichText.text as TextSpan).children![6] as TextSpan).text,
@@ -176,7 +196,7 @@ main() {
         ),
       ).thenReturn(answerGroups);
       when(
-        () => mockExerciseHelper.getTextSpansFromSentence(
+        () => mockExerciseHelper.getSpansFromSentence(
           sentenceExercise: any(named: 'sentenceExercise'),
           defaultTextStyle: any(named: 'defaultTextStyle'),
         ),
@@ -206,6 +226,32 @@ main() {
           answerGroups.length,
         ),
       );
+    },
+  );
+
+  testWidgets(
+    "UrlHelper.launchWiktionaryPageFor is invoked when question's word is tapped",
+    (widgetTester) async {
+      const bare = 'яблоко';
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: Scaffold(
+              body: SentenceExerciseWidget(
+                exercise: Exercise<WordForm, Sentence>(
+                  question: Sentence.testValue(bare: bare),
+                  answers: [],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.tap(find.text(bare, findRichText: true));
+      await widgetTester.pumpAndSettle();
     },
   );
 }

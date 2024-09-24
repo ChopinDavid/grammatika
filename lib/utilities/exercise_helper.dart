@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:uchu/consts.dart';
 import 'package:uchu/extensions/list_extension.dart';
 import 'package:uchu/extensions/string_extension.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
+import 'package:uchu/utilities/url_helper.dart';
 
 class ExerciseHelper {
   const ExerciseHelper();
@@ -26,7 +28,7 @@ class ExerciseHelper {
     return answerGroups;
   }
 
-  List<TextSpan> getTextSpansFromSentence({
+  List<InlineSpan> getSpansFromSentence({
     required Exercise<WordForm, Sentence> sentenceExercise,
     required TextStyle defaultTextStyle,
   }) {
@@ -40,30 +42,43 @@ class ExerciseHelper {
         .replaceFirst(baseWord.capitalized(), sentenceWordPlaceholderText)
         .split(' ');
 
-    List<TextSpan> sentenceTextSpans = [];
+    List<InlineSpan> sentenceSpans = [];
     final sentenceSegmentsCount = sentenceWords.length * 2;
     for (int i = 0; i < sentenceSegmentsCount; i++) {
       if (i % 2 == 0) {
-        sentenceTextSpans.add(
+        sentenceSpans.add(
           const TextSpan(
             text: '  ',
           ),
         );
       } else {
         final sentenceWordIndex = i ~/ 2;
-        sentenceTextSpans.add(
-          TextSpan(
-            text: sentenceWords[sentenceWordIndex],
-            style: sentenceWords[sentenceWordIndex]
-                    .contains(sentenceWordPlaceholderText)
-                ? defaultTextStyle
-                : translatableTextStyle,
-          ),
-        );
+        final word = sentenceWords[sentenceWordIndex];
+        final isPlaceholder = word.contains(sentenceWordPlaceholderText);
+
+        if (isPlaceholder) {
+          sentenceSpans.add(
+            TextSpan(
+              text: word,
+              style: defaultTextStyle,
+            ),
+          );
+        } else {
+          sentenceSpans.add(
+            WidgetSpan(
+              child: InkWell(
+                child: Text(word, style: translatableTextStyle),
+                onTap: () {
+                  GetIt.instance.get<UrlHelper>().launchWiktionaryPageFor(word);
+                },
+              ),
+            ),
+          );
+        }
       }
     }
 
-    return sentenceTextSpans..removeAt(0);
+    return sentenceSpans..removeAt(0);
   }
 
   bool? getAnswerIsCorrect(

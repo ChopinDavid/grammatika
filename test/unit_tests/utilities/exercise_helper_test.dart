@@ -1,19 +1,31 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:uchu/consts.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
 import 'package:uchu/utilities/exercise_helper.dart';
+import 'package:uchu/utilities/url_helper.dart';
 
 import '../mocks.dart';
 
 main() {
   late ExerciseHelper testObject;
+  late UrlHelper mockUrlHelper;
 
   setUp(
-    () {
+    () async {
+      await GetIt.instance.reset();
       testObject = const ExerciseHelper();
+
+      mockUrlHelper = MockUrlHelper();
+      GetIt.instance.registerSingleton<UrlHelper>(mockUrlHelper);
+      when(() => mockUrlHelper.launchWiktionaryPageFor(any())).thenAnswer(
+        (invocation) async => true,
+      );
     },
   );
 
@@ -82,7 +94,7 @@ main() {
         const sentence = "Всему' своё вре'мя.";
         expect(
           testObject
-              .getTextSpansFromSentence(
+              .getSpansFromSentence(
                 sentenceExercise: Exercise<WordForm, Sentence>(
                   question: Sentence.testValue(ru: sentence),
                   answers: [],
@@ -98,19 +110,23 @@ main() {
           'even indexed text spans correspond to their respective words, while odd indexed text spans are just whitespace',
           () {
         const sentence = "Всему своё время.";
-        final textSpans = testObject.getTextSpansFromSentence(
+        final spans = testObject.getSpansFromSentence(
           sentenceExercise: Exercise<WordForm, Sentence>(
             question: Sentence.testValue(ru: sentence),
             answers: [],
           ),
           defaultTextStyle: MockTextStyle(),
         );
-        for (int i = 0; i < textSpans.length; i++) {
+        for (int i = 0; i < spans.length; i++) {
           final isEven = i % 2 == 0;
-          expect(
-            textSpans[i].text,
-            isEven ? sentence.split(' ')[i ~/ 2] : '  ',
-          );
+          if (isEven) {
+            expect(
+              (((spans[i] as WidgetSpan).child as InkWell).child as Text).data,
+              sentence.split(' ')[i ~/ 2],
+            );
+          } else {
+            expect((spans[i] as TextSpan).text, '  ');
+          }
         }
       });
 
@@ -119,7 +135,7 @@ main() {
         () {
           const sentence = "Всему' своё вре'мя.";
           final expectedDefaultTextStyle = MockTextStyle();
-          final textSpans = testObject.getTextSpansFromSentence(
+          final spans = testObject.getSpansFromSentence(
             sentenceExercise: Exercise<WordForm, Sentence>(
               question: Sentence.testValue(
                 ru: sentence,
@@ -135,23 +151,59 @@ main() {
             ),
             defaultTextStyle: expectedDefaultTextStyle,
           );
-          for (int i = 0; i < textSpans.length; i++) {
-            final textSpan = textSpans[i];
-            if (textSpan.text?.contains(sentenceWordPlaceholderText) == true) {
+          for (int i = 0; i < spans.length; i++) {
+            final span = spans[i];
+            if (span is WidgetSpan) {
               expect(
-                textSpan.style,
-                expectedDefaultTextStyle,
-              );
-            } else if (textSpan.text == '  ') {
-              expect(
-                textSpan.style,
-                isNull,
-              );
-            } else {
-              expect(
-                textSpan.style,
+                ((span.child as InkWell).child as Text).style,
                 translatableTextStyle,
               );
+            } else if (span is TextSpan) {
+              if (span.text?.contains(sentenceWordPlaceholderText) == true) {
+                expect(
+                  span.style,
+                  expectedDefaultTextStyle,
+                );
+              } else if (span.text == '  ') {
+                expect(
+                  span.style,
+                  isNull,
+                );
+              }
+            } else {
+              fail('all spans should either be WidgetSpans or TextSpans');
+            }
+          }
+        },
+      );
+
+      test(
+        'even indexed text spans launch wiktionary for respective word when tapped',
+        () {
+          const sentence = "Всему' своё вре'мя.";
+          final expectedDefaultTextStyle = MockTextStyle();
+          final spans = testObject.getSpansFromSentence(
+            sentenceExercise: Exercise<WordForm, Sentence>(
+              question: Sentence.testValue(
+                ru: sentence,
+                possibleAnswers: [
+                  WordForm.testValue(
+                    bare: 'время',
+                    type: WordFormType.ruNounSgNom,
+                  ),
+                ],
+                formType: WordFormType.ruNounSgNom,
+              ),
+              answers: [],
+            ),
+            defaultTextStyle: expectedDefaultTextStyle,
+          );
+          for (int i = 0; i < spans.length; i++) {
+            final span = spans[i];
+            if (span is WidgetSpan) {
+              (span.child as InkWell).onTap?.call();
+              verify(() => mockUrlHelper.launchWiktionaryPageFor(
+                  sentence.split(' ')[i ~/ 2].replaceAll('\'', '')));
             }
           }
         },
@@ -161,18 +213,28 @@ main() {
         'apostrophes are omitted from text spans',
         () {
           const sentence = "Всему' своё вре'мя.";
-          final textSpans = testObject.getTextSpansFromSentence(
+          final spans = testObject.getSpansFromSentence(
             sentenceExercise: Exercise<WordForm, Sentence>(
               question: Sentence.testValue(ru: sentence),
               answers: [],
             ),
             defaultTextStyle: MockTextStyle(),
           );
-          for (int i = 0; i < textSpans.length; i++) {
-            expect(
-              textSpans[i].text?.contains("'"),
-              isFalse,
-            );
+          for (int i = 0; i < spans.length; i++) {
+            final span = spans[i];
+            if (span is WidgetSpan) {
+              expect(
+                ((span.child as InkWell).child as Text).data?.contains("'"),
+                isFalse,
+              );
+            } else if (span is TextSpan) {
+              expect(
+                span.text?.contains("'"),
+                isFalse,
+              );
+            } else {
+              fail('all spans should either be WidgetSpans or TextSpans');
+            }
           }
         },
       );
