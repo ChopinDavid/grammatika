@@ -16,7 +16,7 @@ import 'package:uchu/models/word_form_type.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
 
-import 'models/answer.dart';
+import '../../models/answer.dart';
 
 part 'exercise_event.dart';
 part 'exercise_state.dart';
