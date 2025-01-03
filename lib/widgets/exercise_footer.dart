@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uchu/exercise_bloc.dart';
+import 'package:uchu/blocs/exercise/exercise_bloc.dart';
 
 class ExerciseFooter extends StatelessWidget {
   const ExerciseFooter({

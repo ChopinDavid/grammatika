@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uchu/exercise_bloc.dart';
+import 'package:uchu/blocs/exercise/exercise_bloc.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/exercise_helper.dart';
