@@ -2,13 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
 
 class TranslationService {
-  const TranslationService();
+  TranslationService({@visibleForTesting Client? client})
+      : _client = client ?? Client();
+
+  final Client _client;
 
   Future<String> getSentenceFrom({required int tatoebaKey}) async {
-    final response = await http
+    final response = await _client
         .get(Uri.parse('https://tatoeba.org/en/api_v0/sentence/$tatoebaKey'));
 
     if (response.statusCode < 200 || response.statusCode >= 300) {

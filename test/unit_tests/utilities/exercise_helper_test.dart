@@ -30,7 +30,7 @@ main() {
   );
 
   group(
-    'getAnswerGroupsForSentence',
+    'getAnswerGroupsForSentenceExercise',
     () {
       test(
         'creates new list when bare is not yet registered in answerGroups',
@@ -88,7 +88,7 @@ main() {
   );
 
   group(
-    'getTextSpansFromSentence',
+    'getSpansFromSentence',
     () {
       test('number of spans returned is correct', () {
         const sentence = "Всему' своё вре'мя.";
