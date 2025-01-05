@@ -13,8 +13,7 @@ void main() {
   GetIt.instance.registerSingleton<DbHelper>(DbHelper());
   GetIt.instance.registerSingleton<ExplanationHelper>(ExplanationHelper());
   GetIt.instance.registerSingleton<UrlHelper>(const UrlHelper());
-  GetIt.instance
-      .registerSingleton<TranslationService>(const TranslationService());
+  GetIt.instance.registerSingleton<TranslationService>(TranslationService());
 
   runApp(const MyApp());
 }
