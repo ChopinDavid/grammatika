@@ -126,12 +126,12 @@ class Sentence extends Question<WordForm> {
 
   @visibleForTesting
   factory Sentence.testValue({
-    List<Map<String, dynamic>>? answerSynonyms,
+    List<WordForm>? answerSynonyms,
     WordFormType formType = WordFormType.ruVerbGerundPast,
     int wordFormPosition = 1,
     String form = "сказа'л",
     String formBare = 'сказал',
-    List<Map<String, dynamic>>? possibleAnswers,
+    List<WordForm>? possibleAnswers,
     String explanation = 'because I said so',
     int id = 33,
     String ru = "Я сказа'л им посла'ть мне ещё один биле'т.",
@@ -154,12 +154,12 @@ class Sentence extends Question<WordForm> {
     DateTime? createdAt,
   }) {
     answerSynonyms ??= [
-      {
+      WordForm.fromJson({
         'form_type': WordFormType.ruVerbPastM.name,
         'word_form_position': 1,
         'form': "сказа'л",
         '_form_bare': 'сказал'
-      },
+      }),
     ];
     possibleAnswers ??= [
       {
@@ -258,10 +258,16 @@ class Sentence extends Question<WordForm> {
         'form': "ска'занный",
         '_form_bare': 'сказанный'
       },
-    ];
+    ]
+        .map(
+          (answer) => WordForm.fromJson(answer),
+        )
+        .toList();
     createdAt ??= DateTime.parse('2020-01-01 00:00:00');
     return Sentence.fromJson({
-      'answer_synonyms': answerSynonyms,
+      'answer_synonyms': answerSynonyms.map(
+        (answer) => answer.toJson(),
+      ),
       'form_type': formType.name,
       'word_form_position': wordFormPosition,
       'form': form,
@@ -286,7 +292,9 @@ class Sentence extends Question<WordForm> {
       'type': type.name,
       'word_level': wordLevel.name,
       'created_at': createdAt.toIso8601String(),
-      'possible_answers': possibleAnswers,
+      'possible_answers': possibleAnswers.map(
+        (answer) => answer.toJson(),
+      ),
     });
   }
 }
