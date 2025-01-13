@@ -13,6 +13,7 @@ class Noun extends Question<Gender> {
     required super.answerSynonyms,
     required super.possibleAnswers,
     required super.explanation,
+    super.visualExplanation,
     required this.partner,
     required this.animate,
     required this.indeclinable,
@@ -53,6 +54,7 @@ class Noun extends Question<Gender> {
           Gender.n,
         ],
         explanation: json['explanation'],
+        visualExplanation: json['visual_explanation'],
         word: Word.fromJson({
           'id': json['id'],
           'position': json['position'],
@@ -83,6 +85,7 @@ class Noun extends Question<Gender> {
     return {
       'gender': correctAnswer.name,
       'explanation': explanation,
+      if (visualExplanation != null) 'visual_explanation': visualExplanation,
       'id': word.id,
       'position': word.position,
       'bare': word.bare,
@@ -120,6 +123,7 @@ class Noun extends Question<Gender> {
   factory Noun.testValue({
     Gender gender = Gender.m,
     String explanation = 'because I said so',
+    String visualExplanation = '',
     int wordId = 97,
     int position = 0,
     String bare = 'друг',
@@ -146,6 +150,7 @@ class Noun extends Question<Gender> {
     return Noun.fromJson({
       'gender': gender.name,
       'explanation': explanation,
+      'visual_explanation': visualExplanation,
       'id': wordId,
       'position': position,
       'bare': bare,
@@ -172,6 +177,7 @@ class Noun extends Question<Gender> {
   factory Noun.testValueSimple({
     Gender gender = Gender.m,
     String explanation = 'because I said so',
+    String? visualExplanation,
     int id = 97,
     int? position,
     String bare = 'друг',
@@ -195,6 +201,7 @@ class Noun extends Question<Gender> {
     return Noun.fromJson({
       'gender': gender.name,
       'explanation': 'because I said so',
+      'visual_explanation': visualExplanation,
       'id': id,
       'position': position,
       'bare': bare,
