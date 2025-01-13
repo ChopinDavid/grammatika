@@ -1905,6 +1905,7 @@ main() {
       final expected = {
         'gender': testValue.correctAnswer.name,
         'explanation': testValue.explanation,
+        'visual_explanation': testValue.visualExplanation,
         'id': testValue.word.id,
         'position': testValue.word.position,
         'bare': testValue.word.bare,

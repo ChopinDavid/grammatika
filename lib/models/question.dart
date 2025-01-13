@@ -7,11 +7,13 @@ class Question<T extends Answer> extends Equatable {
     required this.answerSynonyms,
     required this.possibleAnswers,
     required this.explanation,
+    required this.visualExplanation,
   });
   final T correctAnswer;
   final List<T> answerSynonyms;
   final List<T> possibleAnswers;
   final String explanation;
+  final String? visualExplanation;
 
   @override
   List<Object?> get props => [
@@ -19,5 +21,6 @@ class Question<T extends Answer> extends Equatable {
         answerSynonyms,
         possibleAnswers,
         explanation,
+        visualExplanation,
       ];
 }
