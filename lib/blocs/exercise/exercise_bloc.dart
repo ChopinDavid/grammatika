@@ -87,7 +87,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
           final List<Map<String, dynamic>> answers = (await db.rawQuery(
               'SELECT form_type, position AS word_form_position, form, _form_bare FROM words_forms WHERE word_id = ${sentenceQuery['word_id']};'));
           final correctAnswer = WordForm.fromJson(sentenceQuery);
-          final explanation =
+          final (explanation, visualExplanation) =
               GetIt.instance.get<ExplanationHelper>().sentenceExplanation(
                     correctAnswer: correctAnswer,
                     bare: sentenceQuery['bare'],
@@ -106,6 +106,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
             }),
             'possible_answers': answers,
             'explanation': explanation,
+            'visual_explanation': visualExplanation,
           };
           final sentence = Sentence.fromJson(json);
 
