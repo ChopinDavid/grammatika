@@ -61,12 +61,11 @@ class ExercisePage extends StatelessWidget {
               }
 
               if (state is ExerciseAnswerSelectedState) {
+                final question =
+                    context.read<ExerciseBloc>().exercise?.question;
                 stackChildren.add(ExerciseFooter(
-                  explanation: context
-                      .read<ExerciseBloc>()
-                      .exercise
-                      ?.question
-                      .explanation,
+                  explanation: question?.explanation,
+                  visualExplanation: question?.visualExplanation,
                 ));
               }
 
