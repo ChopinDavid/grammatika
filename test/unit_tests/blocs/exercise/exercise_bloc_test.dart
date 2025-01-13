@@ -54,7 +54,7 @@ main() {
             bare: any(named: 'bare'),
             correctAnswer: any(named: 'correctAnswer'),
             wordFormTypesToBareMap: any(named: 'wordFormTypesToBareMap')))
-        .thenAnswer((invocation) => 'because I said so');
+        .thenAnswer((invocation) => ('because I said so', 'сказ- ➡️ сказал'));
     GetIt.instance.registerSingleton<DbHelper>(mockDbHelper);
     GetIt.instance.registerSingleton<ExplanationHelper>(mockExplanationHelper);
     testObject = ExerciseBloc(mockRandom: mockRandom);

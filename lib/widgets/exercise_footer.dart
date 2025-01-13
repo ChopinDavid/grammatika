@@ -6,33 +6,52 @@ class ExerciseFooter extends StatelessWidget {
   const ExerciseFooter({
     super.key,
     required this.explanation,
+    required this.visualExplanation,
   });
   final String? explanation;
+  final String? visualExplanation;
+
   @override
   Widget build(BuildContext context) {
+    final explanation = this.explanation;
+    final visualExplanation = this.visualExplanation;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (explanation != null)
           Text(
-            explanation!,
+            explanation,
             key: const Key('explanation-text'),
           ),
-        Container(
-          color: Colors.grey,
-          width: double.maxFinite,
-          // TODO(DC): Can we use a SafeArea widget instead?
-          child: Padding(
-            padding:
-                EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-            child: TextButton(
-              child: const Text('Next'),
-              onPressed: () {
-                BlocProvider.of<ExerciseBloc>(context).add(
-                  ExerciseRetrieveExerciseEvent(),
-                );
-              },
+        if (visualExplanation != null)
+          Center(
+            child: Text(
+              visualExplanation,
+              key: const Key('visual-explanation-text'),
             ),
+          ),
+        Material(
+          color: Colors.grey.shade400,
+          child: InkWell(
+            child: const SizedBox(
+              height: 48.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Next',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            onTap: () {
+              BlocProvider.of<ExerciseBloc>(context).add(
+                ExerciseRetrieveExerciseEvent(),
+              );
+            },
           ),
         ),
       ],
