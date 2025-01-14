@@ -8,6 +8,7 @@ import 'package:uchu/models/word_form.dart';
 import 'package:uchu/widgets/exercise_footer.dart';
 import 'package:uchu/widgets/gender_exercise_widget.dart';
 import 'package:uchu/widgets/sentence_exercise_widget.dart';
+import 'package:uchu/widgets/uchu_drawer.dart';
 
 import '../models/sentence.dart';
 
@@ -17,6 +18,15 @@ class ExercisePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: UchuDrawer(),
+      appBar: AppBar(
+        leading: Builder(builder: (context) {
+          return IconButton(
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            icon: const Icon(Icons.menu),
+          );
+        }),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Center(
