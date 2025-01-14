@@ -9,6 +9,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uchu/blocs/exercise/exercise_bloc.dart';
 import 'package:uchu/blocs/translation/translation_bloc.dart';
 import 'package:uchu/models/noun.dart';
+import 'package:uchu/services/navigation_service.dart';
 import 'package:uchu/services/translation_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/exercise_helper.dart';
@@ -62,3 +63,7 @@ class MockNavigatorState extends Mock implements NavigatorState {
     return super.toString();
   }
 }
+
+class MockNavigationService extends Mock implements NavigationService {}
+
+class MockBuildContext extends Mock implements BuildContext {}
