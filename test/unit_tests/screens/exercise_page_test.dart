@@ -13,6 +13,7 @@ import 'package:uchu/screens/exercise_page.dart';
 import 'package:uchu/widgets/exercise_footer.dart';
 import 'package:uchu/widgets/gender_exercise_widget.dart';
 import 'package:uchu/widgets/sentence_exercise_widget.dart';
+import 'package:uchu/widgets/uchu_drawer.dart';
 
 import '../mocks.dart';
 
@@ -172,4 +173,43 @@ main() {
           explanation);
     });
   });
+
+  group(
+    'drawer',
+    () {
+      testWidgets(
+        'is shown when menu icon is tapped',
+        (widgetTester) async {
+          whenListen(
+            mockExerciseBloc,
+            Stream.fromIterable(
+              <ExerciseState>[],
+            ),
+            initialState: ExerciseExerciseRetrievedState(),
+          );
+
+          await widgetTester.pumpWidget(
+            MaterialApp(
+              home: BlocProvider.value(
+                value: mockExerciseBloc,
+                child: const ExercisePage(),
+              ),
+            ),
+          );
+          await widgetTester.pump();
+          await widgetTester.idle();
+
+          expect(find.byType(UchuDrawer), findsNothing);
+
+          final menuIconFinder = find.byIcon(Icons.menu);
+          expect(menuIconFinder, findsOneWidget);
+          await widgetTester.tap(menuIconFinder);
+          await widgetTester.pump();
+          await widgetTester.idle();
+
+          expect(find.byType(UchuDrawer), findsOneWidget);
+        },
+      );
+    },
+  );
 }

@@ -15,5 +15,6 @@ class TestUtils {
         question: Sentence.testValue(), answers: [WordForm.testValue()]));
     registerFallbackValue(MockTextStyle());
     registerFallbackValue(const LaunchOptions());
+    registerFallbackValue(MockBuildContext());
   }
 }
