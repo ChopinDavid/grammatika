@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:uchu/screens/exercise_page.dart';
+import 'package:uchu/services/navigation_service.dart';
 import 'package:uchu/services/translation_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
@@ -14,6 +15,7 @@ void main() {
   GetIt.instance.registerSingleton<ExplanationHelper>(ExplanationHelper());
   GetIt.instance.registerSingleton<UrlHelper>(const UrlHelper());
   GetIt.instance.registerSingleton<TranslationService>(TranslationService());
+  GetIt.instance.registerSingleton<NavigationService>(NavigationService());
 
   runApp(const MyApp());
 }
