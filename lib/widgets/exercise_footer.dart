@@ -33,7 +33,7 @@ class ExerciseFooter extends StatelessWidget {
             ),
           ),
         Material(
-          color: Colors.grey.shade400,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           child: InkWell(
             child: const SizedBox(
               height: 48.0,
