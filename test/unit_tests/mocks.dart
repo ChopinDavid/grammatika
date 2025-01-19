@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uchu/blocs/exercise/exercise_bloc.dart';
 import 'package:uchu/blocs/translation/translation_bloc.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/services/navigation_service.dart';
+import 'package:uchu/services/shared_preferences_service.dart';
 import 'package:uchu/services/translation_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/exercise_helper.dart';
@@ -67,3 +69,8 @@ class MockNavigatorState extends Mock implements NavigatorState {
 class MockNavigationService extends Mock implements NavigationService {}
 
 class MockBuildContext extends Mock implements BuildContext {}
+
+class MockSharedPreferences extends Mock implements SharedPreferences {}
+
+class MockSharedPreferencesService extends Mock
+    implements SharedPreferencesService {}
