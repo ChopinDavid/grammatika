@@ -34,6 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 AppearanceSettingWidget(
+                  key: const Key('light_mode_appearance_setting_widget'),
                   isSelected: themeMode == ThemeMode.light ||
                       (themeMode == ThemeMode.system &&
                           MediaQuery.of(context).platformBrightness ==
@@ -44,6 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       .updateThemeMode(ThemeMode.light)),
                 ),
                 AppearanceSettingWidget(
+                  key: const Key('dark_mode_appearance_setting_widget'),
                   isSelected: themeMode == ThemeMode.dark ||
                       (themeMode == ThemeMode.system &&
                           MediaQuery.of(context).platformBrightness ==
