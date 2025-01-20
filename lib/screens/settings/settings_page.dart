@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:uchu/screens/settings/appearance_setting_widget.dart';
 import 'package:uchu/services/shared_preferences_service.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _AppearanceSettingWidget(
+                AppearanceSettingWidget(
                   isSelected: themeMode == ThemeMode.light ||
                       (themeMode == ThemeMode.system &&
                           MediaQuery.of(context).platformBrightness ==
@@ -42,7 +43,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   onSelected: () => setState(() => sharedPreferencesService
                       .updateThemeMode(ThemeMode.light)),
                 ),
-                _AppearanceSettingWidget(
+                AppearanceSettingWidget(
                   isSelected: themeMode == ThemeMode.dark ||
                       (themeMode == ThemeMode.system &&
                           MediaQuery.of(context).platformBrightness ==
@@ -82,48 +83,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AppearanceSettingWidget extends StatelessWidget {
-  const _AppearanceSettingWidget({
-    required this.isSelected,
-    required this.title,
-    required this.icon,
-    required this.onSelected,
-  });
-  final bool isSelected;
-  final String title;
-  final IconData icon;
-  final VoidCallback onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onSelected,
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: isSelected ? Colors.blueAccent : Colors.grey,
-            ),
-            borderRadius: BorderRadius.circular(5)),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              Icon(icon),
-              const SizedBox(height: 8.0),
-              Text(title),
-              const SizedBox(height: 24.0),
-              Icon(
-                isSelected ? Icons.check_circle : Icons.circle_outlined,
-                color: isSelected ? Colors.blueAccent : Colors.grey,
-              )
-            ],
-          ),
         ),
       ),
     );
