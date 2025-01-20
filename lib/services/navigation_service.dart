@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uchu/screens/settings_page.dart';
+import 'package:uchu/screens/settings/settings_page.dart';
 import 'package:uchu/screens/statistics_page.dart';
 
 class NavigationService {
