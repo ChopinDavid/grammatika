@@ -8,18 +8,18 @@ class SharedPreferencesService with ChangeNotifier {
   final SharedPreferences _sharedPreferences;
 
   void updateThemeMode(ThemeMode themeMode) {
-    _sharedPreferences.setInt(
-        _SharedPreferencesKeys.themeMode, themeMode.index);
+    _sharedPreferences.setInt(SharedPreferencesKeys.themeMode, themeMode.index);
     notifyListeners();
   }
 
   ThemeMode getThemeMode() {
     return ThemeMode.values[
-        _sharedPreferences.getInt(_SharedPreferencesKeys.themeMode) ??
+        _sharedPreferences.getInt(SharedPreferencesKeys.themeMode) ??
             ThemeMode.system.index];
   }
 }
 
-class _SharedPreferencesKeys {
+@visibleForTesting
+class SharedPreferencesKeys {
   static const String themeMode = 'theme_mode';
 }
