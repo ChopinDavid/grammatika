@@ -10,7 +10,6 @@ class UchuSpacing {
 const sentenceWordPlaceholderText = '______';
 
 const translatableTextStyle = TextStyle(
-  color: Colors.black,
   decoration: TextDecoration.underline,
   decorationColor: Colors.blue,
   decorationThickness: 3,

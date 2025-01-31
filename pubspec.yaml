@@ -37,6 +37,8 @@ dependencies:
   get_it: ^7.6.7
   url_launcher: ^6.3.0
   http: ^1.2.2
+  shared_preferences: ^2.3.5
+  provider: ^6.1.2
 
 
 dev_dependencies:
