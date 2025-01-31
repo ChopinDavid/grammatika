@@ -26,6 +26,9 @@ class SentenceExerciseWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final givenAnswers = exercise.answers;
 
+    var nonTranslatableTextStyle = TextStyle(
+      color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
+    );
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -34,11 +37,9 @@ class SentenceExerciseWidget extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               children: [
-                const TextSpan(
+                TextSpan(
                   text: 'What is the correct form of the word ',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+                  style: nonTranslatableTextStyle,
                 ),
                 WidgetSpan(
                   child: InkWell(
@@ -53,11 +54,9 @@ class SentenceExerciseWidget extends StatelessWidget {
                     },
                   ),
                 ),
-                const TextSpan(
+                TextSpan(
                   text: ' in the sentence:',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+                  style: nonTranslatableTextStyle,
                 ),
               ],
             ),
@@ -71,21 +70,17 @@ class SentenceExerciseWidget extends StatelessWidget {
             key: const Key('sentence-rich-text'),
             text: TextSpan(
               children: [
-                const TextSpan(
+                TextSpan(
                   text: '«',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+                  style: nonTranslatableTextStyle,
                 ),
                 ...exerciseHelper.getSpansFromSentence(
                   sentenceExercise: exercise,
                   defaultTextStyle: DefaultTextStyle.of(context).style,
                 ),
-                const TextSpan(
+                TextSpan(
                   text: '»',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+                  style: nonTranslatableTextStyle,
                 ),
                 WidgetSpan(
                   child: SizedBox(
