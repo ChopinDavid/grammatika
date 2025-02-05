@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uchu/models/gender.dart';
+import 'package:uchu/services/shared_preferences_service.dart';
 
 class DbHelper {
   Future<Database> getDatabase() async {
@@ -27,5 +30,39 @@ class DbHelper {
     }
 
     return await openDatabase(path, readOnly: true);
+  }
+
+  String randomNounQueryString() {
+    final disabledExercises =
+        GetIt.instance.get<SharedPreferencesService>().getDisabledExercises();
+    final disabledGenderExercises = disabledExercises
+        .where(
+          (element) => Gender.values
+              .map(
+                (e) => e.name,
+              )
+              .contains(element),
+        )
+        .toList();
+    var sqlString = '''SELECT *
+FROM nouns
+  INNER JOIN words ON words.id = nouns.word_id
+WHERE gender IS NOT NULL
+  AND gender IS NOT ''
+  AND gender IS NOT 'both'
+  AND gender IS NOT 'pl\'''';
+
+    for (var disabledGenderExercise in disabledGenderExercises) {
+      sqlString += '''
+      AND gender IS NOT '$disabledGenderExercise'
+      ''';
+    }
+
+    sqlString += '''
+ORDER BY RANDOM()
+LIMIT 1;
+''';
+
+    return sqlString;
   }
 }

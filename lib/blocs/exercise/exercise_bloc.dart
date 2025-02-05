@@ -13,6 +13,7 @@ import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
+import 'package:uchu/services/shared_preferences_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
 
@@ -28,8 +29,21 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
     on<ExerciseEvent>((event, emit) async {
       if (event is ExerciseRetrieveExerciseEvent) {
         final random = mockRandom ?? Random();
+        var exerciseTypes = List.from(ExerciseType.values);
+        final disabledExercises = GetIt.instance
+            .get<SharedPreferencesService>()
+            .getDisabledExercises();
+        final enabledGenderExercises = Gender.values.where((element) =>
+            !disabledExercises.contains(element.name) &&
+            element != Gender.both &&
+            element != Gender.pl);
+        if (enabledGenderExercises.isEmpty) {
+          exerciseTypes.removeWhere(
+            (element) => element == ExerciseType.determineNounGender,
+          );
+        }
         final exerciseType =
-            ExerciseType.values[random.nextInt(ExerciseType.values.length)];
+            exerciseTypes[random.nextInt(exerciseTypes.length)];
         switch (exerciseType) {
           case ExerciseType.determineNounGender:
             add(ExerciseRetrieveRandomNounEvent());
@@ -42,10 +56,11 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
         emit(ExerciseRetrievingExerciseState());
 
         try {
-          final db = await GetIt.instance.get<DbHelper>().getDatabase();
+          final dbHelper = GetIt.instance.get<DbHelper>();
+          final db = await dbHelper.getDatabase();
 
           final Map<String, dynamic> nounQuery = (await db.rawQuery(
-            randomNounQueryString,
+            dbHelper.randomNounQueryString(),
           ))
               .single;
           final answers = Gender.values.map((gender) => gender.name);
