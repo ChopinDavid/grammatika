@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/models/word_form_type.dart';
 import 'package:uchu/services/shared_preferences_service.dart';
 
-class WordFormSection {
-  const WordFormSection(
-      {required this.title, this.subSections, this.wordFormTypes})
-      : assert(subSections == null || wordFormTypes == null,
-            'WordFormSection cannot have both subSections and wordForms');
-  final String title;
-  final List<WordFormSection>? subSections;
-  final List<(WordFormType, String)>? wordFormTypes;
-}
-
-class WordFormSectionsWidget extends StatefulWidget {
-  const WordFormSectionsWidget({
+class ExerciseSectionsWidget extends StatefulWidget {
+  const ExerciseSectionsWidget({
     super.key,
     required this.sections,
   });
-  final List<WordFormSection> sections;
+  final List<ExerciseSection> sections;
 
   @override
-  State<WordFormSectionsWidget> createState() => _WordFormSectionsWidgetState();
+  State<ExerciseSectionsWidget> createState() => _ExerciseSectionsWidgetState();
 }
 
-class _WordFormSectionsWidgetState extends State<WordFormSectionsWidget> {
+class ExerciseSection {
+  const ExerciseSection({required this.title, this.subSections, this.exercises})
+      : assert(subSections == null || exercises == null,
+            'ExerciseSection cannot have both subSections and wordForms');
+  final String title;
+  final List<ExerciseSection>? subSections;
+  final List<(String, String)>? exercises;
+}
+
+class _ExerciseSectionsWidgetState extends State<ExerciseSectionsWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -44,7 +42,7 @@ class _WordFormSectionsWidgetState extends State<WordFormSectionsWidget> {
 class _SectionWidget extends StatefulWidget {
   const _SectionWidget(
       {required this.section, this.depth = 0, required this.isLastSubsection});
-  final WordFormSection section;
+  final ExerciseSection section;
   final int depth;
   final bool isLastSubsection;
 
@@ -59,7 +57,7 @@ class _SectionWidgetState extends State<_SectionWidget> {
   @override
   Widget build(BuildContext context) {
     final subSections = widget.section.subSections;
-    final wordFormTypes = widget.section.wordFormTypes;
+    final wordFormTypes = widget.section.exercises;
     final expansionTile = ExpansionTile(
       trailing: const SizedBox.shrink(),
       onExpansionChanged: (value) => setState(() {}),
@@ -145,7 +143,7 @@ class _SectionWidgetState extends State<_SectionWidget> {
                                     child: Checkbox(
                                       value: GetIt.instance
                                           .get<SharedPreferencesService>()
-                                          .getWordFormTypeEnabled(e.$1),
+                                          .getExerciseEnabled(e.$1),
                                       onChanged: (_) {},
                                     ),
                                   ),
@@ -157,7 +155,7 @@ class _SectionWidgetState extends State<_SectionWidget> {
                             setState(() {
                               GetIt.instance
                                   .get<SharedPreferencesService>()
-                                  .toggleWordFormTypeEnabled(e.$1);
+                                  .toggleExerciseEnabled(e.$1);
                             });
                           },
                         ),
