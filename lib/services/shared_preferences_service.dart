@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uchu/models/word_form_type.dart';
 
 class SharedPreferencesService with ChangeNotifier {
   SharedPreferencesService({required SharedPreferences sharedPreferences})
@@ -19,13 +18,13 @@ class SharedPreferencesService with ChangeNotifier {
             ThemeMode.system.index];
   }
 
-  bool getWordFormTypeEnabled(WordFormType type) {
-    return _sharedPreferences.getBool(type.name) ?? true;
+  bool getExerciseEnabled(String exerciseIdentifier) {
+    return _sharedPreferences.getBool(exerciseIdentifier) ?? true;
   }
 
-  void toggleWordFormTypeEnabled(WordFormType type) {
-    final currentValue = getWordFormTypeEnabled(type);
-    _sharedPreferences.setBool(type.name, !currentValue);
+  void toggleExerciseEnabled(String exerciseIdentifier) {
+    final currentValue = getExerciseEnabled(exerciseIdentifier);
+    _sharedPreferences.setBool(exerciseIdentifier, !currentValue);
   }
 }
 
