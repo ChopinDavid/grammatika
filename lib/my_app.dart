@@ -27,7 +27,10 @@ class MyApp extends StatelessWidget {
               value: _exerciseBloc,
               child: const ExercisePage(),
             ),
-            theme: ThemeData.light(),
+            theme: ThemeData.light()
+              ..copyWith(
+                listTileTheme: const ListTileThemeData(minVerticalPadding: 0.0),
+              ),
             darkTheme: ThemeData.dark(),
             themeMode: themeMode,
           );
