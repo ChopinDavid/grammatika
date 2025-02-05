@@ -18,6 +18,12 @@ class SharedPreferencesService with ChangeNotifier {
             ThemeMode.system.index];
   }
 
+  List<String> getDisabledExercises() {
+    return _sharedPreferences
+            .getStringList(SharedPreferencesKeys.disabledExercises) ??
+        [];
+  }
+
   bool getExerciseEnabled(String exerciseIdentifier) {
     return _sharedPreferences
             .getStringList(SharedPreferencesKeys.disabledExercises)

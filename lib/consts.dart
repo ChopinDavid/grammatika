@@ -46,17 +46,6 @@ const neuterNounEndings = ['о', 'е'];
 
 const foreignNeuterNounEndings = ['и', 'у', 'ю'];
 
-const randomNounQueryString = '''SELECT *
-FROM nouns
-  INNER JOIN words ON words.id = nouns.word_id
-WHERE gender IS NOT NULL
-  AND gender IS NOT ''
-  AND gender IS NOT 'both'
-  AND gender IS NOT 'pl'
-ORDER BY RANDOM()
-LIMIT 1;
-''';
-
 const randomSentenceQueryString = '''SELECT words.*,
        words.id AS word_id,
        words.disabled AS word_disabled,
