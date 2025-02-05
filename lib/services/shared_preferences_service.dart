@@ -19,16 +19,30 @@ class SharedPreferencesService with ChangeNotifier {
   }
 
   bool getExerciseEnabled(String exerciseIdentifier) {
-    return _sharedPreferences.getBool(exerciseIdentifier) ?? true;
+    return _sharedPreferences
+            .getStringList(SharedPreferencesKeys.disabledExercises)
+            ?.contains(exerciseIdentifier) !=
+        true;
   }
 
   void toggleExerciseEnabled(String exerciseIdentifier) {
-    final currentValue = getExerciseEnabled(exerciseIdentifier);
-    _sharedPreferences.setBool(exerciseIdentifier, !currentValue);
+    var disabledExercises = _sharedPreferences
+        .getStringList(SharedPreferencesKeys.disabledExercises);
+    if (disabledExercises == null) {
+      disabledExercises = [exerciseIdentifier];
+    } else if (disabledExercises.contains(exerciseIdentifier)) {
+      disabledExercises.remove(exerciseIdentifier);
+    } else {
+      disabledExercises.add(exerciseIdentifier);
+    }
+
+    _sharedPreferences.setStringList(
+        SharedPreferencesKeys.disabledExercises, disabledExercises);
   }
 }
 
 @visibleForTesting
 class SharedPreferencesKeys {
   static const String themeMode = 'theme_mode';
+  static const String disabledExercises = 'disabled_exercises';
 }
