@@ -56,6 +56,7 @@ class _ExerciseSectionsWidgetState extends State<ExerciseSectionsWidget> {
       itemCount: widget.sections.length,
       itemBuilder: (context, index) {
         return _SectionWidget(
+          sectionHasCheckBoxBuilder: (depth) => true,
           section: widget.sections[index],
           isLastSubsection: index == widget.sections.length - 1,
         );
@@ -65,11 +66,16 @@ class _ExerciseSectionsWidgetState extends State<ExerciseSectionsWidget> {
 }
 
 class _SectionWidget extends StatefulWidget {
-  const _SectionWidget(
-      {required this.section, this.depth = 0, required this.isLastSubsection});
+  const _SectionWidget({
+    required this.section,
+    this.depth = 0,
+    required this.isLastSubsection,
+    this.sectionHasCheckBoxBuilder,
+  });
   final ExerciseSection section;
   final int depth;
   final bool isLastSubsection;
+  final bool Function(int)? sectionHasCheckBoxBuilder;
 
   @override
   State<_SectionWidget> createState() => _SectionWidgetState();
@@ -83,21 +89,17 @@ class _SectionWidgetState extends State<_SectionWidget> {
   @override
   void initState() {
     super.initState();
-    if (widget.depth == 0) {
-      GetIt.instance
-          .get<EnabledExercisesService>()
-          .addListener(_enabledExerciseServiceListener);
-    }
+    GetIt.instance
+        .get<EnabledExercisesService>()
+        .addListener(_enabledExerciseServiceListener);
   }
 
   @override
   void dispose() {
     super.dispose();
-    if (widget.depth == 0) {
-      GetIt.instance
-          .get<EnabledExercisesService>()
-          .removeListener(_enabledExerciseServiceListener);
-    }
+    GetIt.instance
+        .get<EnabledExercisesService>()
+        .removeListener(_enabledExerciseServiceListener);
   }
 
   void _enabledExerciseServiceListener() {
@@ -110,30 +112,35 @@ class _SectionWidgetState extends State<_SectionWidget> {
   Widget build(BuildContext context) {
     final subSections = widget.section.subSections;
     final exercises = widget.section.exercises;
+    final sectionHasCheckBoxBuilder = widget.sectionHasCheckBoxBuilder;
     final expansionTile = ExpansionTile(
-      trailing: widget.depth == 0
-          ? Checkbox(
-              value: subSectionsEnabled,
-              tristate: true,
-              onChanged: (value) {
-                final enabledExercisesService =
-                    GetIt.instance.get<EnabledExercisesService>();
-                final exerciseIds = widget.section
-                    .flattenExercises()
-                    .map(
-                      (e) => e.$1,
-                    )
-                    .toList();
-                setState(() {
-                  final newValue = value ?? false;
-                  subSectionsEnabled = newValue;
-                  newValue
-                      ? enabledExercisesService
-                          .removeDisabledExercises(exerciseIds)
-                      : enabledExercisesService
-                          .addDisabledExercises(exerciseIds);
-                });
-              })
+      trailing: sectionHasCheckBoxBuilder != null &&
+              sectionHasCheckBoxBuilder.call(widget.depth)
+          ? Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Checkbox(
+                  value: subSectionsEnabled,
+                  tristate: true,
+                  onChanged: (value) {
+                    final enabledExercisesService =
+                        GetIt.instance.get<EnabledExercisesService>();
+                    final exerciseIds = widget.section
+                        .flattenExercises()
+                        .map(
+                          (e) => e.$1,
+                        )
+                        .toList();
+                    setState(() {
+                      final newValue = value ?? false;
+                      subSectionsEnabled = newValue;
+                      newValue
+                          ? enabledExercisesService
+                              .removeDisabledExercises(exerciseIds)
+                          : enabledExercisesService
+                              .addDisabledExercises(exerciseIds);
+                    });
+                  }),
+            )
           : const SizedBox.shrink(),
       onExpansionChanged: (value) => setState(() {}),
       controller: controller,
@@ -177,6 +184,7 @@ class _SectionWidgetState extends State<_SectionWidget> {
       children: (subSections != null)
           ? subSections
               .map((e) => _SectionWidget(
+                    sectionHasCheckBoxBuilder: (depth) => true,
                     section: e,
                     depth: widget.depth + 1,
                     isLastSubsection:
