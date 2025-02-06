@@ -3,7 +3,8 @@ import 'package:get_it/get_it.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/word_form_type.dart';
 import 'package:uchu/screens/settings/appearance_setting_widget.dart';
-import 'package:uchu/screens/settings/exercise_sections_widget.dart';
+import 'package:uchu/screens/settings/enabled_exercises/exercise_section.dart';
+import 'package:uchu/screens/settings/enabled_exercises/exercise_sections_widget.dart';
 import 'package:uchu/services/theme_service.dart';
 
 class SettingsPage extends StatefulWidget {
