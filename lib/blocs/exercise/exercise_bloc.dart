@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/consts.dart';
 import 'package:uchu/extensions/gender_extension.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
@@ -37,9 +36,26 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
             !disabledExercises.contains(element.name) &&
             element != Gender.both &&
             element != Gender.pl);
+        final enabledWordFormExercises = WordFormType.values.where(
+          (element) {
+            return !disabledExercises.contains(element.name) &&
+                element != WordFormType.ruBase &&
+                element != WordFormType.ruAdjComparative &&
+                element != WordFormType.ruAdjSuperlative &&
+                element != WordFormType.ruAdjShortM &&
+                element != WordFormType.ruAdjShortF &&
+                element != WordFormType.ruAdjShortN &&
+                element != WordFormType.ruAdjShortPl;
+          },
+        );
         if (enabledGenderExercises.isEmpty) {
           exerciseTypes.removeWhere(
             (element) => element == ExerciseType.determineNounGender,
+          );
+        }
+        if (enabledWordFormExercises.isEmpty) {
+          exerciseTypes.removeWhere(
+            (element) => element == ExerciseType.determineWordForm,
           );
         }
         final exerciseType =
@@ -92,10 +108,11 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       if (event is ExerciseRetrieveRandomSentenceEvent) {
         emit(ExerciseRetrievingExerciseState());
         try {
-          final db = await GetIt.instance.get<DbHelper>().getDatabase();
+          final dbHelper = GetIt.instance.get<DbHelper>();
+          final db = await dbHelper.getDatabase();
 
           final Map<String, dynamic> sentenceQuery = (await db.rawQuery(
-            randomSentenceQueryString,
+            dbHelper.randomSentenceQueryString(),
           ))
               .single;
 
