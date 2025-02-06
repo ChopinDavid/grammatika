@@ -4,12 +4,12 @@ import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:uchu/screens/settings/appearance_setting_widget.dart';
 import 'package:uchu/screens/settings/settings_page.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/theme_service.dart';
 
 import '../../mocks.dart';
 
 main() {
-  late SharedPreferencesService mockSharedPreferencesService;
+  late ThemeService mockSharedPreferencesService;
 
   setUp(() async {
     await GetIt.instance.reset();
@@ -17,7 +17,7 @@ main() {
     mockSharedPreferencesService = MockSharedPreferencesService();
     when(() => mockSharedPreferencesService.getThemeMode())
         .thenReturn(ThemeMode.system);
-    GetIt.instance.registerSingleton<SharedPreferencesService>(
+    GetIt.instance.registerSingleton<ThemeService>(
       mockSharedPreferencesService,
     );
   });

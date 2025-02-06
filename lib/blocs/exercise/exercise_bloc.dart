@@ -12,7 +12,7 @@ import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
 
@@ -30,7 +30,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
         final random = mockRandom ?? Random();
         var exerciseTypes = List.from(ExerciseType.values);
         final disabledExercises = GetIt.instance
-            .get<SharedPreferencesService>()
+            .get<EnabledExercisesService>()
             .getDisabledExercises();
         final enabledGenderExercises = Gender.values.where((element) =>
             !disabledExercises.contains(element.name) &&

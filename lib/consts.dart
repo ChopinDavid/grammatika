@@ -45,3 +45,6 @@ const feminineNounEndings = ['а', 'я'];
 const neuterNounEndings = ['о', 'е'];
 
 const foreignNeuterNounEndings = ['и', 'у', 'ю'];
+
+const String themeModeSharedPreferencesKey = 'theme_mode';
+const String disabledExercisesSharedPreferencesKey = 'disabled_exercises';

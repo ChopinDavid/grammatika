@@ -4,7 +4,7 @@ import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/word_form_type.dart';
 import 'package:uchu/screens/settings/appearance_setting_widget.dart';
 import 'package:uchu/screens/settings/exercise_sections_widget.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/theme_service.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -48,8 +48,7 @@ class _AppearanceSettingsWidget extends StatefulWidget {
 class _AppearanceSettingsWidgetState extends State<_AppearanceSettingsWidget> {
   @override
   Widget build(BuildContext context) {
-    var sharedPreferencesService =
-        GetIt.instance.get<SharedPreferencesService>();
+    var sharedPreferencesService = GetIt.instance.get<ThemeService>();
     var themeMode = sharedPreferencesService.getThemeMode();
     return Padding(
       padding: const EdgeInsets.only(right: 24.0),

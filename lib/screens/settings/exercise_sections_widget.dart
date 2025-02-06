@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/enabled_exercises_service.dart';
 
 class ExerciseSectionsWidget extends StatefulWidget {
   const ExerciseSectionsWidget({
@@ -16,10 +16,35 @@ class ExerciseSectionsWidget extends StatefulWidget {
 class ExerciseSection {
   const ExerciseSection({required this.title, this.subSections, this.exercises})
       : assert(subSections == null || exercises == null,
-            'ExerciseSection cannot have both subSections and wordForms');
+            'ExerciseSection cannot have both subSections and exercises');
   final String title;
   final List<ExerciseSection>? subSections;
   final List<(String, String)>? exercises;
+
+  List<(String, String)> flattenExercises() {
+    final exercises = this.exercises;
+    final subSections = this.subSections;
+    return [
+      if (exercises != null) ...exercises,
+      if (subSections != null)
+        ...subSections.expand((subSection) => subSection.flattenExercises())
+    ];
+  }
+
+  bool? subSectionsEnabled() {
+    final flattenedExercises = flattenExercises();
+    final flattenedExerciseIds = flattenedExercises.map((e) => e.$1).toList();
+    final disabledSubSections =
+        GetIt.instance.get<EnabledExercisesService>().getDisabledExercises();
+    final disabledExerciseIds = disabledSubSections
+        .where((element) => flattenedExerciseIds.contains(element))
+        .toList();
+    return disabledExerciseIds.isEmpty
+        ? true
+        : disabledExerciseIds.length == flattenedExerciseIds.length
+            ? false
+            : null;
+  }
 }
 
 class _ExerciseSectionsWidgetState extends State<ExerciseSectionsWidget> {
@@ -53,13 +78,63 @@ class _SectionWidget extends StatefulWidget {
 class _SectionWidgetState extends State<_SectionWidget> {
   final ExpansionTileController controller = ExpansionTileController();
   bool isFirstBuild = true;
+  late bool? subSectionsEnabled = widget.section.subSectionsEnabled();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.depth == 0) {
+      GetIt.instance
+          .get<EnabledExercisesService>()
+          .addListener(_enabledExerciseServiceListener);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (widget.depth == 0) {
+      GetIt.instance
+          .get<EnabledExercisesService>()
+          .removeListener(_enabledExerciseServiceListener);
+    }
+  }
+
+  void _enabledExerciseServiceListener() {
+    setState(() {
+      subSectionsEnabled = widget.section.subSectionsEnabled();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final subSections = widget.section.subSections;
-    final wordFormTypes = widget.section.exercises;
+    final exercises = widget.section.exercises;
     final expansionTile = ExpansionTile(
-      trailing: const SizedBox.shrink(),
+      trailing: widget.depth == 0
+          ? Checkbox(
+              value: subSectionsEnabled,
+              tristate: true,
+              onChanged: (value) {
+                final enabledExercisesService =
+                    GetIt.instance.get<EnabledExercisesService>();
+                final exerciseIds = widget.section
+                    .flattenExercises()
+                    .map(
+                      (e) => e.$1,
+                    )
+                    .toList();
+                setState(() {
+                  final newValue = value ?? false;
+                  subSectionsEnabled = newValue;
+                  newValue
+                      ? enabledExercisesService
+                          .removeDisabledExercises(exerciseIds)
+                      : enabledExercisesService
+                          .addDisabledExercises(exerciseIds);
+                });
+              })
+          : const SizedBox.shrink(),
       onExpansionChanged: (value) => setState(() {}),
       controller: controller,
       collapsedShape: LinearBorder.none,
@@ -108,61 +183,13 @@ class _SectionWidgetState extends State<_SectionWidget> {
                         subSections.indexOf(e) == subSections.length - 1,
                   ))
               .toList()
-          : wordFormTypes!.map(
-              (e) {
-                return SizedBox(
-                  height: 36.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ...List.generate(
-                        widget.depth + 1,
-                        (index) => Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: index == widget.depth
-                              ? wordFormTypes.indexOf(e) ==
-                                      wordFormTypes.length - 1
-                                  ? const _UpAndRightBoxDrawingWidget()
-                                  : const _VerticalAndRightBoxDrawingWidget()
-                              : const _VerticalBoxDrawingWidget(),
-                        ),
-                      ),
-                      const SizedBox(width: 4.0),
-                      Expanded(
-                        child: InkWell(
-                          child: Row(
-                            children: [
-                              Text(e.$2),
-                              const Spacer(),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 24.0),
-                                child: IgnorePointer(
-                                  child: SizedBox.square(
-                                    dimension: Checkbox.width,
-                                    child: Checkbox(
-                                      value: GetIt.instance
-                                          .get<SharedPreferencesService>()
-                                          .getExerciseEnabled(e.$1),
-                                      onChanged: (_) {},
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          onTap: () {
-                            setState(() {
-                              GetIt.instance
-                                  .get<SharedPreferencesService>()
-                                  .toggleExerciseEnabled(e.$1);
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                );
+          : exercises!.map(
+              (exercise) {
+                return ExerciseCell(
+                    exercise: exercise,
+                    depth: widget.depth + 1,
+                    isLastExerciseInList:
+                        exercises.indexOf(exercise) == exercises.length - 1);
               },
             ).toList(),
     );
@@ -241,6 +268,112 @@ class _UpAndRightBoxDrawingWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ExerciseCell extends StatefulWidget {
+  const ExerciseCell({
+    super.key,
+    required this.exercise,
+    required this.depth,
+    required this.isLastExerciseInList,
+  });
+  final (String, String) exercise;
+  final int depth;
+  final bool isLastExerciseInList;
+
+  @override
+  State<ExerciseCell> createState() => _ExerciseCellState();
+}
+
+class _ExerciseCellState extends State<ExerciseCell> {
+  late bool isEnabled = GetIt.instance
+      .get<EnabledExercisesService>()
+      .getExerciseEnabled(widget.exercise.$1);
+  @override
+  void initState() {
+    super.initState();
+    GetIt.instance
+        .get<EnabledExercisesService>()
+        .addListener(_enabledExerciseServiceListener);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    GetIt.instance
+        .get<EnabledExercisesService>()
+        .removeListener(_enabledExerciseServiceListener);
+  }
+
+  void _enabledExerciseServiceListener() {
+    setState(() {
+      isEnabled = GetIt.instance
+          .get<EnabledExercisesService>()
+          .getExerciseEnabled(widget.exercise.$1);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 36.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ...List.generate(
+            widget.depth,
+            (index) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: index == widget.depth - 1
+                    ? widget.isLastExerciseInList
+                        ? const _UpAndRightBoxDrawingWidget()
+                        : const _VerticalAndRightBoxDrawingWidget()
+                    : const _VerticalBoxDrawingWidget(),
+              );
+            },
+          ),
+          const SizedBox(width: 4.0),
+          Expanded(
+            child: InkWell(
+              child: Row(
+                children: [
+                  Text(widget.exercise.$2),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 24.0),
+                    child: IgnorePointer(
+                      child: SizedBox.square(
+                        dimension: Checkbox.width,
+                        child: Checkbox(
+                          value: isEnabled,
+                          onChanged: (_) {
+                            setState(() {
+                              GetIt.instance
+                                  .get<EnabledExercisesService>()
+                                  .toggleExerciseEnabled(widget.exercise.$1);
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              onTap: () {
+                setState(() {
+                  GetIt.instance
+                      .get<EnabledExercisesService>()
+                      .toggleExerciseEnabled(widget.exercise.$1);
+                });
+              },
+            ),
+          )
+        ],
+      ),
     );
   }
 }
