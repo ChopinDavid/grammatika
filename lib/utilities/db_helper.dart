@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/word_form_type.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/enabled_exercises_service.dart';
 
 class DbHelper {
   Future<Database> getDatabase() async {
@@ -35,7 +35,7 @@ class DbHelper {
 
   String randomNounQueryString() {
     final disabledExercises =
-        GetIt.instance.get<SharedPreferencesService>().getDisabledExercises();
+        GetIt.instance.get<EnabledExercisesService>().getDisabledExercises();
     final disabledGenderExercises = disabledExercises
         .where(
           (element) => Gender.values
@@ -68,7 +68,7 @@ LIMIT 1;
 
   String randomSentenceQueryString() {
     final disabledExercises =
-        GetIt.instance.get<SharedPreferencesService>().getDisabledExercises();
+        GetIt.instance.get<EnabledExercisesService>().getDisabledExercises();
     final disabledWordFormExercises = disabledExercises
         .where(
           (element) => WordFormType.values

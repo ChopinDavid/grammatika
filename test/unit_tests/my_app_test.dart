@@ -6,14 +6,14 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uchu/blocs/exercise/exercise_bloc.dart';
 import 'package:uchu/my_app.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/theme_service.dart';
 
 import 'mocks.dart';
 
 main() {
   late ExerciseBloc mockExerciseBloc;
   late SharedPreferences mockSharedPreferences;
-  late SharedPreferencesService sharedPreferencesService;
+  late ThemeService sharedPreferencesService;
 
   setUp(() async {
     await GetIt.instance.reset();
@@ -30,9 +30,8 @@ main() {
         .thenAnswer((_) async => true);
 
     sharedPreferencesService =
-        SharedPreferencesService(sharedPreferences: mockSharedPreferences);
-    GetIt.instance
-        .registerSingleton<SharedPreferencesService>(sharedPreferencesService);
+        ThemeService(sharedPreferences: mockSharedPreferences);
+    GetIt.instance.registerSingleton<ThemeService>(sharedPreferencesService);
   });
 
   testWidgets(
