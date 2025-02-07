@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uchu/consts.dart';
 import 'package:uchu/services/theme_service.dart';
 
 import '../mocks.dart';
@@ -26,7 +27,7 @@ main() {
           () {
         testObject.updateThemeMode(themeMode);
         verify(() => mockSharedPreferences.setInt(
-            SharedPreferencesKeys.themeMode, themeMode.index));
+            themeModeSharedPreferencesKey, themeMode.index));
       });
     }
 
