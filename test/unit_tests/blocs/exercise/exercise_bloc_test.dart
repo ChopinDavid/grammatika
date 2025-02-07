@@ -11,6 +11,7 @@ import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
+import 'package:uchu/models/word_form_type.dart';
 import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
@@ -79,8 +80,60 @@ main() {
         when(() => mockRandom.nextInt(any())).thenReturn(0);
       });
       blocTest(
-        'emits ExerciseRetrievingExerciseState, ExerciseExerciseRetrievedState with Exercise<Gender, Noun> when db query succeeds',
+        'emits ExerciseRetrievingExerciseState, ExerciseExerciseRetrievedState with Exercise<Gender, Noun> when no exercises are disabled and db query succeeds',
         build: () => testObject,
+        act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
+        expect: () => [
+          ExerciseRetrievingExerciseState(),
+          ExerciseExerciseRetrievedState(),
+        ],
+        tearDown: () {
+          expect(
+              testObject.exercise,
+              Exercise<Gender, Noun>(
+                question: noun,
+                answers: null,
+              ));
+        },
+      );
+
+      blocTest(
+        'emits ExerciseRetrievingExerciseState, ExerciseExerciseRetrievedState with Exercise<WordForm, Sentence> when all gender exercises are disabled and db query succeeds',
+        build: () => testObject,
+        setUp: () {
+          when(() => mockEnabledExercisesService.getDisabledExercises())
+              .thenReturn(Gender.values
+                  .map(
+                    (e) => e.name,
+                  )
+                  .toList());
+        },
+        act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
+        expect: () => [
+          ExerciseRetrievingExerciseState(),
+          ExerciseExerciseRetrievedState(),
+        ],
+        tearDown: () {
+          expect(
+              testObject.exercise,
+              Exercise<WordForm, Sentence>(
+                question: sentence,
+                answers: null,
+              ));
+        },
+      );
+
+      blocTest(
+        'emits ExerciseRetrievingExerciseState, ExerciseExerciseRetrievedState with Exercise<Gender, Noun> when all word form type exercises are disabled and db query succeeds',
+        build: () => testObject,
+        setUp: () {
+          when(() => mockEnabledExercisesService.getDisabledExercises())
+              .thenReturn(WordFormType.values
+                  .map(
+                    (e) => e.name,
+                  )
+                  .toList());
+        },
         act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
         expect: () => [
           ExerciseRetrievingExerciseState(),
