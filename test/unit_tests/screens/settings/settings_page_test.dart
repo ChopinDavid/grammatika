@@ -4,30 +4,34 @@ import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:uchu/screens/settings/appearance_setting_widget.dart';
 import 'package:uchu/screens/settings/settings_page.dart';
+import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/services/theme_service.dart';
 
 import '../../mocks.dart';
 
 main() {
-  late ThemeService mockSharedPreferencesService;
+  late ThemeService mockThemeService;
+  late EnabledExercisesService mockEnabledExercisesService;
 
   setUp(() async {
     await GetIt.instance.reset();
 
-    mockSharedPreferencesService = MockSharedPreferencesService();
-    when(() => mockSharedPreferencesService.getThemeMode())
-        .thenReturn(ThemeMode.system);
+    mockThemeService = MockThemeService();
+    mockEnabledExercisesService = MockEnabledExercisesService();
+
+    when(() => mockThemeService.getThemeMode()).thenReturn(ThemeMode.system);
     GetIt.instance.registerSingleton<ThemeService>(
-      mockSharedPreferencesService,
+      mockThemeService,
     );
+    GetIt.instance.registerSingleton<EnabledExercisesService>(
+        mockEnabledExercisesService);
   });
   group('appearance section', () {
     group('"Light mode" AppearanceSettingWidget', () {
       testWidgets(
-          'isSelected when SharedPreferencesService.getThemeMode returns ThemeMode.light',
+          'isSelected when ThemeService.getThemeMode returns ThemeMode.light',
           (tester) async {
-        when(() => mockSharedPreferencesService.getThemeMode())
-            .thenReturn(ThemeMode.light);
+        when(() => mockThemeService.getThemeMode()).thenReturn(ThemeMode.light);
         await tester.pumpWidget(
           const MaterialApp(
             home: SettingsPage(),
@@ -43,9 +47,9 @@ main() {
       });
 
       testWidgets(
-          'isSelected when SharedPreferencesService.getThemeMode returns ThemeMode.system and platformBrightness is Brightness.light',
+          'isSelected when ThemeService.getThemeMode returns ThemeMode.system and platformBrightness is Brightness.light',
           (tester) async {
-        when(() => mockSharedPreferencesService.getThemeMode())
+        when(() => mockThemeService.getThemeMode())
             .thenReturn(ThemeMode.system);
         const mediaQueryData = MediaQueryData(
           platformBrightness: Brightness.light,
@@ -68,10 +72,9 @@ main() {
       });
 
       testWidgets(
-          'is not selected when SharedPreferencesService.getThemeMode returns ThemeMode.dark',
+          'is not selected when ThemeService.getThemeMode returns ThemeMode.dark',
           (tester) async {
-        when(() => mockSharedPreferencesService.getThemeMode())
-            .thenReturn(ThemeMode.dark);
+        when(() => mockThemeService.getThemeMode()).thenReturn(ThemeMode.dark);
         await tester.pumpWidget(
           const MaterialApp(
             home: SettingsPage(),
@@ -87,9 +90,9 @@ main() {
       });
 
       testWidgets(
-          'is not selected when SharedPreferencesService.getThemeMode returns ThemeMode.system and platformBrightness is Brightness.dark',
+          'is not selected when ThemeService.getThemeMode returns ThemeMode.system and platformBrightness is Brightness.dark',
           (tester) async {
-        when(() => mockSharedPreferencesService.getThemeMode())
+        when(() => mockThemeService.getThemeMode())
             .thenReturn(ThemeMode.system);
         const mediaQueryData = MediaQueryData(
           platformBrightness: Brightness.dark,
@@ -112,7 +115,7 @@ main() {
       });
 
       testWidgets(
-          'invokes SharedPreferencesService.updateThemeMode with ThemeMode.light when tapped',
+          'invokes ThemeService.updateThemeMode with ThemeMode.light when tapped',
           (tester) async {
         await tester.pumpWidget(
           const MaterialApp(
@@ -124,18 +127,16 @@ main() {
         await tester
             .tap(find.byKey(const Key('light_mode_appearance_setting_widget')));
 
-        verify(() =>
-                mockSharedPreferencesService.updateThemeMode(ThemeMode.light))
+        verify(() => mockThemeService.updateThemeMode(ThemeMode.light))
             .called(1);
       });
     });
 
     group('"Dark mode" AppearanceSettingWidget', () {
       testWidgets(
-          'isSelected when SharedPreferencesService.getThemeMode returns ThemeMode.dark',
+          'isSelected when ThemeService.getThemeMode returns ThemeMode.dark',
           (tester) async {
-        when(() => mockSharedPreferencesService.getThemeMode())
-            .thenReturn(ThemeMode.dark);
+        when(() => mockThemeService.getThemeMode()).thenReturn(ThemeMode.dark);
         await tester.pumpWidget(
           const MaterialApp(
             home: SettingsPage(),
@@ -151,9 +152,9 @@ main() {
       });
 
       testWidgets(
-          'isSelected when SharedPreferencesService.getThemeMode returns ThemeMode.system and platformBrightness is Brightness.dark',
+          'isSelected when ThemeService.getThemeMode returns ThemeMode.system and platformBrightness is Brightness.dark',
           (tester) async {
-        when(() => mockSharedPreferencesService.getThemeMode())
+        when(() => mockThemeService.getThemeMode())
             .thenReturn(ThemeMode.system);
         const mediaQueryData = MediaQueryData(
           platformBrightness: Brightness.dark,
@@ -176,10 +177,9 @@ main() {
       });
 
       testWidgets(
-          'is not selected when SharedPreferencesService.getThemeMode returns ThemeMode.light',
+          'is not selected when ThemeService.getThemeMode returns ThemeMode.light',
           (tester) async {
-        when(() => mockSharedPreferencesService.getThemeMode())
-            .thenReturn(ThemeMode.light);
+        when(() => mockThemeService.getThemeMode()).thenReturn(ThemeMode.light);
         await tester.pumpWidget(
           const MaterialApp(
             home: SettingsPage(),
@@ -195,9 +195,9 @@ main() {
       });
 
       testWidgets(
-          'is not selected when SharedPreferencesService.getThemeMode returns ThemeMode.system and platformBrightness is Brightness.light',
+          'is not selected when ThemeService.getThemeMode returns ThemeMode.system and platformBrightness is Brightness.light',
           (tester) async {
-        when(() => mockSharedPreferencesService.getThemeMode())
+        when(() => mockThemeService.getThemeMode())
             .thenReturn(ThemeMode.system);
         const mediaQueryData = MediaQueryData(
           platformBrightness: Brightness.light,
@@ -220,7 +220,7 @@ main() {
       });
 
       testWidgets(
-          'invokes SharedPreferencesService.updateThemeMode with ThemeMode.dark when tapped',
+          'invokes ThemeService.updateThemeMode with ThemeMode.dark when tapped',
           (tester) async {
         await tester.pumpWidget(
           const MaterialApp(
@@ -232,8 +232,7 @@ main() {
         await tester
             .tap(find.byKey(const Key('dark_mode_appearance_setting_widget')));
 
-        verify(() =>
-                mockSharedPreferencesService.updateThemeMode(ThemeMode.dark))
+        verify(() => mockThemeService.updateThemeMode(ThemeMode.dark))
             .called(1);
       });
     });
