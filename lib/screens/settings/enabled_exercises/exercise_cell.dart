@@ -83,13 +83,7 @@ class _ExerciseCellState extends State<ExerciseCell> {
                         dimension: Checkbox.width,
                         child: Checkbox(
                           value: isEnabled,
-                          onChanged: (_) {
-                            setState(() {
-                              GetIt.instance
-                                  .get<EnabledExercisesService>()
-                                  .toggleExerciseEnabled(widget.exercise.$1);
-                            });
-                          },
+                          onChanged: (bool? value) {},
                         ),
                       ),
                     ),
@@ -97,11 +91,9 @@ class _ExerciseCellState extends State<ExerciseCell> {
                 ],
               ),
               onTap: () {
-                setState(() {
-                  GetIt.instance
-                      .get<EnabledExercisesService>()
-                      .toggleExerciseEnabled(widget.exercise.$1);
-                });
+                GetIt.instance
+                    .get<EnabledExercisesService>()
+                    .toggleExerciseEnabled(widget.exercise.$1);
               },
             ),
           )

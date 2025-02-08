@@ -79,5 +79,6 @@ class MockEnabledExercisesService extends Mock
     implements EnabledExercisesService {
   MockEnabledExercisesService() {
     when(() => getDisabledExercises()).thenReturn([]);
+    when(() => getExerciseEnabled(any())).thenReturn(true);
   }
 }
