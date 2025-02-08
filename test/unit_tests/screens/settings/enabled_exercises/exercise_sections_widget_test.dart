@@ -76,7 +76,7 @@ main() {
           widgetTester.widgetList<SectionWidget>(sectionWidgetFinder).toList();
 
       for (var i = 0; i < 5; i++) {
-        expect(sectionWidgets[i].isLastSubsection, i == sections.length - 1);
+        expect(sectionWidgets[i].isLastSubSection, i == sections.length - 1);
       }
     },
   );

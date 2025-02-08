@@ -24,7 +24,7 @@ class _ExerciseSectionsWidgetState extends State<ExerciseSectionsWidget> {
         return SectionWidget(
           sectionHasCheckBoxBuilder: (depth) => true,
           section: widget.sections[index],
-          isLastSubsection: index == widget.sections.length - 1,
+          isLastSubSection: index == widget.sections.length - 1,
         );
       },
     );
