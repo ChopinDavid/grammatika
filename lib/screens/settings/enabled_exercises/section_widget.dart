@@ -11,12 +11,12 @@ class SectionWidget extends StatefulWidget {
   const SectionWidget({
     required this.section,
     this.depth = 0,
-    required this.isLastSubsection,
+    required this.isLastSubSection,
     this.sectionHasCheckBoxBuilder,
   });
   final ExerciseSection section;
   final int depth;
-  final bool isLastSubsection;
+  final bool isLastSubSection;
   final bool Function(int)? sectionHasCheckBoxBuilder;
 
   @override
@@ -102,7 +102,7 @@ class _SectionWidgetState extends State<SectionWidget> {
               (index) => Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: index == widget.depth - 1
-                    ? widget.isLastSubsection &&
+                    ? widget.isLastSubSection &&
                             (isFirstBuild || !controller.isExpanded)
                         ? const UpAndRightBoxDrawingCharacterWidget()
                         : const VerticalAndRightBoxDrawingCharacterWidget()
@@ -129,7 +129,7 @@ class _SectionWidgetState extends State<SectionWidget> {
                     sectionHasCheckBoxBuilder: (depth) => true,
                     section: e,
                     depth: widget.depth + 1,
-                    isLastSubsection:
+                    isLastSubSection:
                         subSections.indexOf(e) == subSections.length - 1,
                   ))
               .toList()
