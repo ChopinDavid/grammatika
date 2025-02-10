@@ -10,6 +10,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uchu/blocs/exercise/exercise_bloc.dart';
 import 'package:uchu/blocs/translation/translation_bloc.dart';
 import 'package:uchu/models/noun.dart';
+import 'package:uchu/screens/settings/enabled_exercises/exercise_section.dart';
 import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/services/navigation_service.dart';
 import 'package:uchu/services/theme_service.dart';
@@ -82,3 +83,5 @@ class MockEnabledExercisesService extends Mock
     when(() => getExerciseEnabled(any())).thenReturn(true);
   }
 }
+
+class MockExerciseSection extends Mock implements ExerciseSection {}

@@ -9,6 +9,7 @@ import 'package:uchu/services/enabled_exercises_service.dart';
 
 class SectionWidget extends StatefulWidget {
   const SectionWidget({
+    super.key,
     required this.section,
     this.depth = 0,
     required this.isLastSubSection,
@@ -84,7 +85,7 @@ class _SectionWidgetState extends State<SectionWidget> {
                   }),
             )
           : const SizedBox.shrink(),
-      onExpansionChanged: (value) => setState(() {}),
+      onExpansionChanged: (_) => setState(() {}),
       controller: controller,
       collapsedShape: LinearBorder.none,
       shape: LinearBorder.none,
