@@ -239,4 +239,22 @@ main() {
 
     group('"Automatic" Switch', () {});
   });
+
+  group('Enabled Exercises section', () {
+    testWidgets(
+      'displays "Enabled Exercises", "Inflection", and "Identifying Gender"',
+      (widgetTester) async {
+        await widgetTester.pumpWidget(
+          const MaterialApp(
+            home: SettingsPage(),
+          ),
+        );
+        await widgetTester.pumpAndSettle();
+
+        expect(find.text('Enabled Exercises'), findsOneWidget);
+        expect(find.text('Inflection'), findsOneWidget);
+        expect(find.text('Identifying Gender'), findsOneWidget);
+      },
+    );
+  });
 }
