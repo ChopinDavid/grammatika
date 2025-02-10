@@ -29,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               _AppearanceSettingsWidget(),
               SizedBox(height: 24.0),
-              _EnabledWordFormsWidget(),
+              _EnabledExercisesWidget(),
             ],
           ),
         ),
@@ -120,15 +120,15 @@ class _AppearanceSettingsWidgetState extends State<_AppearanceSettingsWidget> {
   }
 }
 
-class _EnabledWordFormsWidget extends StatefulWidget {
-  const _EnabledWordFormsWidget({super.key});
+class _EnabledExercisesWidget extends StatefulWidget {
+  const _EnabledExercisesWidget({super.key});
 
   @override
-  State<_EnabledWordFormsWidget> createState() =>
-      _EnabledWordFormsWidgetState();
+  State<_EnabledExercisesWidget> createState() =>
+      _EnabledExercisesWidgetState();
 }
 
-class _EnabledWordFormsWidgetState extends State<_EnabledWordFormsWidget> {
+class _EnabledExercisesWidgetState extends State<_EnabledExercisesWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -142,7 +142,7 @@ class _EnabledWordFormsWidgetState extends State<_EnabledWordFormsWidget> {
         ExerciseSectionsWidget(
           sections: [
             ExerciseSection(
-              title: 'Declension and Conjugation',
+              title: 'Inflection',
               subSections: [
                 ExerciseSection(
                   title: 'Nouns',
