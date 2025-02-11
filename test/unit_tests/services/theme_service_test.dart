@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/consts.dart';
+import 'package:uchu/services/theme_service.dart';
 
 import '../mocks.dart';
 
 main() {
   late SharedPreferences mockSharedPreferences;
-  late SharedPreferencesService testObject;
+  late ThemeService testObject;
 
   setUp(() {
     mockSharedPreferences = MockSharedPreferences();
-    testObject =
-        SharedPreferencesService(sharedPreferences: mockSharedPreferences);
+    testObject = ThemeService(sharedPreferences: mockSharedPreferences);
 
     when(() => mockSharedPreferences.setInt(any(), any()))
         .thenAnswer((_) async => true);
@@ -27,7 +27,7 @@ main() {
           () {
         testObject.updateThemeMode(themeMode);
         verify(() => mockSharedPreferences.setInt(
-            SharedPreferencesKeys.themeMode, themeMode.index));
+            themeModeSharedPreferencesKey, themeMode.index));
       });
     }
 
