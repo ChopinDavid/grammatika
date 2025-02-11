@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/consts.dart';
 import 'package:uchu/extensions/gender_extension.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
@@ -13,6 +12,7 @@ import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
+import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
 
@@ -28,8 +28,38 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
     on<ExerciseEvent>((event, emit) async {
       if (event is ExerciseRetrieveExerciseEvent) {
         final random = mockRandom ?? Random();
+        var exerciseTypes = List.from(ExerciseType.values);
+        final disabledExercises = GetIt.instance
+            .get<EnabledExercisesService>()
+            .getDisabledExercises();
+        final enabledGenderExercises = Gender.values.where((element) =>
+            !disabledExercises.contains(element.name) &&
+            element != Gender.both &&
+            element != Gender.pl);
+        final enabledWordFormExercises = WordFormType.values.where(
+          (element) {
+            return !disabledExercises.contains(element.name) &&
+                element != WordFormType.ruBase &&
+                element != WordFormType.ruAdjComparative &&
+                element != WordFormType.ruAdjSuperlative &&
+                element != WordFormType.ruAdjShortM &&
+                element != WordFormType.ruAdjShortF &&
+                element != WordFormType.ruAdjShortN &&
+                element != WordFormType.ruAdjShortPl;
+          },
+        );
+        if (enabledGenderExercises.isEmpty) {
+          exerciseTypes.removeWhere(
+            (element) => element == ExerciseType.determineNounGender,
+          );
+        }
+        if (enabledWordFormExercises.isEmpty) {
+          exerciseTypes.removeWhere(
+            (element) => element == ExerciseType.determineWordForm,
+          );
+        }
         final exerciseType =
-            ExerciseType.values[random.nextInt(ExerciseType.values.length)];
+            exerciseTypes[random.nextInt(exerciseTypes.length)];
         switch (exerciseType) {
           case ExerciseType.determineNounGender:
             add(ExerciseRetrieveRandomNounEvent());
@@ -42,10 +72,11 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
         emit(ExerciseRetrievingExerciseState());
 
         try {
-          final db = await GetIt.instance.get<DbHelper>().getDatabase();
+          final dbHelper = GetIt.instance.get<DbHelper>();
+          final db = await dbHelper.getDatabase();
 
           final Map<String, dynamic> nounQuery = (await db.rawQuery(
-            randomNounQueryString,
+            dbHelper.randomNounQueryString(),
           ))
               .single;
           final answers = Gender.values.map((gender) => gender.name);
@@ -77,10 +108,11 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       if (event is ExerciseRetrieveRandomSentenceEvent) {
         emit(ExerciseRetrievingExerciseState());
         try {
-          final db = await GetIt.instance.get<DbHelper>().getDatabase();
+          final dbHelper = GetIt.instance.get<DbHelper>();
+          final db = await dbHelper.getDatabase();
 
           final Map<String, dynamic> sentenceQuery = (await db.rawQuery(
-            randomSentenceQueryString,
+            dbHelper.randomSentenceQueryString(),
           ))
               .single;
 

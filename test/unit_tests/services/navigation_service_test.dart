@@ -4,27 +4,30 @@ import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:uchu/screens/settings/settings_page.dart';
 import 'package:uchu/screens/statistics_page.dart';
+import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/services/navigation_service.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/theme_service.dart';
 
 import '../mocks.dart';
 
 void main() {
   late NavigationService testObject;
-  late SharedPreferencesService mockSharedPreferencesService;
+  late ThemeService mockSharedPreferencesService;
 
   setUp(() async {
     await GetIt.instance.reset();
 
     testObject = NavigationService();
 
-    mockSharedPreferencesService = MockSharedPreferencesService();
+    mockSharedPreferencesService = MockThemeService();
 
     when(() => mockSharedPreferencesService.getThemeMode())
         .thenReturn(ThemeMode.system);
 
-    GetIt.instance.registerSingleton<SharedPreferencesService>(
-        mockSharedPreferencesService);
+    GetIt.instance
+        .registerSingleton<ThemeService>(mockSharedPreferencesService);
+    GetIt.instance.registerSingleton<EnabledExercisesService>(
+        MockEnabledExercisesService());
   });
 
   group('pushSettingsPage', () {

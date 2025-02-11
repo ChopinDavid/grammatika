@@ -319,4 +319,131 @@ extension WordFormTypeExt on WordFormType {
         throw Exception('String id did not match any WordFormType.');
     }
   }
+
+  String get displayName {
+    switch (this) {
+      case WordFormType.ruVerbGerundPast:
+        return 'Gerund Past';
+      case WordFormType.ruVerbGerundPresent:
+        return 'Gerund Present';
+      case WordFormType.ruBase:
+        return 'Base';
+      case WordFormType.ruAdjMNom:
+        return 'Adjective Masculine Nominative';
+      case WordFormType.ruAdjMGen:
+        return 'Adjective Masculine Genitive';
+      case WordFormType.ruAdjMDat:
+        return 'Adjective Masculine Dative';
+      case WordFormType.ruAdjMAcc:
+        return 'Adjective Masculine Accusative';
+      case WordFormType.ruAdjMInst:
+        return 'Adjective Masculine Instrumental';
+      case WordFormType.ruAdjMPrep:
+        return 'Adjective Masculine Prepositional';
+      case WordFormType.ruAdjFNom:
+        return 'Adjective Feminine Nominative';
+      case WordFormType.ruAdjFGen:
+        return 'Adjective Feminine Genitive';
+      case WordFormType.ruAdjFDat:
+        return 'Adjective Feminine Dative';
+      case WordFormType.ruAdjFAcc:
+        return 'Adjective Feminine Accusative';
+      case WordFormType.ruAdjFInst:
+        return 'Adjective Feminine Instrumental';
+      case WordFormType.ruAdjFPrep:
+        return 'Adjective Feminine Prepositional';
+      case WordFormType.ruAdjNNom:
+        return 'Adjective Neuter Nominative';
+      case WordFormType.ruAdjNGen:
+        return 'Adjective Neuter Genitive';
+      case WordFormType.ruAdjNDat:
+        return 'Adjective Neuter Dative';
+      case WordFormType.ruAdjNAcc:
+        return 'Adjective Neuter Accusative';
+      case WordFormType.ruAdjNInst:
+        return 'Adjective Neuter Instrumental';
+      case WordFormType.ruAdjNPrep:
+        return 'Adjective Noun Prepositional';
+      case WordFormType.ruAdjPlNom:
+        return 'Adjective Plural Nominative';
+      case WordFormType.ruAdjPlGen:
+        return 'Adjective Plural Genitive';
+      case WordFormType.ruAdjPlDat:
+        return 'Adjective Plural Dative';
+      case WordFormType.ruAdjPlAcc:
+        return 'Adjective Plural Accusative';
+      case WordFormType.ruAdjPlInst:
+        return 'Adjective Plural Instrumental';
+      case WordFormType.ruAdjPlPrep:
+        return 'Adjective Plural Prepositional';
+      case WordFormType.ruVerbImperativeSg:
+        return 'Verb Imperative Singular';
+      case WordFormType.ruVerbImperativePl:
+        return 'Verb Imperative Plural';
+      case WordFormType.ruVerbPastM:
+        return 'Verb Masculine Past';
+      case WordFormType.ruVerbPastF:
+        return 'Verb Feminine Past';
+      case WordFormType.ruVerbPastN:
+        return 'Verb Neuter Past';
+      case WordFormType.ruVerbPastPl:
+        return 'Verb Plural Past';
+      case WordFormType.ruVerbPresfutSg1:
+        return 'Verb First Person Singular';
+      case WordFormType.ruVerbPresfutSg2:
+        return 'Verb Second Person Singular';
+      case WordFormType.ruVerbPresfutSg3:
+        return 'Verb Third Person Singular';
+      case WordFormType.ruVerbPresfutPl1:
+        return 'Verb First Person Plural';
+      case WordFormType.ruVerbPresfutPl2:
+        return 'Verb Second Person Plural';
+      case WordFormType.ruVerbPresfutPl3:
+        return 'Verb Third Person Plural';
+      case WordFormType.ruVerbParticipleActivePast:
+        return 'Verb Past Active Participle';
+      case WordFormType.ruVerbParticiplePassivePast:
+        return 'Verb Past Passive Participle';
+      case WordFormType.ruVerbParticipleActivePresent:
+        return 'Verb Present Active Participle';
+      case WordFormType.ruVerbParticiplePassivePresent:
+        return 'Verb Present Passive Participle';
+      case WordFormType.ruNounSgNom:
+        return 'Noun Singular Nominative';
+      case WordFormType.ruNounSgGen:
+        return 'Noun Singular Genitive';
+      case WordFormType.ruNounSgDat:
+        return 'Noun Singular Dative';
+      case WordFormType.ruNounSgAcc:
+        return 'Noun Singular Accusative';
+      case WordFormType.ruNounSgInst:
+        return 'Noun Singular Instrumental';
+      case WordFormType.ruNounSgPrep:
+        return 'Noun Singular Prepositional';
+      case WordFormType.ruNounPlNom:
+        return 'Noun Plural Nominative';
+      case WordFormType.ruNounPlGen:
+        return 'Noun Plural Genitive';
+      case WordFormType.ruNounPlDat:
+        return 'Noun Plural Dative';
+      case WordFormType.ruNounPlAcc:
+        return 'Noun Plural Accusative';
+      case WordFormType.ruNounPlInst:
+        return 'Noun Plural Instrumental';
+      case WordFormType.ruNounPlPrep:
+        return 'Noun Plural Prepositional';
+      case WordFormType.ruAdjComparative:
+        return 'Adjective Comparative';
+      case WordFormType.ruAdjSuperlative:
+        return 'Adjective Superlative';
+      case WordFormType.ruAdjShortM:
+        return 'Adjective Masculine';
+      case WordFormType.ruAdjShortF:
+        return 'Adjective Short Feminine';
+      case WordFormType.ruAdjShortN:
+        return 'Adjective Short Neuter';
+      case WordFormType.ruAdjShortPl:
+        return 'Adjective Short Plural';
+    }
+  }
 }

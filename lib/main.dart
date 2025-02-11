@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/services/navigation_service.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/theme_service.dart';
 import 'package:uchu/services/translation_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
@@ -20,8 +21,10 @@ void main() async {
   GetIt.instance.registerSingleton<NavigationService>(NavigationService());
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
-  GetIt.instance.registerSingleton<SharedPreferencesService>(
-      SharedPreferencesService(sharedPreferences: sharedPreferences));
+  GetIt.instance.registerSingleton<ThemeService>(
+      ThemeService(sharedPreferences: sharedPreferences));
+  GetIt.instance.registerSingleton<EnabledExercisesService>(
+      EnabledExercisesService(sharedPreferences: sharedPreferences));
 
   runApp(MyApp());
 }

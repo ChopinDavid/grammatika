@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:uchu/screens/exercise_page.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/theme_service.dart';
 
 import 'blocs/exercise/exercise_bloc.dart';
 
@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: GetIt.instance.get<SharedPreferencesService>(),
-      child: Consumer<SharedPreferencesService>(
+      value: GetIt.instance.get<ThemeService>(),
+      child: Consumer<ThemeService>(
         builder: (context, sharedPreferencesService, child) {
           final themeMode = sharedPreferencesService.getThemeMode();
           return MaterialApp(
@@ -27,7 +27,10 @@ class MyApp extends StatelessWidget {
               value: _exerciseBloc,
               child: const ExercisePage(),
             ),
-            theme: ThemeData.light(),
+            theme: ThemeData.light()
+              ..copyWith(
+                listTileTheme: const ListTileThemeData(minVerticalPadding: 0.0),
+              ),
             darkTheme: ThemeData.dark(),
             themeMode: themeMode,
           );

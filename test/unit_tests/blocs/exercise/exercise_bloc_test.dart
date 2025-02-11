@@ -6,12 +6,13 @@ import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uchu/blocs/exercise/exercise_bloc.dart';
-import 'package:uchu/consts.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
+import 'package:uchu/models/word_form_type.dart';
+import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
 
@@ -24,8 +25,12 @@ main() {
   late Database mockDatabase;
   late Random mockRandom;
   late ExplanationHelper mockExplanationHelper;
+  late EnabledExercisesService mockEnabledExercisesService;
   final Noun noun = Noun.testValue();
   final Sentence sentence = Sentence.testValue();
+
+  const mockRandomNounQueryString = 'abc';
+  const mockRandomSentenceQueryString = 'def';
 
   setUpAll(TestUtils.registerFallbackValues);
 
@@ -35,11 +40,17 @@ main() {
     mockDbHelper = MockDbHelper();
     mockRandom = MockRandom();
     mockExplanationHelper = MockExplanationHelper();
+    mockEnabledExercisesService = MockEnabledExercisesService();
+
     when(() => mockDbHelper.getDatabase())
         .thenAnswer((invocation) async => mockDatabase);
-    when(() => mockDatabase.rawQuery(randomNounQueryString))
+    when(() => mockDbHelper.randomNounQueryString())
+        .thenReturn(mockRandomNounQueryString);
+    when(() => mockDbHelper.randomSentenceQueryString())
+        .thenReturn(mockRandomSentenceQueryString);
+    when(() => mockDatabase.rawQuery(mockRandomNounQueryString))
         .thenAnswer((invocation) async => [noun.toJson()]);
-    when(() => mockDatabase.rawQuery(randomSentenceQueryString))
+    when(() => mockDatabase.rawQuery(mockRandomSentenceQueryString))
         .thenAnswer((invocation) async => [sentence.toJson()]);
     when(() => mockDatabase.rawQuery(
             'SELECT form_type, position AS word_form_position, form, _form_bare FROM words_forms WHERE word_id = ${sentence.word.id};'))
@@ -55,8 +66,11 @@ main() {
             correctAnswer: any(named: 'correctAnswer'),
             wordFormTypesToBareMap: any(named: 'wordFormTypesToBareMap')))
         .thenAnswer((invocation) => ('because I said so', 'сказ- ➡️ сказал'));
+
     GetIt.instance.registerSingleton<DbHelper>(mockDbHelper);
     GetIt.instance.registerSingleton<ExplanationHelper>(mockExplanationHelper);
+    GetIt.instance.registerSingleton<EnabledExercisesService>(
+        mockEnabledExercisesService);
     testObject = ExerciseBloc(mockRandom: mockRandom);
   });
 
@@ -66,8 +80,60 @@ main() {
         when(() => mockRandom.nextInt(any())).thenReturn(0);
       });
       blocTest(
-        'emits ExerciseRetrievingExerciseState, ExerciseExerciseRetrievedState with Exercise<Gender, Noun> when db query succeeds',
+        'emits ExerciseRetrievingExerciseState, ExerciseExerciseRetrievedState with Exercise<Gender, Noun> when no exercises are disabled and db query succeeds',
         build: () => testObject,
+        act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
+        expect: () => [
+          ExerciseRetrievingExerciseState(),
+          ExerciseExerciseRetrievedState(),
+        ],
+        tearDown: () {
+          expect(
+              testObject.exercise,
+              Exercise<Gender, Noun>(
+                question: noun,
+                answers: null,
+              ));
+        },
+      );
+
+      blocTest(
+        'emits ExerciseRetrievingExerciseState, ExerciseExerciseRetrievedState with Exercise<WordForm, Sentence> when all gender exercises are disabled and db query succeeds',
+        build: () => testObject,
+        setUp: () {
+          when(() => mockEnabledExercisesService.getDisabledExercises())
+              .thenReturn(Gender.values
+                  .map(
+                    (e) => e.name,
+                  )
+                  .toList());
+        },
+        act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
+        expect: () => [
+          ExerciseRetrievingExerciseState(),
+          ExerciseExerciseRetrievedState(),
+        ],
+        tearDown: () {
+          expect(
+              testObject.exercise,
+              Exercise<WordForm, Sentence>(
+                question: sentence,
+                answers: null,
+              ));
+        },
+      );
+
+      blocTest(
+        'emits ExerciseRetrievingExerciseState, ExerciseExerciseRetrievedState with Exercise<Gender, Noun> when all word form type exercises are disabled and db query succeeds',
+        build: () => testObject,
+        setUp: () {
+          when(() => mockEnabledExercisesService.getDisabledExercises())
+              .thenReturn(WordFormType.values
+                  .map(
+                    (e) => e.name,
+                  )
+                  .toList());
+        },
         act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
         expect: () => [
           ExerciseRetrievingExerciseState(),
