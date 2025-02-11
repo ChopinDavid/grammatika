@@ -10,8 +10,10 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uchu/blocs/exercise/exercise_bloc.dart';
 import 'package:uchu/blocs/translation/translation_bloc.dart';
 import 'package:uchu/models/noun.dart';
+import 'package:uchu/screens/settings/enabled_exercises/exercise_section.dart';
+import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/services/navigation_service.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/theme_service.dart';
 import 'package:uchu/services/translation_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/exercise_helper.dart';
@@ -72,5 +74,14 @@ class MockBuildContext extends Mock implements BuildContext {}
 
 class MockSharedPreferences extends Mock implements SharedPreferences {}
 
-class MockSharedPreferencesService extends Mock
-    implements SharedPreferencesService {}
+class MockThemeService extends Mock implements ThemeService {}
+
+class MockEnabledExercisesService extends Mock
+    implements EnabledExercisesService {
+  MockEnabledExercisesService() {
+    when(() => getDisabledExercises()).thenReturn([]);
+    when(() => getExerciseEnabled(any())).thenReturn(true);
+  }
+}
+
+class MockExerciseSection extends Mock implements ExerciseSection {}

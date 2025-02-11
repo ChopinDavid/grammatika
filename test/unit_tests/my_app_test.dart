@@ -6,14 +6,15 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uchu/blocs/exercise/exercise_bloc.dart';
 import 'package:uchu/my_app.dart';
-import 'package:uchu/services/shared_preferences_service.dart';
+import 'package:uchu/services/enabled_exercises_service.dart';
+import 'package:uchu/services/theme_service.dart';
 
 import 'mocks.dart';
 
 main() {
   late ExerciseBloc mockExerciseBloc;
   late SharedPreferences mockSharedPreferences;
-  late SharedPreferencesService sharedPreferencesService;
+  late ThemeService themeService;
 
   setUp(() async {
     await GetIt.instance.reset();
@@ -29,10 +30,10 @@ main() {
     when(() => mockSharedPreferences.setInt(any(), any()))
         .thenAnswer((_) async => true);
 
-    sharedPreferencesService =
-        SharedPreferencesService(sharedPreferences: mockSharedPreferences);
-    GetIt.instance
-        .registerSingleton<SharedPreferencesService>(sharedPreferencesService);
+    themeService = ThemeService(sharedPreferences: mockSharedPreferences);
+    GetIt.instance.registerSingleton<ThemeService>(themeService);
+    GetIt.instance.registerSingleton<EnabledExercisesService>(
+        MockEnabledExercisesService());
   });
 
   testWidgets(
@@ -52,7 +53,7 @@ main() {
   );
 
   testWidgets(
-    'Consumer<SharedPreferencesService> rebuilds on SharedPreferencesService.updateThemeMode',
+    'Consumer<ThemeService> rebuilds on ThemeService.updateThemeMode',
     (WidgetTester tester) async {
       final List<int> getIntReturnValues = [
         ThemeMode.system.index,
@@ -73,7 +74,7 @@ main() {
           tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(firstMaterialApp.themeMode, ThemeMode.system);
 
-      sharedPreferencesService.updateThemeMode(ThemeMode.light);
+      themeService.updateThemeMode(ThemeMode.light);
       await tester.pump();
       await tester.idle();
 
@@ -81,7 +82,7 @@ main() {
           tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(secondMaterialApp.themeMode, ThemeMode.light);
 
-      sharedPreferencesService.updateThemeMode(ThemeMode.dark);
+      themeService.updateThemeMode(ThemeMode.dark);
       await tester.pump();
       await tester.idle();
 

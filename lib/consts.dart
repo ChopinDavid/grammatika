@@ -46,44 +46,5 @@ const neuterNounEndings = ['о', 'е'];
 
 const foreignNeuterNounEndings = ['и', 'у', 'ю'];
 
-const randomNounQueryString = '''SELECT *
-FROM nouns
-  INNER JOIN words ON words.id = nouns.word_id
-WHERE gender IS NOT NULL
-  AND gender IS NOT ''
-  AND gender IS NOT 'both'
-  AND gender IS NOT 'pl'
-ORDER BY RANDOM()
-LIMIT 1;
-''';
-
-const randomSentenceQueryString = '''SELECT words.*,
-       words.id AS word_id,
-       words.disabled AS word_disabled,
-       words.level AS word_level,
-       sentences.id AS sentence_id,
-       sentences.ru,
-       sentences.tatoeba_key,
-       sentences.disabled,
-       sentences.level,
-       words_forms.*,
-       words_forms.position AS word_form_position,
-       (SELECT nouns.gender
-        FROM nouns
-        WHERE nouns.word_id = words.id AND words.type = 'noun' AND nouns.gender IS NOT NULL AND nouns.gender != ""
-        LIMIT 1) AS gender
-FROM sentences_words
-INNER JOIN sentences ON sentences.id = sentences_words.sentence_id
-INNER JOIN words_forms ON words_forms.word_id = sentences_words.word_id
-INNER JOIN words ON words.id = sentences_words.word_id
-WHERE sentences_words.form_type IS NOT NULL
-  AND sentences_words.form_type IS NOT 'ru_base'
-  AND sentences_words.form_type IS NOT 'ru_adj_comparative'
-  AND sentences_words.form_type IS NOT 'ru_adj_superlative'
-  AND sentences_words.form_type IS NOT 'ru_adj_short_m'
-  AND sentences_words.form_type IS NOT 'ru_adj_short_f'
-  AND sentences_words.form_type IS NOT 'ru_adj_short_n'
-  AND sentences_words.form_type IS NOT 'ru_adj_short_pl'
-  AND words_forms.form_type = sentences_words.form_type
-ORDER BY RANDOM()
-LIMIT 1;''';
+const String themeModeSharedPreferencesKey = 'theme_mode';
+const String disabledExercisesSharedPreferencesKey = 'disabled_exercises';
