@@ -51,17 +51,11 @@ FROM nouns
 WHERE gender IS NOT NULL
   AND gender IS NOT ''
   AND gender IS NOT 'both'
-  AND gender IS NOT 'pl\'''';
-
-    for (var disabledGenderExercise in disabledGenderExercises) {
-      sqlString += '''
-      AND gender IS NOT '$disabledGenderExercise\'''';
-    }
-
-    sqlString += '''
+  AND gender IS NOT 'pl'${disabledGenderExercises.map(
+              (e) => '''\n  AND gender IS NOT \'$e\'''',
+            ).join()}
 ORDER BY RANDOM()
-LIMIT 1;
-''';
+LIMIT 1;''';
 
     return sqlString;
   }
@@ -104,13 +98,7 @@ WHERE sentences_words.form_type IS NOT NULL
   AND sentences_words.form_type IS NOT 'ru_adj_short_m'
   AND sentences_words.form_type IS NOT 'ru_adj_short_f'
   AND sentences_words.form_type IS NOT 'ru_adj_short_n'
-  AND sentences_words.form_type IS NOT 'ru_adj_short_pl\'''';
-    for (var disabledWordFormExercise in disabledWordFormExercises) {
-      sqlString += '''
-      AND sentences_words.form_type IS NOT '$disabledWordFormExercise\'''';
-    }
-
-    sqlString += '''
+  AND sentences_words.form_type IS NOT 'ru_adj_short_pl\'${disabledWordFormExercises.map((disabledWordFormExercise) => '''\n  AND sentences_words.form_type IS NOT '$disabledWordFormExercise\'''').join()}
   AND words_forms.form_type = sentences_words.form_type
 ORDER BY RANDOM()
 LIMIT 1;''';
