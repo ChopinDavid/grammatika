@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/services/navigation_service.dart';
+import 'package:uchu/services/statistics_service.dart';
 import 'package:uchu/services/theme_service.dart';
 import 'package:uchu/services/translation_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
@@ -25,6 +26,7 @@ void main() async {
       ThemeService(sharedPreferences: sharedPreferences));
   GetIt.instance.registerSingleton<EnabledExercisesService>(
       EnabledExercisesService(sharedPreferences: sharedPreferences));
+  GetIt.instance.registerSingleton<StatisticsService>(StatisticsService());
 
   runApp(MyApp());
 }
