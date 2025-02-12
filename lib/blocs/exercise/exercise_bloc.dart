@@ -13,6 +13,7 @@ import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
 import 'package:uchu/services/enabled_exercises_service.dart';
+import 'package:uchu/services/statistics_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
 
@@ -159,7 +160,26 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       }
 
       if (event is ExerciseSubmitAnswerEvent) {
-        exercise = exercise?.withAnswers(event.answers);
+        final answers = event.answers;
+        final correctAnswer = exercise?.question.correctAnswer;
+        final exerciseId = correctAnswer is WordForm
+            ? correctAnswer.type.name
+            : correctAnswer is Gender
+                ? correctAnswer.name
+                : null;
+
+        if (exerciseId == null) {
+          emit(ExerciseErrorState(
+              errorString: 'Unable to determine exercise answer ID.'));
+          return;
+        }
+
+        if (event.answers.contains(exercise?.question.correctAnswer) == true) {
+          GetIt.instance.get<StatisticsService>().addExercisePassed(exerciseId);
+        } else {
+          GetIt.instance.get<StatisticsService>().addExerciseFailed(exerciseId);
+        }
+        exercise = exercise?.withAnswers(answers);
         emit(
           ExerciseAnswerSelectedState(),
         );

@@ -18,7 +18,7 @@ class ExercisePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: UchuDrawer(),
+      drawer: const UchuDrawer(),
       appBar: AppBar(
         leading: Builder(builder: (context) {
           return IconButton(
