@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class StatisticsService {
+  StatisticsService({
+    @visibleForTesting Database? database,
+  }) : _database = database;
   Database? _database;
 
   Future<void> _initDatabase() async {
@@ -11,73 +15,37 @@ class StatisticsService {
       join(await getDatabasesPath(), 'statistics.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE exercise_statistics(exercise_id TEXT PRIMARY KEY, number_of_times_answered INTEGER, number_of_times_failed INTEGER)',
+          'CREATE TABLE exercise_statistics(id INTEGER PRIMARY KEY AUTOINCREMENT, exercise_id TEXT, passed INTEGER, timestamp INTEGER)',
         );
       },
       version: 1,
     );
   }
 
-  Future<void> addExercisePassed(String exerciseId) async {
+  Future<void> addExercisePassed(String exerciseId, DateTime timestamp) async {
     await _initDatabase();
-    await _database!.transaction((txn) async {
-      var result = await txn.rawQuery(
-        'SELECT * FROM exercise_statistics WHERE exercise_id = ?',
-        [exerciseId],
-      );
-
-      if (result.isEmpty) {
-        await txn.insert('exercise_statistics', {
-          'exercise_id': exerciseId,
-          'number_of_times_answered': 1,
-          'number_of_times_failed': 0,
-        });
-      } else {
-        await txn.update(
-          'exercise_statistics',
-          {
-            'number_of_times_answered':
-                (result[0]['number_of_times_answered'] as int? ?? 0) + 1,
-          },
-          where: 'exercise_id = ?',
-          whereArgs: [exerciseId],
-        );
-      }
+    await _database!.insert('exercise_statistics', {
+      'exercise_id': exerciseId,
+      'passed': 1,
+      'timestamp': timestamp.millisecondsSinceEpoch,
     });
   }
 
-  Future<void> addExerciseFailed(String exerciseId) async {
+  Future<void> addExerciseFailed(String exerciseId, DateTime timestamp) async {
     await _initDatabase();
-    await _database!.transaction((txn) async {
-      var result = await txn.rawQuery(
-        'SELECT * FROM exercise_statistics WHERE exercise_id = ?',
-        [exerciseId],
-      );
-
-      if (result.isEmpty) {
-        await txn.insert('exercise_statistics', {
-          'exercise_id': exerciseId,
-          'number_of_times_answered': 1,
-          'number_of_times_failed': 1,
-        });
-      } else {
-        await txn.update(
-          'exercise_statistics',
-          {
-            'number_of_times_answered':
-                (result[0]['number_of_times_answered'] as int? ?? 0) + 1,
-            'number_of_times_failed':
-                (result[0]['number_of_times_failed'] as int? ?? 0) + 1,
-          },
-          where: 'exercise_id = ?',
-          whereArgs: [exerciseId],
-        );
-      }
+    await _database!.insert('exercise_statistics', {
+      'exercise_id': exerciseId,
+      'passed': 0,
+      'timestamp': timestamp.millisecondsSinceEpoch,
     });
   }
 
-  Future<double?> getExercisePassRate(String exerciseId) async {
+  Future<double?> getExercisePassRate(
+      String exerciseId, Duration? duration) async {
     await _initDatabase();
+    int currentTime = DateTime.now().millisecondsSinceEpoch;
+    int durationInMillis = duration?.inMilliseconds ?? 0;
+
     var result = await _database!.rawQuery(
       'SELECT * FROM exercise_statistics WHERE exercise_id = ?',
       [exerciseId],
@@ -86,17 +54,24 @@ class StatisticsService {
     if (result.isEmpty) {
       return null;
     } else {
-      int numberOfTimesAnswered =
-          result[0]['number_of_times_answered'] as int? ?? 0;
-      int numberOfTimesFailed =
-          result[0]['number_of_times_failed'] as int? ?? 0;
-      int numberOfTimesPassed = numberOfTimesAnswered - numberOfTimesFailed;
+      int passedCount = 0;
+      int totalCount = 0;
 
-      if (numberOfTimesAnswered == 0) {
+      for (var row in result) {
+        int timestamp = row['timestamp'] as int? ?? 0;
+        if (duration == null || currentTime - timestamp <= durationInMillis) {
+          totalCount++;
+          if (row['passed'] == 1) {
+            passedCount++;
+          }
+        }
+      }
+
+      if (totalCount == 0) {
         return null;
       }
 
-      return numberOfTimesPassed / numberOfTimesAnswered;
+      return passedCount / totalCount;
     }
   }
 }

@@ -175,9 +175,13 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
         }
 
         if (event.answers.contains(exercise?.question.correctAnswer) == true) {
-          GetIt.instance.get<StatisticsService>().addExercisePassed(exerciseId);
+          GetIt.instance
+              .get<StatisticsService>()
+              .addExercisePassed(exerciseId, DateTime.now());
         } else {
-          GetIt.instance.get<StatisticsService>().addExerciseFailed(exerciseId);
+          GetIt.instance
+              .get<StatisticsService>()
+              .addExerciseFailed(exerciseId, DateTime.now());
         }
         exercise = exercise?.withAnswers(answers);
         emit(
