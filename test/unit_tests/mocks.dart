@@ -13,6 +13,7 @@ import 'package:uchu/models/noun.dart';
 import 'package:uchu/screens/settings/enabled_exercises/exercise_section.dart';
 import 'package:uchu/services/enabled_exercises_service.dart';
 import 'package:uchu/services/navigation_service.dart';
+import 'package:uchu/services/statistics_service.dart';
 import 'package:uchu/services/theme_service.dart';
 import 'package:uchu/services/translation_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
@@ -85,3 +86,5 @@ class MockEnabledExercisesService extends Mock
 }
 
 class MockExerciseSection extends Mock implements ExerciseSection {}
+
+class MockStatisticsService extends Mock implements StatisticsService {}
