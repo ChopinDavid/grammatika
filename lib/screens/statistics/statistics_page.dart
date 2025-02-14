@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:uchu/extensions/gender_extension.dart';
-import 'package:uchu/extensions/iterable_extension.dart';
+import 'package:uchu/extensions/intersperse_extensions.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/word_form_type.dart';
+import 'package:uchu/screens/statistics/pass_rate_list_tile.dart';
 import 'package:uchu/services/statistics_service.dart';
+
+import 'duration_radio_button.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({super.key});
@@ -70,31 +73,31 @@ class _StatisticsPageState extends State<StatisticsPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              _DurationRadioButton(
+                              DurationRadioButton(
                                 text: 'All',
                                 duration: null,
                                 selectedDuration: selectedDuration,
                                 onChanged: _onDurationChanged,
                               ),
-                              _DurationRadioButton(
+                              DurationRadioButton(
                                 text: 'Day',
                                 duration: const Duration(days: 1),
                                 selectedDuration: selectedDuration,
                                 onChanged: _onDurationChanged,
                               ),
-                              _DurationRadioButton(
+                              DurationRadioButton(
                                 text: 'Week',
                                 duration: const Duration(days: 7),
                                 selectedDuration: selectedDuration,
                                 onChanged: _onDurationChanged,
                               ),
-                              _DurationRadioButton(
+                              DurationRadioButton(
                                 text: 'Month',
                                 duration: const Duration(days: 31),
                                 selectedDuration: selectedDuration,
                                 onChanged: _onDurationChanged,
                               ),
-                              _DurationRadioButton(
+                              DurationRadioButton(
                                 text: 'Year',
                                 duration: const Duration(days: 365),
                                 selectedDuration: selectedDuration,
@@ -120,126 +123,31 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 ],
                               ),
                             )
-                          : Flexible(
-                              child: ListView.builder(
-                                itemCount: passRates.length,
-                                itemBuilder: (context, index) {
-                                  final sortedPassRateEntries = passRates
-                                      .entries
-                                      .toList()
-                                    ..sort(
-                                      (a, b) =>
-                                          (a.value > b.value) == true ? 1 : 0,
+                          : Builder(builder: (context) {
+                              final sortedPassRateEntries = passRates.entries
+                                  .toList()
+                                ..sort((a, b) => a.value.compareTo(b.value));
+                              return Flexible(
+                                child: ListView.builder(
+                                  itemCount: passRates.length,
+                                  itemBuilder: (context, index) {
+                                    final title =
+                                        sortedPassRateEntries[index].key;
+                                    final value =
+                                        sortedPassRateEntries[index].value;
+                                    return PassRateListTile(
+                                      title: title,
+                                      value: value,
                                     );
-                                  final key = sortedPassRateEntries[index].key;
-                                  final value =
-                                      sortedPassRateEntries[index].value;
-                                  return ListTile(
-                                    title: Text(key),
-                                    subtitle: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          PassRateBar(
-                                            passRate: value,
-                                          ),
-                                          const SizedBox(height: 4.0),
-                                          Text(
-                                              '${(value * 100).toStringAsFixed(2)}% pass rate'),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+                                  },
+                                ),
+                              );
+                            }),
                     ],
                   );
           },
         ),
       ),
-    );
-  }
-}
-
-class PassRateBar extends StatelessWidget {
-  final double passRate;
-
-  const PassRateBar({super.key, required this.passRate})
-      : assert(passRate >= 0.0 && passRate <= 1.0,
-            'Pass rate must be between 0.0 and 1.0');
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.0)),
-      clipBehavior: Clip.hardEdge,
-      child: Row(
-        children: [
-          Expanded(
-            flex: (passRate * 100).toInt(),
-            child: Container(
-              height: 12,
-              color: Colors.green,
-            ),
-          ),
-          Expanded(
-            flex: ((1 - passRate) * 100).toInt(),
-            child: Container(
-              height: 12,
-              color: Colors.red,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _DurationRadioButton extends StatelessWidget {
-  const _DurationRadioButton({
-    super.key,
-    required this.text,
-    required this.duration,
-    required this.selectedDuration,
-    required this.onChanged,
-  });
-  final String text;
-  final Duration? duration;
-  final Duration? selectedDuration;
-  final void Function(Duration?) onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.only(
-          top: 8.0,
-          left: 8.0,
-          bottom: 8.0,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(text),
-            IgnorePointer(
-              child: Radio<Duration?>(
-                value: duration,
-                groupValue: selectedDuration,
-                onChanged: (_) {},
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                splashRadius: 0.0,
-                visualDensity: VisualDensity.compact,
-              ),
-            ),
-          ],
-        ),
-      ),
-      onTap: () => onChanged(duration),
     );
   }
 }
