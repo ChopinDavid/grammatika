@@ -13,6 +13,7 @@ import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/models/word_form_type.dart';
 import 'package:uchu/services/enabled_exercises_service.dart';
+import 'package:uchu/services/statistics_service.dart';
 import 'package:uchu/utilities/db_helper.dart';
 import 'package:uchu/utilities/explanation_helper.dart';
 
@@ -26,6 +27,7 @@ main() {
   late Random mockRandom;
   late ExplanationHelper mockExplanationHelper;
   late EnabledExercisesService mockEnabledExercisesService;
+  late StatisticsService mockStatisticsService;
   final Noun noun = Noun.testValue();
   final Sentence sentence = Sentence.testValue();
 
@@ -41,6 +43,7 @@ main() {
     mockRandom = MockRandom();
     mockExplanationHelper = MockExplanationHelper();
     mockEnabledExercisesService = MockEnabledExercisesService();
+    mockStatisticsService = MockStatisticsService();
 
     when(() => mockDbHelper.getDatabase())
         .thenAnswer((invocation) async => mockDatabase);
@@ -66,11 +69,16 @@ main() {
             correctAnswer: any(named: 'correctAnswer'),
             wordFormTypesToBareMap: any(named: 'wordFormTypesToBareMap')))
         .thenAnswer((invocation) => ('because I said so', 'сказ- ➡️ сказал'));
+    when(() => mockStatisticsService.addExercisePassed(any(), any()))
+        .thenAnswer((_) async {});
+    when(() => mockStatisticsService.addExerciseFailed(any(), any()))
+        .thenAnswer((_) async {});
 
     GetIt.instance.registerSingleton<DbHelper>(mockDbHelper);
     GetIt.instance.registerSingleton<ExplanationHelper>(mockExplanationHelper);
     GetIt.instance.registerSingleton<EnabledExercisesService>(
         mockEnabledExercisesService);
+    GetIt.instance.registerSingleton<StatisticsService>(mockStatisticsService);
     testObject = ExerciseBloc(mockRandom: mockRandom);
   });
 
@@ -451,6 +459,56 @@ main() {
             answers: answersToAdd,
           ),
         );
+      },
+    );
+
+    blocTest(
+      'invokes StatisticsService.addExercisePassed when correct answer is selected',
+      build: () => testObject,
+      setUp: () {
+        testObject.exercise = initialExercise;
+      },
+      act: (bloc) => bloc.add(
+        ExerciseSubmitAnswerEvent(
+          answers: [
+            testObject.exercise!.question.correctAnswer as WordForm,
+          ],
+        ),
+      ),
+      verify: (_) {
+        final correctAnswer = initialExercise.question.correctAnswer.type.name;
+
+        verify(() =>
+                mockStatisticsService.addExercisePassed(correctAnswer, any()))
+            .called(1);
+        verifyNever(() =>
+            mockStatisticsService.addExerciseFailed(correctAnswer, any()));
+      },
+    );
+
+    blocTest(
+      'invokes StatisticsService.addExerciseFailed when incorrect answer is selected',
+      build: () => testObject,
+      setUp: () {
+        testObject.exercise = initialExercise;
+      },
+      act: (bloc) => bloc.add(
+        ExerciseSubmitAnswerEvent(
+          answers: [
+            WordForm.testValue(
+              type: WordFormType.ruVerbGerundPresent,
+            )
+          ],
+        ),
+      ),
+      verify: (_) {
+        final correctAnswer = initialExercise.question.correctAnswer.type.name;
+
+        verifyNever(() =>
+            mockStatisticsService.addExercisePassed(correctAnswer, any()));
+        verify(() =>
+                mockStatisticsService.addExerciseFailed(correctAnswer, any()))
+            .called(1);
       },
     );
   });
