@@ -10,7 +10,7 @@ import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/screens/exercise_page.dart';
-import 'package:uchu/widgets/exercise_footer.dart';
+import 'package:uchu/widgets/explanations_widget.dart';
 import 'package:uchu/widgets/gender_exercise_widget.dart';
 import 'package:uchu/widgets/sentence_exercise_widget.dart';
 import 'package:uchu/widgets/uchu_drawer.dart';
@@ -166,11 +166,43 @@ main() {
       await widgetTester.pump();
       await widgetTester.idle();
 
-      final exerciseFooterFinder = find.byType(ExerciseFooter);
+      final exerciseFooterFinder = find.byType(ExplanationsWidget);
       expect(exerciseFooterFinder, findsOneWidget);
       expect(
-          widgetTester.widget<ExerciseFooter>(exerciseFooterFinder).explanation,
+          widgetTester
+              .widget<ExplanationsWidget>(exerciseFooterFinder)
+              .explanation,
           explanation);
+    });
+
+    testWidgets(
+        'tapping "Next" button adds ExerciseRetrieveExerciseEvent to ExerciseBloc',
+        (widgetTester) async {
+      whenListen(
+        mockExerciseBloc,
+        Stream.fromIterable(
+          [
+            ExerciseAnswerSelectedState(),
+          ],
+        ),
+        initialState: ExerciseInitial(),
+      );
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider.value(
+            value: mockExerciseBloc,
+            child: const ExercisePage(),
+          ),
+        ),
+      );
+      await widgetTester.pump();
+      await widgetTester.idle();
+
+      final nextFinder = find.text('Next');
+      expect(nextFinder, findsOneWidget);
+      await widgetTester.tap(nextFinder);
+
+      verify(() => mockExerciseBloc.add(ExerciseRetrieveExerciseEvent()));
     });
   });
 
