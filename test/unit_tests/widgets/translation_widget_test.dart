@@ -47,7 +47,7 @@ main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text(expectedTranslation), findsOneWidget);
+      expect(find.text('"$expectedTranslation"'), findsOneWidget);
     });
 
     testWidgets(

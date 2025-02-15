@@ -13,7 +13,7 @@ class UchuDrawer extends StatelessWidget {
         itemBuilder: (context, index) {
           switch (index) {
             case 0:
-              return const DrawerHeader(child: Text('Uchu'));
+              return const DrawerHeader(child: Text('Menu'));
             case 1:
               return ListTile(
                 title: const Text('Settings'),

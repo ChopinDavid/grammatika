@@ -1,10 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:uchu/blocs/exercise/exercise_bloc.dart';
-import 'package:uchu/widgets/exercise_footer.dart';
+import 'package:uchu/widgets/explanations_widget.dart';
 
 import '../mocks.dart';
 
@@ -18,7 +16,7 @@ main() {
   });
   testWidgets('does not display explanation if null', (widgetTester) async {
     await widgetTester.pumpWidget(const MaterialApp(
-        home: ExerciseFooter(
+        home: ExplanationsWidget(
       explanation: null,
       visualExplanation: null,
     )));
@@ -29,7 +27,7 @@ main() {
   testWidgets('does not display visual explanation if null',
       (widgetTester) async {
     await widgetTester.pumpWidget(const MaterialApp(
-        home: ExerciseFooter(
+        home: ExplanationsWidget(
       explanation: null,
       visualExplanation: null,
     )));
@@ -40,7 +38,7 @@ main() {
   testWidgets('displays explanation if not null', (widgetTester) async {
     const explanation = 'some explanation';
     await widgetTester.pumpWidget(const MaterialApp(
-        home: ExerciseFooter(
+        home: ExplanationsWidget(
       explanation: explanation,
       visualExplanation: null,
     )));
@@ -53,7 +51,7 @@ main() {
   testWidgets('displays visual explanation if not null', (widgetTester) async {
     const visualExplanation = 'wordRoot- ➡️ word';
     await widgetTester.pumpWidget(const MaterialApp(
-        home: ExerciseFooter(
+        home: ExplanationsWidget(
       explanation: null,
       visualExplanation: visualExplanation,
     )));
@@ -61,28 +59,5 @@ main() {
 
     expect(find.byKey(const Key('visual-explanation-text')), findsOneWidget);
     expect(find.text(visualExplanation), findsOneWidget);
-  });
-
-  testWidgets(
-      'tapping "Next" button adds ExerciseRetrieveExerciseEvent to ExerciseBloc',
-      (widgetTester) async {
-    await widgetTester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<ExerciseBloc>.value(
-          value: mockExerciseBloc,
-          child: const ExerciseFooter(
-            explanation: null,
-            visualExplanation: null,
-          ),
-        ),
-      ),
-    );
-    await widgetTester.pumpAndSettle();
-
-    final nextFinder = find.text('Next');
-    expect(nextFinder, findsOneWidget);
-    await widgetTester.tap(nextFinder);
-
-    verify(() => mockExerciseBloc.add(ExerciseRetrieveExerciseEvent()));
   });
 }

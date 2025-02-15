@@ -5,7 +5,7 @@ import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
 import 'package:uchu/models/word_form.dart';
-import 'package:uchu/widgets/exercise_footer.dart';
+import 'package:uchu/widgets/explanations_widget.dart';
 import 'package:uchu/widgets/gender_exercise_widget.dart';
 import 'package:uchu/widgets/sentence_exercise_widget.dart';
 import 'package:uchu/widgets/uchu_drawer.dart';
@@ -20,6 +20,7 @@ class ExercisePage extends StatelessWidget {
     return Scaffold(
       drawer: const UchuDrawer(),
       appBar: AppBar(
+        title: const Text('Uchu'),
         leading: Builder(builder: (context) {
           return IconButton(
             onPressed: () => Scaffold.of(context).openDrawer(),
@@ -52,10 +53,10 @@ class ExercisePage extends StatelessWidget {
                 exercise = context.read<ExerciseBloc>().exercise;
               }
 
-              List<Widget> stackChildren = [];
+              List<Widget> children = [];
 
               if (exercise?.type == ExerciseType.determineNounGender) {
-                stackChildren.add(
+                children.add(
                   GenderExerciseWidget(
                     exercise: exercise as Exercise<Gender, Noun>,
                   ),
@@ -63,7 +64,7 @@ class ExercisePage extends StatelessWidget {
               }
 
               if (exercise?.type == ExerciseType.determineWordForm) {
-                stackChildren.add(
+                children.add(
                   SentenceExerciseWidget(
                     exercise: exercise as Exercise<WordForm, Sentence>,
                   ),
@@ -73,16 +74,48 @@ class ExercisePage extends StatelessWidget {
               if (state is ExerciseAnswerSelectedState) {
                 final question =
                     context.read<ExerciseBloc>().exercise?.question;
-                stackChildren.add(ExerciseFooter(
-                  explanation: question?.explanation,
-                  visualExplanation: question?.visualExplanation,
-                ));
+                children.add(
+                  Flexible(
+                    child: ExplanationsWidget(
+                      explanation: question?.explanation,
+                      visualExplanation: question?.visualExplanation,
+                    ),
+                  ),
+                );
+                children.add(
+                  Material(
+                    color:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
+                    child: InkWell(
+                      child: const SizedBox(
+                        height: 48.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Next',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        BlocProvider.of<ExerciseBloc>(context).add(
+                          ExerciseRetrieveExerciseEvent(),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                children.add(const Spacer());
               }
 
-              if (stackChildren.isNotEmpty) {
-                return Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: stackChildren,
+              if (children.isNotEmpty) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: children,
                 );
               }
               return const CircularProgressIndicator();
