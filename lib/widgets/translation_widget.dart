@@ -39,7 +39,7 @@ class TranslationWidget extends StatelessWidget {
                       right: 24.0,
                       bottom: 24.0,
                     ),
-                    child: Text(state.translation),
+                    child: Text('"${state.translation}"'),
                   ));
                 }
 
