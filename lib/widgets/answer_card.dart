@@ -43,6 +43,9 @@ class AnswerCard<T extends Answer> extends StatelessWidget {
                 child: Text(
                   displayString,
                   textAlign: TextAlign.center,
+                  style: DefaultTextStyle.of(context)
+                      .style
+                      .copyWith(fontSize: 18.0),
                 ),
               ),
             ),

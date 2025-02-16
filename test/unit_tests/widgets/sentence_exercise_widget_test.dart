@@ -14,6 +14,7 @@ import 'package:uchu/utilities/exercise_helper.dart';
 import 'package:uchu/utilities/url_helper.dart';
 import 'package:uchu/widgets/answer_card.dart';
 import 'package:uchu/widgets/sentence_exercise_widget.dart';
+import 'package:uchu/widgets/translation_button.dart';
 
 import '../../test_utils.dart';
 import '../mocks.dart';
@@ -59,7 +60,7 @@ main() {
               body: SentenceExerciseWidget(
                 exercise: Exercise.testValue(
                   question: Sentence.testValue(ru: sentence),
-                  answers: [],
+                  answers: const [],
                 ),
               ),
             ),
@@ -78,7 +79,8 @@ main() {
   testWidgets(
     'sentence segments are interpolated into RichText correctly',
     (widgetTester) async {
-      const sentence = "Что ты де'лаешь?";
+      const sentenceText = "Что ты де'лаешь?";
+      final sentence = Sentence.testValue(ru: sentenceText);
       await widgetTester.pumpWidget(
         MaterialApp(
           home: BlocProvider<ExerciseBloc>.value(
@@ -86,8 +88,8 @@ main() {
             child: Scaffold(
               body: SentenceExerciseWidget(
                 exercise: Exercise.testValue(
-                  question: Sentence.testValue(ru: sentence),
-                  answers: [],
+                  question: sentence,
+                  answers: const [],
                 ),
               ),
             ),
@@ -98,36 +100,36 @@ main() {
 
       final RichText sentenceRichText = widgetTester
           .widget<RichText>(find.byKey(const Key('sentence-rich-text')));
+      final firstWordRowChildren =
+          (((sentenceRichText.text as TextSpan).children![0] as WidgetSpan)
+                  .child as Row)
+              .children;
+      expect((firstWordRowChildren.first as Text).data, '«');
       expect(
-          ((sentenceRichText.text as TextSpan).children![0] as TextSpan).text,
-          '«');
+          ((firstWordRowChildren.last as InkWell).child as Text).data, 'Что');
       expect(
-          ((((sentenceRichText.text as TextSpan).children![1] as WidgetSpan)
-                      .child as InkWell)
-                  .child as Text)
-              .data,
-          'Что');
-      expect(
-          ((sentenceRichText.text as TextSpan).children![2] as TextSpan).text,
+          ((sentenceRichText.text as TextSpan).children![1] as TextSpan).text,
           '  ');
       expect(
-          ((((sentenceRichText.text as TextSpan).children![3] as WidgetSpan)
-                      .child as InkWell)
+          (((((sentenceRichText.text as TextSpan).children![2] as WidgetSpan)
+                          .child as Row)
+                      .children
+                      .single as InkWell)
                   .child as Text)
               .data,
           'ты');
       expect(
-          ((sentenceRichText.text as TextSpan).children![4] as TextSpan).text,
+          ((sentenceRichText.text as TextSpan).children![3] as TextSpan).text,
           '  ');
-      expect(
-          ((((sentenceRichText.text as TextSpan).children![5] as WidgetSpan)
-                      .child as InkWell)
-                  .child as Text)
-              .data,
+      final lastWordRowChildren =
+          (((sentenceRichText.text as TextSpan).children![4] as WidgetSpan)
+                  .child as Row)
+              .children;
+      expect(((lastWordRowChildren.first as InkWell).child as Text).data,
           'делаешь?');
-      expect(
-          ((sentenceRichText.text as TextSpan).children![6] as TextSpan).text,
-          '»');
+      expect((lastWordRowChildren[1] as Text).data, '»');
+      expect((lastWordRowChildren[2] as TranslationButton).tatoebaKey,
+          sentence.tatoebaKey);
     },
   );
 
@@ -164,7 +166,7 @@ main() {
                     possibleAnswers: possibleAnswers,
                     formType: WordFormType.ruVerbPresfutSg2,
                   ),
-                  answers: [],
+                  answers: const [],
                 ),
               ),
             ),
@@ -197,8 +199,10 @@ main() {
       ).thenReturn(answerGroups);
       when(
         () => mockExerciseHelper.getSpansFromSentence(
+          any(),
           sentenceExercise: any(named: 'sentenceExercise'),
           defaultTextStyle: any(named: 'defaultTextStyle'),
+          tatoebaKey: any(named: 'tatoebaKey'),
         ),
       ).thenReturn([]);
 
@@ -211,7 +215,7 @@ main() {
                 exerciseHelper: mockExerciseHelper,
                 exercise: Exercise.testValue(
                   question: Sentence.testValue(),
-                  answers: [],
+                  answers: const [],
                 ),
               ),
             ),
@@ -241,7 +245,7 @@ main() {
               body: SentenceExerciseWidget(
                 exercise: Exercise<WordForm, Sentence>(
                   question: Sentence.testValue(bare: bare),
-                  answers: [],
+                  answers: const [],
                 ),
               ),
             ),

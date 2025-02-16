@@ -95,11 +95,13 @@ main() {
         expect(
           testObject
               .getSpansFromSentence(
+                MockBuildContext(),
                 sentenceExercise: Exercise<WordForm, Sentence>(
                   question: Sentence.testValue(ru: sentence),
-                  answers: [],
+                  answers: const [],
                 ),
                 defaultTextStyle: MockTextStyle(),
+                tatoebaKey: 1,
               )
               .length,
           sentence.split(' ').length * 2 - 1,
@@ -111,17 +113,22 @@ main() {
           () {
         const sentence = "Всему своё время.";
         final spans = testObject.getSpansFromSentence(
+          MockBuildContext(),
           sentenceExercise: Exercise<WordForm, Sentence>(
             question: Sentence.testValue(ru: sentence),
-            answers: [],
+            answers: const [],
           ),
           defaultTextStyle: MockTextStyle(),
+          tatoebaKey: 1,
         );
         for (int i = 0; i < spans.length; i++) {
           final isEven = i % 2 == 0;
           if (isEven) {
+            final children = (((spans[i] as WidgetSpan).child as Row)).children;
             expect(
-              (((spans[i] as WidgetSpan).child as InkWell).child as Text).data,
+              (((i == 0 ? children.last : children.first) as InkWell).child
+                      as Text)
+                  .data,
               sentence.split(' ')[i ~/ 2],
             );
           } else {
@@ -136,6 +143,7 @@ main() {
           const sentence = "Всему' своё вре'мя.";
           final expectedDefaultTextStyle = MockTextStyle();
           final spans = testObject.getSpansFromSentence(
+            MockBuildContext(),
             sentenceExercise: Exercise<WordForm, Sentence>(
               question: Sentence.testValue(
                 ru: sentence,
@@ -147,17 +155,28 @@ main() {
                 ],
                 formType: WordFormType.ruNounSgNom,
               ),
-              answers: [],
+              answers: const [],
             ),
             defaultTextStyle: expectedDefaultTextStyle,
+            tatoebaKey: 1,
           );
           for (int i = 0; i < spans.length; i++) {
             final span = spans[i];
             if (span is WidgetSpan) {
-              expect(
-                ((span.child as InkWell).child as Text).style,
-                translatableTextStyle,
-              );
+              final children =
+                  (((spans[i] as WidgetSpan).child as Row)).children;
+              final widgetWithText = i == 0 ? children.last : children.first;
+              if (widgetWithText is Text) {
+                expect(
+                  widgetWithText.style,
+                  expectedDefaultTextStyle,
+                );
+              } else {
+                expect(
+                  ((widgetWithText as InkWell).child as Text).style,
+                  translatableTextStyle.copyWith(fontSize: 24.0),
+                );
+              }
             } else if (span is TextSpan) {
               if (span.text?.contains(sentenceWordPlaceholderText) == true) {
                 expect(
@@ -183,6 +202,7 @@ main() {
           const sentence = "Всему' своё вре'мя.";
           final expectedDefaultTextStyle = MockTextStyle();
           final spans = testObject.getSpansFromSentence(
+            MockBuildContext(),
             sentenceExercise: Exercise<WordForm, Sentence>(
               question: Sentence.testValue(
                 ru: sentence,
@@ -194,16 +214,25 @@ main() {
                 ],
                 formType: WordFormType.ruNounSgNom,
               ),
-              answers: [],
+              answers: const [],
             ),
             defaultTextStyle: expectedDefaultTextStyle,
+            tatoebaKey: 1,
           );
           for (int i = 0; i < spans.length; i++) {
             final span = spans[i];
             if (span is WidgetSpan) {
-              (span.child as InkWell).onTap?.call();
-              verify(() => mockUrlHelper.launchWiktionaryPageFor(
-                  sentence.split(' ')[i ~/ 2].replaceAll('\'', '')));
+              final children =
+                  (((spans[i] as WidgetSpan).child as Row)).children;
+
+              final widgetWithText = i == 0 ? children.last : children.first;
+              if (widgetWithText is Text) {
+                return;
+              } else {
+                (widgetWithText as InkWell).onTap?.call();
+                verify(() => mockUrlHelper.launchWiktionaryPageFor(
+                    sentence.split(' ')[i ~/ 2].replaceAll('\'', '')));
+              }
             }
           }
         },
@@ -214,17 +243,24 @@ main() {
         () {
           const sentence = "Всему' своё вре'мя.";
           final spans = testObject.getSpansFromSentence(
+            MockBuildContext(),
             sentenceExercise: Exercise<WordForm, Sentence>(
               question: Sentence.testValue(ru: sentence),
-              answers: [],
+              answers: const [],
             ),
             defaultTextStyle: MockTextStyle(),
+            tatoebaKey: 1,
           );
           for (int i = 0; i < spans.length; i++) {
             final span = spans[i];
             if (span is WidgetSpan) {
+              final children =
+                  (((spans[i] as WidgetSpan).child as Row)).children;
               expect(
-                ((span.child as InkWell).child as Text).data?.contains("'"),
+                (((i == 0 ? children.last : children.first) as InkWell).child
+                        as Text)
+                    .data
+                    ?.contains("'"),
                 isFalse,
               );
             } else if (span is TextSpan) {
@@ -251,7 +287,7 @@ main() {
             testObject.getAnswerIsCorrect(
               sentenceExercise: Exercise<WordForm, Sentence>(
                 question: Sentence.testValue(),
-                answers: [],
+                answers: const [],
               ),
               givenAnswers: null,
               listOfAnswers: [],
@@ -268,7 +304,7 @@ main() {
             testObject.getAnswerIsCorrect(
               sentenceExercise: Exercise<WordForm, Sentence>(
                 question: Sentence.testValue(),
-                answers: [],
+                answers: const [],
               ),
               givenAnswers: [],
               listOfAnswers: [],
@@ -287,7 +323,7 @@ main() {
                 question: Sentence.testValue(answerSynonyms: [
                   WordForm.testValue(type: WordFormType.ruAdjFDat)
                 ]),
-                answers: [],
+                answers: const [],
               ),
               givenAnswers: [],
               listOfAnswers: [
@@ -312,7 +348,7 @@ main() {
                     wordFormPosition: correctAnswer.position,
                     form: correctAnswer.form,
                     formBare: correctAnswer.bare),
-                answers: [],
+                answers: const [],
               ),
               givenAnswers: [correctAnswer],
               listOfAnswers: [correctAnswer],
@@ -335,7 +371,7 @@ main() {
                     wordFormPosition: correctAnswer.position,
                     form: correctAnswer.form,
                     formBare: correctAnswer.bare),
-                answers: [],
+                answers: const [],
               ),
               givenAnswers: [correctAnswer],
               listOfAnswers: [correctAnswer],
@@ -360,7 +396,7 @@ main() {
                   formBare: correctAnswer.bare,
                   answerSynonyms: [correctAnswer],
                 ),
-                answers: [],
+                answers: const [],
               ),
               givenAnswers: [correctAnswer],
               listOfAnswers: [correctAnswer],
