@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
-import 'package:uchu/extensions/map_string_dynamic_extension.dart';
-import 'package:uchu/extensions/string_extension.dart';
-import 'package:uchu/models/level.dart';
-import 'package:uchu/models/question.dart';
-import 'package:uchu/models/word.dart';
-import 'package:uchu/models/word_form.dart';
-import 'package:uchu/models/word_form_type.dart';
-import 'package:uchu/models/word_type.dart';
+import 'package:grammatika/extensions/map_string_dynamic_extension.dart';
+import 'package:grammatika/extensions/string_extension.dart';
+import 'package:grammatika/models/level.dart';
+import 'package:grammatika/models/question.dart';
+import 'package:grammatika/models/word.dart';
+import 'package:grammatika/models/word_form.dart';
+import 'package:grammatika/models/word_form_type.dart';
+import 'package:grammatika/models/word_type.dart';
 
 class Sentence extends Question<WordForm> {
   const Sentence._({

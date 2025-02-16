@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uchu/blocs/exercise/exercise_bloc.dart';
-import 'package:uchu/models/answer.dart';
+import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
+import 'package:grammatika/models/answer.dart';
 
 class AnswerCard<T extends Answer> extends StatelessWidget {
   const AnswerCard({

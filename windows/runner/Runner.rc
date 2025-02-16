@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "uchu" "\0"
+            VALUE "FileDescription", "grammatika" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "uchu" "\0"
+            VALUE "InternalName", "grammatika" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "uchu.exe" "\0"
-            VALUE "ProductName", "uchu" "\0"
+            VALUE "OriginalFilename", "grammatika.exe" "\0"
+            VALUE "ProductName", "grammatika" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

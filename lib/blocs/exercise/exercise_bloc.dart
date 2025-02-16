@@ -5,17 +5,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/extensions/gender_extension.dart';
-import 'package:uchu/models/exercise.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/noun.dart';
-import 'package:uchu/models/sentence.dart';
-import 'package:uchu/models/word_form.dart';
-import 'package:uchu/models/word_form_type.dart';
-import 'package:uchu/services/enabled_exercises_service.dart';
-import 'package:uchu/services/statistics_service.dart';
-import 'package:uchu/utilities/db_helper.dart';
-import 'package:uchu/utilities/explanation_helper.dart';
+import 'package:grammatika/extensions/gender_extension.dart';
+import 'package:grammatika/models/exercise.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/noun.dart';
+import 'package:grammatika/models/sentence.dart';
+import 'package:grammatika/models/word_form.dart';
+import 'package:grammatika/models/word_form_type.dart';
+import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/statistics_service.dart';
+import 'package:grammatika/utilities/db_helper.dart';
+import 'package:grammatika/utilities/explanation_helper.dart';
 
 import '../../models/answer.dart';
 

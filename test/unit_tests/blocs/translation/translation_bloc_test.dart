@@ -2,8 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/blocs/translation/translation_bloc.dart';
-import 'package:uchu/services/translation_service.dart';
+import 'package:grammatika/blocs/translation/translation_bloc.dart';
+import 'package:grammatika/services/translation_service.dart';
 
 import '../../mocks.dart';
 

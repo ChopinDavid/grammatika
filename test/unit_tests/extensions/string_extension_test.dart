@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uchu/extensions/string_extension.dart';
+import 'package:grammatika/extensions/string_extension.dart';
 
 main() {
   group('isNullOrEmpty', () {

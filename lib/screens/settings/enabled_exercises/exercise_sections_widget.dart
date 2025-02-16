@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uchu/screens/settings/enabled_exercises/exercise_section.dart';
-import 'package:uchu/screens/settings/enabled_exercises/section_widget.dart';
+import 'package:grammatika/screens/settings/enabled_exercises/exercise_section.dart';
+import 'package:grammatika/screens/settings/enabled_exercises/section_widget.dart';
 
 class ExerciseSectionsWidget extends StatefulWidget {
   const ExerciseSectionsWidget({

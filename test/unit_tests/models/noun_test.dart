@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/level.dart';
-import 'package:uchu/models/noun.dart';
-import 'package:uchu/models/word_type.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/level.dart';
+import 'package:grammatika/models/noun.dart';
+import 'package:grammatika/models/word_type.dart';
 
 main() {
   group('fromJson', () {

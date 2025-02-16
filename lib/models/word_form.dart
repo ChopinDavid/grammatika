@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:uchu/extensions/map_string_dynamic_extension.dart';
-import 'package:uchu/models/answer.dart';
-import 'package:uchu/models/word_form_type.dart';
+import 'package:grammatika/extensions/map_string_dynamic_extension.dart';
+import 'package:grammatika/models/answer.dart';
+import 'package:grammatika/models/word_form_type.dart';
 
 class WordForm extends Equatable implements Answer {
   final WordFormType type;

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/blocs/translation/translation_bloc.dart';
-import 'package:uchu/widgets/translation_widget.dart';
+import 'package:grammatika/blocs/translation/translation_bloc.dart';
+import 'package:grammatika/widgets/translation_widget.dart';
 
 import '../mocks.dart';
 

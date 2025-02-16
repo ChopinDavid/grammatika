@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uchu/widgets/translation_button.dart';
-import 'package:uchu/widgets/translation_widget.dart';
+import 'package:grammatika/widgets/translation_button.dart';
+import 'package:grammatika/widgets/translation_widget.dart';
 
 void main() {
   group('constructor assertions', () {

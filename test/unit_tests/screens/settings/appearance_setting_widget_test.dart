@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uchu/screens/settings/appearance_setting_widget.dart';
+import 'package:grammatika/screens/settings/appearance_setting_widget.dart';
 
 main() {
   group('onSelected', () {

@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:uchu/extensions/map_string_dynamic_extension.dart';
-import 'package:uchu/extensions/string_extension.dart';
-import 'package:uchu/models/level.dart';
-import 'package:uchu/models/word_type.dart';
+import 'package:grammatika/extensions/map_string_dynamic_extension.dart';
+import 'package:grammatika/extensions/string_extension.dart';
+import 'package:grammatika/models/level.dart';
+import 'package:grammatika/models/word_type.dart';
 
 class Word extends Equatable {
   const Word._({

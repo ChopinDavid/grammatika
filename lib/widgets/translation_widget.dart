@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uchu/blocs/translation/translation_bloc.dart';
+import 'package:grammatika/blocs/translation/translation_bloc.dart';
 
 class TranslationWidget extends StatelessWidget {
   const TranslationWidget({

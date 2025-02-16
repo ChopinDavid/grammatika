@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uchu/screens/statistics/pass_rate_bar.dart';
+import 'package:grammatika/screens/statistics/pass_rate_bar.dart';
 
 main() {
   testWidgets('throws if the pass rate is less than 0',

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uchu/consts.dart';
+import 'package:grammatika/consts.dart';
 
 class ThemeService with ChangeNotifier {
   ThemeService({required SharedPreferences sharedPreferences})

@@ -2,18 +2,18 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
+import 'package:grammatika/models/exercise.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/noun.dart';
+import 'package:grammatika/models/sentence.dart';
+import 'package:grammatika/models/word_form.dart';
+import 'package:grammatika/screens/exercise_page.dart';
+import 'package:grammatika/widgets/explanations_widget.dart';
+import 'package:grammatika/widgets/gender_exercise_widget.dart';
+import 'package:grammatika/widgets/grammatika_drawer.dart';
+import 'package:grammatika/widgets/sentence_exercise_widget.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/blocs/exercise/exercise_bloc.dart';
-import 'package:uchu/models/exercise.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/noun.dart';
-import 'package:uchu/models/sentence.dart';
-import 'package:uchu/models/word_form.dart';
-import 'package:uchu/screens/exercise_page.dart';
-import 'package:uchu/widgets/explanations_widget.dart';
-import 'package:uchu/widgets/gender_exercise_widget.dart';
-import 'package:uchu/widgets/sentence_exercise_widget.dart';
-import 'package:uchu/widgets/uchu_drawer.dart';
 
 import '../mocks.dart';
 
@@ -231,7 +231,7 @@ main() {
           await widgetTester.pump();
           await widgetTester.idle();
 
-          expect(find.byType(UchuDrawer), findsNothing);
+          expect(find.byType(GrammatikaDrawer), findsNothing);
 
           final menuIconFinder = find.byIcon(Icons.menu);
           expect(menuIconFinder, findsOneWidget);
@@ -239,7 +239,7 @@ main() {
           await widgetTester.pump();
           await widgetTester.idle();
 
-          expect(find.byType(UchuDrawer), findsOneWidget);
+          expect(find.byType(GrammatikaDrawer), findsOneWidget);
         },
       );
     },

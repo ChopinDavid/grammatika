@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:uchu/models/answer.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/noun.dart';
-import 'package:uchu/models/question.dart';
-import 'package:uchu/models/sentence.dart';
-import 'package:uchu/models/word_form.dart';
+import 'package:grammatika/models/answer.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/noun.dart';
+import 'package:grammatika/models/question.dart';
+import 'package:grammatika/models/sentence.dart';
+import 'package:grammatika/models/word_form.dart';
 
 class Exercise<A extends Answer, Q extends Question<A>> extends Equatable {
   const Exercise({

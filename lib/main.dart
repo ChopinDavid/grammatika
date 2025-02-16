@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uchu/services/enabled_exercises_service.dart';
-import 'package:uchu/services/navigation_service.dart';
-import 'package:uchu/services/statistics_service.dart';
-import 'package:uchu/services/theme_service.dart';
-import 'package:uchu/services/translation_service.dart';
-import 'package:uchu/utilities/db_helper.dart';
-import 'package:uchu/utilities/explanation_helper.dart';
-import 'package:uchu/utilities/url_helper.dart';
+import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/navigation_service.dart';
+import 'package:grammatika/services/statistics_service.dart';
+import 'package:grammatika/services/theme_service.dart';
+import 'package:grammatika/services/translation_service.dart';
+import 'package:grammatika/utilities/db_helper.dart';
+import 'package:grammatika/utilities/explanation_helper.dart';
+import 'package:grammatika/utilities/url_helper.dart';
 
 import 'my_app.dart';
 

@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/word_form_type.dart';
-import 'package:uchu/services/enabled_exercises_service.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/word_form_type.dart';
+import 'package:grammatika/services/enabled_exercises_service.dart';
 
 class DbHelper {
   Future<Database> getDatabase() async {

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uchu/consts.dart';
+import 'package:grammatika/consts.dart';
 
 class EnabledExercisesService with ChangeNotifier {
   EnabledExercisesService({required SharedPreferences sharedPreferences})

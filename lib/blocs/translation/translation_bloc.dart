@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
-import 'package:uchu/services/translation_service.dart';
+import 'package:grammatika/services/translation_service.dart';
 
 part 'translation_event.dart';
 part 'translation_state.dart';

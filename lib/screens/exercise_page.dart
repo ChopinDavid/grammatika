@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uchu/blocs/exercise/exercise_bloc.dart';
-import 'package:uchu/models/exercise.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/noun.dart';
-import 'package:uchu/models/word_form.dart';
-import 'package:uchu/widgets/explanations_widget.dart';
-import 'package:uchu/widgets/gender_exercise_widget.dart';
-import 'package:uchu/widgets/sentence_exercise_widget.dart';
-import 'package:uchu/widgets/uchu_drawer.dart';
+import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
+import 'package:grammatika/models/exercise.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/noun.dart';
+import 'package:grammatika/models/word_form.dart';
+import 'package:grammatika/widgets/explanations_widget.dart';
+import 'package:grammatika/widgets/gender_exercise_widget.dart';
+import 'package:grammatika/widgets/grammatika_drawer.dart';
+import 'package:grammatika/widgets/sentence_exercise_widget.dart';
 
 import '../models/sentence.dart';
 
@@ -18,9 +18,9 @@ class ExercisePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const UchuDrawer(),
+      drawer: const GrammatikaDrawer(),
       appBar: AppBar(
-        title: const Text('Uchu'),
+        title: const Text('Grammatika'),
         leading: Builder(builder: (context) {
           return IconButton(
             onPressed: () => Scaffold.of(context).openDrawer(),

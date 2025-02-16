@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/screens/settings/settings_page.dart';
-import 'package:uchu/screens/statistics/statistics_page.dart';
-import 'package:uchu/services/enabled_exercises_service.dart';
-import 'package:uchu/services/navigation_service.dart';
-import 'package:uchu/services/statistics_service.dart';
-import 'package:uchu/services/theme_service.dart';
+import 'package:grammatika/screens/settings/settings_page.dart';
+import 'package:grammatika/screens/statistics/statistics_page.dart';
+import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/navigation_service.dart';
+import 'package:grammatika/services/statistics_service.dart';
+import 'package:grammatika/services/theme_service.dart';
 
 import '../mocks.dart';
 
