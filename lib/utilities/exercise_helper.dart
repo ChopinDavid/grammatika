@@ -7,6 +7,7 @@ import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/utilities/url_helper.dart';
+import 'package:uchu/widgets/translation_button.dart';
 
 class ExerciseHelper {
   const ExerciseHelper();
@@ -28,9 +29,11 @@ class ExerciseHelper {
     return answerGroups;
   }
 
-  List<InlineSpan> getSpansFromSentence({
+  List<InlineSpan> getSpansFromSentence(
+    BuildContext context, {
     required Exercise<WordForm, Sentence> sentenceExercise,
     required TextStyle defaultTextStyle,
+    required int? tatoebaKey,
   }) {
     final baseWord = sentenceExercise.question.possibleAnswers
         .firstWhere((element) =>
@@ -53,28 +56,47 @@ class ExerciseHelper {
         );
       } else {
         final sentenceWordIndex = i ~/ 2;
-        final word = sentenceWords[sentenceWordIndex];
+        var word = sentenceWords[sentenceWordIndex];
         final isPlaceholder = word.contains(sentenceWordPlaceholderText);
+        Widget widgetToAdd;
 
         if (isPlaceholder) {
-          sentenceSpans.add(
-            TextSpan(
-              text: word,
-              style: defaultTextStyle,
-            ),
+          widgetToAdd = Text(
+            word,
+            style: defaultTextStyle.copyWith(fontSize: 24),
           );
         } else {
-          sentenceSpans.add(
-            WidgetSpan(
-              child: InkWell(
-                child: Text(word, style: translatableTextStyle),
-                onTap: () {
-                  GetIt.instance.get<UrlHelper>().launchWiktionaryPageFor(word);
-                },
-              ),
-            ),
+          widgetToAdd = InkWell(
+            child:
+                Text(word, style: translatableTextStyle.copyWith(fontSize: 24)),
+            onTap: () {
+              GetIt.instance.get<UrlHelper>().launchWiktionaryPageFor(word);
+            },
           );
         }
+
+        final bool isFirstWord = sentenceWordIndex == 0;
+        final bool isLastWord = sentenceWordIndex == sentenceWords.length - 1;
+
+        sentenceSpans.add(
+          WidgetSpan(
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              if (isFirstWord)
+                Text(
+                  '«',
+                  style: defaultTextStyle,
+                ),
+              widgetToAdd,
+              if (isLastWord) ...[
+                Text(
+                  '»',
+                  style: defaultTextStyle,
+                ),
+                TranslationButton(tatoebaKey: tatoebaKey),
+              ]
+            ]),
+          ),
+        );
       }
     }
 

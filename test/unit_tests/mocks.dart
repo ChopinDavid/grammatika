@@ -41,6 +41,38 @@ class MockExplanationHelper extends Mock implements ExplanationHelper {}
 class MockRandom extends Mock implements Random {}
 
 class MockTextStyle extends Mock implements TextStyle {
+  MockTextStyle() {
+    when(
+      () => copyWith(
+        leadingDistribution: any(named: 'leadingDistribution'),
+        fontSize: any(named: 'fontSize'),
+        height: any(named: 'height'),
+        textBaseline: any(named: 'textBaseline'),
+        fontWeight: any(named: 'fontWeight'),
+        color: any(named: 'color'),
+        backgroundColor: any(named: 'backgroundColor'),
+        background: any(named: 'background'),
+        debugLabel: any(named: 'debugLabel'),
+        decoration: any(named: 'decoration'),
+        decorationColor: any(named: 'decorationColor'),
+        decorationStyle: any(named: 'decorationStyle'),
+        decorationThickness: any(named: 'decorationThickness'),
+        fontFamily: any(named: 'fontFamily'),
+        fontFamilyFallback: any(named: 'fontFamilyFallback'),
+        fontFeatures: any(named: 'fontFeatures'),
+        fontStyle: any(named: 'fontStyle'),
+        fontVariations: any(named: 'fontVariations'),
+        foreground: any(named: 'foreground'),
+        inherit: any(named: 'inherit'),
+        letterSpacing: any(named: 'letterSpacing'),
+        locale: any(named: 'locale'),
+        overflow: any(named: 'overflow'),
+        package: any(named: 'package'),
+        shadows: any(named: 'shadows'),
+        wordSpacing: any(named: 'wordSpacing'),
+      ),
+    ).thenReturn(this);
+  }
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return '';

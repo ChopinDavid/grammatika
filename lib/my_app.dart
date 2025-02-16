@@ -27,14 +27,20 @@ class MyApp extends StatelessWidget {
               value: _exerciseBloc,
               child: const ExercisePage(),
             ),
-            theme: ThemeData.light()
-              ..copyWith(
-                listTileTheme: const ListTileThemeData(minVerticalPadding: 0.0),
-              ),
-            darkTheme: ThemeData.dark(),
+            theme: _applyFontSizesTo(themeData: ThemeData.light()),
+            darkTheme: _applyFontSizesTo(themeData: ThemeData.dark()),
             themeMode: themeMode,
           );
         },
+      ),
+    );
+  }
+
+  ThemeData _applyFontSizesTo({required ThemeData themeData}) {
+    return themeData.copyWith(
+      listTileTheme: const ListTileThemeData(minVerticalPadding: 0.0),
+      textTheme: themeData.textTheme.copyWith(
+        bodyMedium: const TextStyle(fontSize: 18.0),
       ),
     );
   }

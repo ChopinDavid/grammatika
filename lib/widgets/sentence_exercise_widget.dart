@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/blocs/translation/translation_bloc.dart';
 import 'package:uchu/consts.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/sentence.dart';
 import 'package:uchu/models/word_form.dart';
 import 'package:uchu/utilities/exercise_helper.dart';
 import 'package:uchu/utilities/url_helper.dart';
-import 'package:uchu/widgets/translation_widget.dart';
 
 import 'answer_card.dart';
 
@@ -26,9 +23,6 @@ class SentenceExerciseWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final givenAnswers = exercise.answers;
 
-    var nonTranslatableTextStyle = TextStyle(
-      color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
-    );
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -39,9 +33,11 @@ class SentenceExerciseWidget extends StatelessWidget {
               children: [
                 TextSpan(
                   text: 'What is the correct form of the word ',
-                  style: nonTranslatableTextStyle,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 WidgetSpan(
+                  alignment: PlaceholderAlignment.baseline,
+                  baseline: TextBaseline.alphabetic,
                   child: InkWell(
                     child: Text(
                       exercise.question.word.bare,
@@ -56,7 +52,7 @@ class SentenceExerciseWidget extends StatelessWidget {
                 ),
                 TextSpan(
                   text: ' in the sentence:',
-                  style: nonTranslatableTextStyle,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),
@@ -69,55 +65,14 @@ class SentenceExerciseWidget extends StatelessWidget {
           child: RichText(
             key: const Key('sentence-rich-text'),
             text: TextSpan(
-              children: [
-                TextSpan(
-                  text: '«',
-                  style: nonTranslatableTextStyle,
-                ),
-                ...exerciseHelper.getSpansFromSentence(
-                  sentenceExercise: exercise,
-                  defaultTextStyle: DefaultTextStyle.of(context).style,
-                ),
-                TextSpan(
-                  text: '»',
-                  style: nonTranslatableTextStyle,
-                ),
-                WidgetSpan(
-                  child: SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: IconButton(
-                      padding: const EdgeInsets.all(4),
-                      onPressed: () {
-                        final tatoebaKey = exercise.question.tatoebaKey;
-                        if (tatoebaKey == null) {
-                          // TODO(DC): Handle this scenario
-                          return;
-                        }
-
-                        showDialog(
-                          context: context,
-                          builder: (context) => Center(
-                            child: BlocProvider<TranslationBloc>(
-                              create: (context) {
-                                return TranslationBloc()
-                                  ..add(TranslationFetchTranslationEvent(
-                                      tatoebaKey: tatoebaKey));
-                              },
-                              child: const TranslationWidget(),
-                            ),
-                          ),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.translate,
-                        color: Colors.blue,
-                        size: 16,
-                      ),
-                    ),
-                  ),
-                )
-              ],
+              children: exerciseHelper.getSpansFromSentence(
+                context,
+                sentenceExercise: exercise,
+                defaultTextStyle:
+                    DefaultTextStyle.of(context).style.copyWith(fontSize: 24.0),
+                tatoebaKey: exercise.question.tatoebaKey,
+              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
         ),
