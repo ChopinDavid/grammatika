@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:uchu/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/enabled_exercises_service.dart';
 
 class ExerciseSection {
   const ExerciseSection({required this.title, this.subSections, this.exercises})

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/consts.dart';
-import 'package:uchu/models/exercise.dart';
-import 'package:uchu/models/sentence.dart';
-import 'package:uchu/models/word_form.dart';
-import 'package:uchu/utilities/exercise_helper.dart';
-import 'package:uchu/utilities/url_helper.dart';
+import 'package:grammatika/consts.dart';
+import 'package:grammatika/models/exercise.dart';
+import 'package:grammatika/models/sentence.dart';
+import 'package:grammatika/models/word_form.dart';
+import 'package:grammatika/utilities/exercise_helper.dart';
+import 'package:grammatika/utilities/url_helper.dart';
 
 import 'answer_card.dart';
 
@@ -58,7 +58,7 @@ class SentenceExerciseWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: UchuSpacing.M),
+        const SizedBox(height: GrammatikaSpacing.M),
         //  TODO(DC): Write test around scenarios when the base word is the first word in the sentence and is capitalized.
 
         Center(
@@ -76,7 +76,7 @@ class SentenceExerciseWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: UchuSpacing.L),
+        const SizedBox(height: GrammatikaSpacing.L),
 
         Wrap(
           children: exerciseHelper

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uchu/screens/statistics/duration_radio_button.dart';
+import 'package:grammatika/screens/statistics/duration_radio_button.dart';
 
 main() {
   testWidgets(

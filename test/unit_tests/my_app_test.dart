@@ -4,10 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uchu/blocs/exercise/exercise_bloc.dart';
-import 'package:uchu/my_app.dart';
-import 'package:uchu/services/enabled_exercises_service.dart';
-import 'package:uchu/services/theme_service.dart';
+import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
+import 'package:grammatika/my_app.dart';
+import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/theme_service.dart';
 
 import 'mocks.dart';
 

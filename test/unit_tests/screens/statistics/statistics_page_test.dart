@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/word_form_type.dart';
-import 'package:uchu/screens/statistics/pass_rate_list_tile.dart';
-import 'package:uchu/screens/statistics/statistics_page.dart';
-import 'package:uchu/services/statistics_service.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/word_form_type.dart';
+import 'package:grammatika/screens/statistics/pass_rate_list_tile.dart';
+import 'package:grammatika/screens/statistics/statistics_page.dart';
+import 'package:grammatika/services/statistics_service.dart';
 
 import '../../mocks.dart';
 

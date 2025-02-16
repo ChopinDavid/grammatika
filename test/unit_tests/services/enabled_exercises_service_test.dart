@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uchu/consts.dart';
-import 'package:uchu/services/enabled_exercises_service.dart';
+import 'package:grammatika/consts.dart';
+import 'package:grammatika/services/enabled_exercises_service.dart';
 
 import '../mocks.dart';
 

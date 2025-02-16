@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uchu/screens/settings/settings_page.dart';
-import 'package:uchu/screens/statistics/statistics_page.dart';
+import 'package:grammatika/screens/settings/settings_page.dart';
+import 'package:grammatika/screens/statistics/statistics_page.dart';
 
 class NavigationService {
   Future<T?> pushSettingsPage<T>(BuildContext context) {

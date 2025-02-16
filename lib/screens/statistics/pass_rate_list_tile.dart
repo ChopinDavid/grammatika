@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uchu/screens/statistics/pass_rate_bar.dart';
+import 'package:grammatika/screens/statistics/pass_rate_bar.dart';
 
 class PassRateListTile extends StatelessWidget {
   const PassRateListTile({

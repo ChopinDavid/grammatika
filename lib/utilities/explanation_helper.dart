@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:uchu/consts.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/word_form.dart';
-import 'package:uchu/models/word_form_type.dart';
+import 'package:grammatika/consts.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/word_form.dart';
+import 'package:grammatika/models/word_form_type.dart';
 
 class ExplanationHelper {
   String? genderExplanation({

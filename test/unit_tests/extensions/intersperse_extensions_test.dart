@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uchu/extensions/intersperse_extensions.dart';
+import 'package:grammatika/extensions/intersperse_extensions.dart';
 
 main() {
   group('intersperse', () {

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/services/translation_service.dart';
+import 'package:grammatika/services/translation_service.dart';
 
 import '../mocks.dart';
 

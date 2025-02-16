@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uchu/extensions/gender_extension.dart';
-import 'package:uchu/models/gender.dart';
+import 'package:grammatika/extensions/gender_extension.dart';
+import 'package:grammatika/models/gender.dart';
 
 main() {
   group('displayString', () {

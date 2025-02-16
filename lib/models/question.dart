@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:uchu/models/answer.dart';
+import 'package:grammatika/models/answer.dart';
 
 class Question<T extends Answer> extends Equatable {
   const Question({

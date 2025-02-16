@@ -1,4 +1,4 @@
-import 'package:uchu/models/gender.dart';
+import 'package:grammatika/models/gender.dart';
 
 extension GenderExtension on Gender {
   String get displayString {

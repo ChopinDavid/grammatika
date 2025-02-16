@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/blocs/exercise/exercise_bloc.dart';
-import 'package:uchu/extensions/gender_extension.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/widgets/answer_card.dart';
+import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
+import 'package:grammatika/extensions/gender_extension.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/widgets/answer_card.dart';
 
 import '../mocks.dart';
 
