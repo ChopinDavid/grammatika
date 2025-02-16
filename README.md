@@ -1,5 +1,5 @@
-[![codecov](https://codecov.io/gh/ChopinDavid/uchu/graph/badge.svg?token=H40NNOYB8Y)](https://codecov.io/gh/ChopinDavid/uchu)
-# uchu
+[![codecov](https://codecov.io/gh/ChopinDavid/grammatika/graph/badge.svg?token=H40NNOYB8Y)](https://codecov.io/gh/ChopinDavid/uchu)
+# grammatika
 
 A new Flutter project.
 

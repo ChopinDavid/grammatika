@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/consts.dart';
-import 'package:uchu/extensions/gender_extension.dart';
-import 'package:uchu/models/exercise.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/noun.dart';
-import 'package:uchu/utilities/url_helper.dart';
-import 'package:uchu/widgets/answer_card.dart';
-import 'package:uchu/widgets/translation_button.dart';
+import 'package:grammatika/consts.dart';
+import 'package:grammatika/extensions/gender_extension.dart';
+import 'package:grammatika/models/exercise.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/noun.dart';
+import 'package:grammatika/utilities/url_helper.dart';
+import 'package:grammatika/widgets/answer_card.dart';
+import 'package:grammatika/widgets/translation_button.dart';
 
 class GenderExerciseWidget extends StatelessWidget {
   const GenderExerciseWidget({
@@ -47,7 +47,7 @@ class GenderExerciseWidget extends StatelessWidget {
                   ),
           ],
         ),
-        const SizedBox(height: UchuSpacing.L),
+        const SizedBox(height: GrammatikaSpacing.L),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [Gender.m, Gender.f, Gender.n]

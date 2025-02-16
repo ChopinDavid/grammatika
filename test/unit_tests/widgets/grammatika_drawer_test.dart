@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:grammatika/services/navigation_service.dart';
+import 'package:grammatika/utilities/url_helper.dart';
+import 'package:grammatika/widgets/grammatika_drawer.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/services/navigation_service.dart';
-import 'package:uchu/utilities/url_helper.dart';
-import 'package:uchu/widgets/uchu_drawer.dart';
 
 import '../../test_utils.dart';
 import '../mocks.dart';
@@ -42,7 +42,7 @@ main() {
     (widgetTester) async {
       await widgetTester.pumpWidget(
         const MaterialApp(
-          home: UchuDrawer(),
+          home: GrammatikaDrawer(),
         ),
       );
 
@@ -59,7 +59,7 @@ main() {
     (widgetTester) async {
       await widgetTester.pumpWidget(
         const MaterialApp(
-          home: UchuDrawer(),
+          home: GrammatikaDrawer(),
         ),
       );
 
@@ -72,11 +72,11 @@ main() {
   );
 
   testWidgets(
-    'Tapping "Bug Report/Feature Request" launches the Uchu GitHub issues page',
+    'Tapping "Bug Report/Feature Request" launches the Grammatika GitHub issues page',
     (widgetTester) async {
       await widgetTester.pumpWidget(
         const MaterialApp(
-          home: UchuDrawer(),
+          home: GrammatikaDrawer(),
         ),
       );
 
@@ -84,8 +84,8 @@ main() {
 
       await widgetTester.tap(find.text('Bug Report/Feature Request'));
 
-      verify(() => mockUrlHelper
-          .launchUrl('https://github.com/ChopinDavid/uchu/issues')).called(1);
+      verify(() => mockUrlHelper.launchUrl(
+          'https://github.com/ChopinDavid/grammatika/issues')).called(1);
     },
   );
 }

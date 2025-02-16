@@ -4,14 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/blocs/exercise/exercise_bloc.dart';
-import 'package:uchu/models/exercise.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/noun.dart';
-import 'package:uchu/utilities/url_helper.dart';
-import 'package:uchu/widgets/answer_card.dart';
-import 'package:uchu/widgets/gender_exercise_widget.dart';
-import 'package:uchu/widgets/translation_button.dart';
+import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
+import 'package:grammatika/models/exercise.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/noun.dart';
+import 'package:grammatika/utilities/url_helper.dart';
+import 'package:grammatika/widgets/answer_card.dart';
+import 'package:grammatika/widgets/gender_exercise_widget.dart';
+import 'package:grammatika/widgets/translation_button.dart';
 
 import '../mocks.dart';
 

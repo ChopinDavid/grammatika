@@ -1,4 +1,4 @@
-import 'package:uchu/models/answer.dart';
+import 'package:grammatika/models/answer.dart';
 
 enum Gender implements Answer {
   m,

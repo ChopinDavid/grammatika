@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/screens/settings/enabled_exercises/box_drawing_character_widgets/up_and_right_box_drawing_character_widget.dart';
-import 'package:uchu/screens/settings/enabled_exercises/box_drawing_character_widgets/vertical_and_right_box_drawing_character_widget.dart';
-import 'package:uchu/screens/settings/enabled_exercises/box_drawing_character_widgets/vertical_box_drawing_character_widget.dart';
-import 'package:uchu/screens/settings/enabled_exercises/exercise_cell.dart';
-import 'package:uchu/screens/settings/enabled_exercises/exercise_section.dart';
-import 'package:uchu/screens/settings/enabled_exercises/section_widget.dart';
-import 'package:uchu/services/enabled_exercises_service.dart';
+import 'package:grammatika/screens/settings/enabled_exercises/box_drawing_character_widgets/up_and_right_box_drawing_character_widget.dart';
+import 'package:grammatika/screens/settings/enabled_exercises/box_drawing_character_widgets/vertical_and_right_box_drawing_character_widget.dart';
+import 'package:grammatika/screens/settings/enabled_exercises/box_drawing_character_widgets/vertical_box_drawing_character_widget.dart';
+import 'package:grammatika/screens/settings/enabled_exercises/exercise_cell.dart';
+import 'package:grammatika/screens/settings/enabled_exercises/exercise_section.dart';
+import 'package:grammatika/screens/settings/enabled_exercises/section_widget.dart';
+import 'package:grammatika/services/enabled_exercises_service.dart';
 
 import '../../../mocks.dart';
 

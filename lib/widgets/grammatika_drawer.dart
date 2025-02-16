@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/services/navigation_service.dart';
-import 'package:uchu/utilities/url_helper.dart';
+import 'package:grammatika/services/navigation_service.dart';
+import 'package:grammatika/utilities/url_helper.dart';
 
-class UchuDrawer extends StatelessWidget {
-  const UchuDrawer({super.key});
+class GrammatikaDrawer extends StatelessWidget {
+  const GrammatikaDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +31,8 @@ class UchuDrawer extends StatelessWidget {
             case 3:
               return ListTile(
                 title: const Text('Bug Report/Feature Request'),
-                onTap: () => GetIt.instance
-                    .get<UrlHelper>()
-                    .launchUrl('https://github.com/ChopinDavid/uchu/issues'),
+                onTap: () => GetIt.instance.get<UrlHelper>().launchUrl(
+                    'https://github.com/ChopinDavid/grammatika/issues'),
               );
           }
         },

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uchu/services/statistics_service.dart';
+import 'package:grammatika/services/statistics_service.dart';
 
 import '../mocks.dart';
 

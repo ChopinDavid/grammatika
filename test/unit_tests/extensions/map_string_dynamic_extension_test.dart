@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uchu/extensions/map_string_dynamic_extension.dart';
+import 'package:grammatika/extensions/map_string_dynamic_extension.dart';
 
 main() {
   group('parseIntForKey', () {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uchu/consts.dart';
-import 'package:uchu/extensions/list_extension.dart';
-import 'package:uchu/extensions/string_extension.dart';
-import 'package:uchu/models/exercise.dart';
-import 'package:uchu/models/sentence.dart';
-import 'package:uchu/models/word_form.dart';
-import 'package:uchu/utilities/url_helper.dart';
-import 'package:uchu/widgets/translation_button.dart';
+import 'package:grammatika/consts.dart';
+import 'package:grammatika/extensions/list_extension.dart';
+import 'package:grammatika/extensions/string_extension.dart';
+import 'package:grammatika/models/exercise.dart';
+import 'package:grammatika/models/sentence.dart';
+import 'package:grammatika/models/word_form.dart';
+import 'package:grammatika/utilities/url_helper.dart';
+import 'package:grammatika/widgets/translation_button.dart';
 
 class ExerciseHelper {
   const ExerciseHelper();

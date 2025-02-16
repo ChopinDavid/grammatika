@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uchu/models/gender.dart';
-import 'package:uchu/models/word_form_type.dart';
-import 'package:uchu/services/enabled_exercises_service.dart';
-import 'package:uchu/utilities/db_helper.dart';
+import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/word_form_type.dart';
+import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/utilities/db_helper.dart';
 
 import '../mocks.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class UchuSpacing {
+class GrammatikaSpacing {
   static const double S = 8;
   static const double M = 16;
   static const double L = 24;
