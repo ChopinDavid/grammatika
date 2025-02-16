@@ -1,4 +1,4 @@
-package com.example.grammatika
+package com.chopindavid.grammatika
 
 import io.flutter.embedding.android.FlutterActivity
 
