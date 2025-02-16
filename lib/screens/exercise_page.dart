@@ -59,6 +59,7 @@ class ExercisePage extends StatelessWidget {
                 children.add(
                   GenderExerciseWidget(
                     exercise: exercise as Exercise<Gender, Noun>,
+                    isAnswered: state is ExerciseAnswerSelectedState,
                   ),
                 );
               }

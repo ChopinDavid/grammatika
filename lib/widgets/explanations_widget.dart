@@ -14,6 +14,8 @@ class ExplanationsWidget extends StatelessWidget {
     final explanation = this.explanation;
     final visualExplanation = this.visualExplanation;
 
+    final gradientColor = Theme.of(context).scaffoldBackgroundColor;
+
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
@@ -50,8 +52,8 @@ class ExplanationsWidget extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white,
-                    Colors.white.withOpacity(0.0),
+                    gradientColor,
+                    gradientColor.withOpacity(0.0),
                   ],
                 ),
               ),
@@ -63,8 +65,8 @@ class ExplanationsWidget extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withOpacity(0.0),
-                    Colors.white,
+                    gradientColor.withOpacity(0.0),
+                    gradientColor,
                   ],
                 ),
               ),

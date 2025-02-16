@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:uchu/consts.dart';
 import 'package:uchu/extensions/gender_extension.dart';
 import 'package:uchu/models/exercise.dart';
 import 'package:uchu/models/gender.dart';
 import 'package:uchu/models/noun.dart';
+import 'package:uchu/utilities/url_helper.dart';
 import 'package:uchu/widgets/answer_card.dart';
+import 'package:uchu/widgets/translation_button.dart';
 
 class GenderExerciseWidget extends StatelessWidget {
   const GenderExerciseWidget({
     super.key,
     required this.exercise,
+    required this.isAnswered,
   });
 
   final Exercise<Gender, Noun> exercise;
+  final bool isAnswered;
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +26,26 @@ class GenderExerciseWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text('What is the gender of the word...'),
-        Text(
-          '${exercise.question.word.bare}?',
-          key: const Key('bare-key'),
-          style: Theme.of(context).textTheme.headlineLarge,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '${exercise.question.word.bare}?',
+              key: const Key('bare-key'),
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+            isAnswered
+                ? TranslationButton(
+                    onPressed: () {
+                      GetIt.instance
+                          .get<UrlHelper>()
+                          .launchWiktionaryPageFor(exercise.question.word.bare);
+                    },
+                  )
+                : const SizedBox.square(
+                    dimension: 24.0,
+                  ),
+          ],
         ),
         const SizedBox(height: UchuSpacing.L),
         Row(
