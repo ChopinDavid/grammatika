@@ -103,7 +103,6 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
           emit(
             ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
           );
-          add(ExerciseRetrieveExerciseEvent());
         }
       }
 
@@ -157,7 +156,6 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
             ExerciseErrorState(
                 errorString: 'Unable to parse sentence from JSON'),
           );
-          add(ExerciseRetrieveExerciseEvent());
         }
       }
 
