@@ -2,15 +2,9 @@ import 'dart:math';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
 import 'package:grammatika/blocs/translation/translation_bloc.dart';
 import 'package:grammatika/models/noun.dart';
-import 'package:grammatika/screens/settings/enabled_exercises/exercise_section.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
 import 'package:grammatika/services/navigation_service.dart';
 import 'package:grammatika/services/statistics_service.dart';
@@ -20,6 +14,11 @@ import 'package:grammatika/utilities/db_helper.dart';
 import 'package:grammatika/utilities/exercise_helper.dart';
 import 'package:grammatika/utilities/explanation_helper.dart';
 import 'package:grammatika/utilities/url_helper.dart';
+import 'package:http/http.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 class MockDbHelper extends Mock implements DbHelper {}
@@ -113,10 +112,8 @@ class MockEnabledExercisesService extends Mock
     implements EnabledExercisesService {
   MockEnabledExercisesService() {
     when(() => getDisabledExercises()).thenReturn([]);
-    when(() => getExerciseEnabled(any())).thenReturn(true);
+    when(() => getEnabledExercises()).thenReturn([]);
   }
 }
-
-class MockExerciseSection extends Mock implements ExerciseSection {}
 
 class MockStatisticsService extends Mock implements StatisticsService {}
