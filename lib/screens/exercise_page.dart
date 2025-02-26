@@ -34,9 +34,14 @@ class ExercisePage extends StatelessWidget {
           child: BlocConsumer<ExerciseBloc, ExerciseState>(
             listener: (context, state) {
               if (state is ExerciseErrorState) {
-                // TODO(DC): Make it so that we show an error snack bar and show previous answer/exercise
-                // TODO(DC): Write tests around this snack bar when implemented
-                print(state.errorString);
+                // TODO(DC): Maybe fetch a new exercise here
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'There was an error fetching exercise: ${state.errorString}',
+                    ),
+                  ),
+                );
               }
             },
             builder: (context, state) {

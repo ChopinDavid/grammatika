@@ -1,10 +1,9 @@
+import 'package:expandable_box_drawing_table/widgets/expandable_box_drawing_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:grammatika/models/gender.dart';
-import 'package:grammatika/models/word_form_type.dart';
+import 'package:grammatika/consts.dart';
 import 'package:grammatika/screens/settings/appearance_setting_widget.dart';
-import 'package:grammatika/screens/settings/enabled_exercises/exercise_section.dart';
-import 'package:grammatika/screens/settings/enabled_exercises/exercise_sections_widget.dart';
+import 'package:grammatika/services/enabled_exercises_service.dart';
 import 'package:grammatika/services/theme_service.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -139,208 +138,16 @@ class _EnabledExercisesWidgetState extends State<_EnabledExercisesWidget> {
         const SizedBox(
           height: 24.0,
         ),
-        ExerciseSectionsWidget(
-          sections: [
-            ExerciseSection(
-              title: 'Inflection',
-              subSections: [
-                ExerciseSection(
-                  title: 'Nouns',
-                  subSections: [
-                    ExerciseSection(
-                      title: 'Nominative',
-                      exercises: [
-                        (WordFormType.ruNounSgNom.name, 'Singular'),
-                        (WordFormType.ruNounPlNom.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Genitive',
-                      exercises: [
-                        (WordFormType.ruNounSgGen.name, 'Singular'),
-                        (WordFormType.ruNounPlGen.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Dative',
-                      exercises: [
-                        (WordFormType.ruNounSgDat.name, 'Singular'),
-                        (WordFormType.ruNounPlDat.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Accusative',
-                      exercises: [
-                        (WordFormType.ruNounSgAcc.name, 'Singular'),
-                        (WordFormType.ruNounPlAcc.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Instrumental',
-                      exercises: [
-                        (WordFormType.ruNounSgInst.name, 'Singular'),
-                        (WordFormType.ruNounPlInst.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Prepositional',
-                      exercises: [
-                        (WordFormType.ruNounSgPrep.name, 'Singular'),
-                        (WordFormType.ruNounPlPrep.name, 'Plural'),
-                      ],
-                    ),
-                  ],
-                ),
-                ExerciseSection(
-                  title: 'Verbs',
-                  subSections: [
-                    ExerciseSection(
-                      title: 'First Person',
-                      exercises: [
-                        (WordFormType.ruVerbPresfutSg1.name, 'Singular'),
-                        (WordFormType.ruVerbPresfutPl1.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Second Person',
-                      exercises: [
-                        (WordFormType.ruVerbPresfutSg2.name, 'Singular'),
-                        (WordFormType.ruVerbPresfutPl2.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Third Person',
-                      exercises: [
-                        (WordFormType.ruVerbPresfutSg3.name, 'Singular'),
-                        (WordFormType.ruVerbPresfutPl3.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Past',
-                      exercises: [
-                        (WordFormType.ruVerbPastM.name, 'Masculine'),
-                        (WordFormType.ruVerbPastF.name, 'Feminine'),
-                        (WordFormType.ruVerbPastN.name, 'Neuter'),
-                        (WordFormType.ruVerbPastPl.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Participles',
-                      subSections: [
-                        ExerciseSection(
-                          title: 'Active',
-                          exercises: [
-                            (
-                              WordFormType.ruVerbParticipleActivePast.name,
-                              'Past'
-                            ),
-                            (
-                              WordFormType.ruVerbParticipleActivePresent.name,
-                              'Present'
-                            ),
-                          ],
-                        ),
-                        ExerciseSection(
-                          title: 'Passive',
-                          exercises: [
-                            (
-                              WordFormType.ruVerbParticiplePassivePast.name,
-                              'Past'
-                            ),
-                            (
-                              WordFormType.ruVerbParticiplePassivePresent.name,
-                              'Present'
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Imperative',
-                      exercises: [
-                        (WordFormType.ruVerbImperativeSg.name, 'Singular'),
-                        (WordFormType.ruVerbImperativePl.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Gerunds',
-                      exercises: [
-                        (WordFormType.ruVerbGerundPast.name, 'Past'),
-                        (WordFormType.ruVerbGerundPresent.name, 'Present'),
-                      ],
-                    )
-                  ],
-                ),
-                ExerciseSection(
-                  title: 'Adjectives',
-                  subSections: [
-                    ExerciseSection(
-                      title: 'Nominative',
-                      exercises: [
-                        (WordFormType.ruAdjMNom.name, 'Masculine'),
-                        (WordFormType.ruAdjFNom.name, 'Feminine'),
-                        (WordFormType.ruAdjNNom.name, 'Neuter'),
-                        (WordFormType.ruAdjPlNom.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Genitive',
-                      exercises: [
-                        (WordFormType.ruAdjMGen.name, 'Masculine'),
-                        (WordFormType.ruAdjFGen.name, 'Feminine'),
-                        (WordFormType.ruAdjNGen.name, 'Neuter'),
-                        (WordFormType.ruAdjPlGen.name, 'Plural')
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Dative',
-                      exercises: [
-                        (WordFormType.ruAdjMDat.name, 'Masculine'),
-                        (WordFormType.ruAdjFDat.name, 'Feminine'),
-                        (WordFormType.ruAdjNDat.name, 'Neuter'),
-                        (WordFormType.ruAdjPlDat.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Accusative',
-                      exercises: [
-                        (WordFormType.ruAdjMAcc.name, 'Masculine'),
-                        (WordFormType.ruAdjFAcc.name, 'Feminine'),
-                        (WordFormType.ruAdjNAcc.name, 'Neuter'),
-                        (WordFormType.ruAdjPlAcc.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Instrumental',
-                      exercises: [
-                        (WordFormType.ruAdjMInst.name, 'Masculine'),
-                        (WordFormType.ruAdjFInst.name, 'Feminine'),
-                        (WordFormType.ruAdjNInst.name, 'Neuter'),
-                        (WordFormType.ruAdjPlInst.name, 'Plural'),
-                      ],
-                    ),
-                    ExerciseSection(
-                      title: 'Prepositional',
-                      exercises: [
-                        (WordFormType.ruAdjMPrep.name, 'Masculine'),
-                        (WordFormType.ruAdjFPrep.name, 'Feminine'),
-                        (WordFormType.ruAdjNPrep.name, 'Neuter'),
-                        (WordFormType.ruAdjPlPrep.name, 'Plural'),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            ExerciseSection(
-              title: 'Identifying Gender',
-              exercises: [
-                (Gender.m.name, 'Masculine'),
-                (Gender.f.name, 'Feminine'),
-                (Gender.n.name, 'Neuter'),
-              ],
-            ),
-          ],
+        ExpandableBoxDrawingTable<String>(
+          initialValues: GetIt.instance
+              .get<EnabledExercisesService>()
+              .getEnabledExercises(),
+          onValuesChanged: (newValues) {
+            GetIt.instance
+                .get<EnabledExercisesService>()
+                .setEnabledExercises(newValues);
+          },
+          sections: sections,
         ),
       ],
     );

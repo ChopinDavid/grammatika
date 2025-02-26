@@ -1,11 +1,13 @@
+import 'package:expandable_box_drawing_table/widgets/expandable_box_drawing_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:grammatika/consts.dart';
 import 'package:grammatika/screens/settings/appearance_setting_widget.dart';
 import 'package:grammatika/screens/settings/settings_page.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
 import 'package:grammatika/services/theme_service.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../mocks.dart';
 
@@ -254,6 +256,68 @@ main() {
         expect(find.text('Enabled Exercises'), findsOneWidget);
         expect(find.text('Inflection'), findsOneWidget);
         expect(find.text('Identifying Gender'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'displays ExpandableBoxDrawingTable with enabled exercises from EnabledExercisesService',
+      (widgetTester) async {
+        final expectedEnabledExercises = ['exercise1', 'exercise2'];
+        when(() => mockEnabledExercisesService.getEnabledExercises())
+            .thenReturn(expectedEnabledExercises);
+        await widgetTester.pumpWidget(
+          const MaterialApp(
+            home: SettingsPage(),
+          ),
+        );
+        await widgetTester.pumpAndSettle();
+
+        final expandableBoxDrawingTableFinder =
+            find.byType(ExpandableBoxDrawingTable<String>);
+        expect(expandableBoxDrawingTableFinder, findsOneWidget);
+        final expandableBoxDrawingTable = widgetTester
+            .widget<ExpandableBoxDrawingTable>(expandableBoxDrawingTableFinder);
+        expect(
+            expandableBoxDrawingTable.initialValues, expectedEnabledExercises);
+      },
+    );
+
+    testWidgets(
+      'displays ExpandableBoxDrawingTable with sections',
+      (widgetTester) async {
+        final expectedEnabledExercises = ['exercise1', 'exercise2'];
+        when(() => mockEnabledExercisesService.getEnabledExercises())
+            .thenReturn(expectedEnabledExercises);
+        await widgetTester.pumpWidget(
+          const MaterialApp(
+            home: SettingsPage(),
+          ),
+        );
+        await widgetTester.pumpAndSettle();
+
+        final expandableBoxDrawingTableFinder =
+            find.byType(ExpandableBoxDrawingTable<String>);
+        expect(expandableBoxDrawingTableFinder, findsOneWidget);
+        final expandableBoxDrawingTable = widgetTester
+            .widget<ExpandableBoxDrawingTable>(expandableBoxDrawingTableFinder);
+        expect(expandableBoxDrawingTable.sections, sections);
+      },
+    );
+
+    testWidgets(
+      'invoked EnabledExercisesService.setEnabledExercises when ExpandableBoxDrawingTable changes',
+      (widgetTester) async {
+        await widgetTester.pumpWidget(
+          const MaterialApp(
+            home: SettingsPage(),
+          ),
+        );
+        await widgetTester.pumpAndSettle();
+
+        await widgetTester.tap(find.byType(Checkbox).first);
+
+        verify(() => mockEnabledExercisesService.setEnabledExercises(any()))
+            .called(1);
       },
     );
   });

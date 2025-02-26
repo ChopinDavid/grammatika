@@ -206,6 +206,42 @@ main() {
     });
   });
 
+  group('when state is ExerciseErrorState', () {
+    testWidgets(
+      'shows error SnackBar',
+      (widgetTester) async {
+        const expectedErrorString = 'something went wrong!';
+        whenListen(
+          mockExerciseBloc,
+          Stream.fromIterable(
+            <ExerciseState>[
+              ExerciseErrorState(errorString: expectedErrorString)
+            ],
+          ),
+          initialState: ExerciseExerciseRetrievedState(),
+        );
+
+        await widgetTester.pumpWidget(
+          MaterialApp(
+            home: BlocProvider.value(
+              value: mockExerciseBloc,
+              child: const ExercisePage(),
+            ),
+          ),
+        );
+        await widgetTester.pump();
+        await widgetTester.idle();
+
+        final snackBarFinder = find.byType(SnackBar);
+        expect(snackBarFinder, findsOneWidget);
+        expect(
+          (widgetTester.widget<SnackBar>(snackBarFinder).content as Text).data,
+          'There was an error fetching exercise: $expectedErrorString',
+        );
+      },
+    );
+  });
+
   group(
     'drawer',
     () {
