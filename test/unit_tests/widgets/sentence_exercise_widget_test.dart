@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
 import 'package:grammatika/consts.dart';
 import 'package:grammatika/models/exercise.dart';
@@ -15,6 +14,7 @@ import 'package:grammatika/utilities/url_helper.dart';
 import 'package:grammatika/widgets/answer_card.dart';
 import 'package:grammatika/widgets/sentence_exercise_widget.dart';
 import 'package:grammatika/widgets/translation_button.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../test_utils.dart';
 import '../mocks.dart';
@@ -51,7 +51,7 @@ main() {
   testWidgets(
     'apostrophes are removed from sentences',
     (widgetTester) async {
-      const sentence = "Что ты де'лаешь?";
+      const sentence = "Что ты де'лаешь сегодня?";
       await widgetTester.pumpWidget(
         MaterialApp(
           home: BlocProvider<ExerciseBloc>.value(
@@ -70,16 +70,15 @@ main() {
       await widgetTester.pumpAndSettle();
 
       expect(
-          find.textContaining('делаешь?', findRichText: true), findsOneWidget);
-      expect(
-          find.textContaining("де'лаешь?", findRichText: true), findsNothing);
+          find.textContaining('делаешь', findRichText: true), findsOneWidget);
+      expect(find.textContaining("де'лаешь", findRichText: true), findsNothing);
     },
   );
 
   testWidgets(
     'sentence segments are interpolated into RichText correctly',
     (widgetTester) async {
-      const sentenceText = "Что ты де'лаешь?";
+      const sentenceText = "Что ты де'лаешь сегодня?";
       final sentence = Sentence.testValue(ru: sentenceText);
       await widgetTester.pumpWidget(
         MaterialApp(
@@ -106,29 +105,49 @@ main() {
               .children;
       expect((firstWordRowChildren.first as Text).data, '«');
       expect(
-          ((firstWordRowChildren.last as InkWell).child as Text).data, 'Что');
+          (((firstWordRowChildren.last as InkWell).child as CustomPaint).child
+                  as Text)
+              .data,
+          'Что');
       expect(
           ((sentenceRichText.text as TextSpan).children![1] as TextSpan).text,
           '  ');
       expect(
-          (((((sentenceRichText.text as TextSpan).children![2] as WidgetSpan)
-                          .child as Row)
-                      .children
-                      .single as InkWell)
+          ((((((sentenceRichText.text as TextSpan).children![2] as WidgetSpan)
+                              .child as Row)
+                          .children
+                          .single as InkWell)
+                      .child as CustomPaint)
                   .child as Text)
               .data,
           'ты');
       expect(
           ((sentenceRichText.text as TextSpan).children![3] as TextSpan).text,
           '  ');
+      expect(
+          ((((((sentenceRichText.text as TextSpan).children![4] as WidgetSpan)
+                              .child as Row)
+                          .children
+                          .single as InkWell)
+                      .child as CustomPaint)
+                  .child as Text)
+              .data,
+          'делаешь');
+      expect(
+          ((sentenceRichText.text as TextSpan).children![5] as TextSpan).text,
+          '  ');
       final lastWordRowChildren =
-          (((sentenceRichText.text as TextSpan).children![4] as WidgetSpan)
+          (((sentenceRichText.text as TextSpan).children![6] as WidgetSpan)
                   .child as Row)
               .children;
-      expect(((lastWordRowChildren.first as InkWell).child as Text).data,
-          'делаешь?');
-      expect((lastWordRowChildren[1] as Text).data, '»');
-      expect((lastWordRowChildren[2] as TranslationButton).tatoebaKey,
+      expect(
+          (((lastWordRowChildren.first as InkWell).child as CustomPaint).child
+                  as Text)
+              .data,
+          'сегодня');
+      expect((lastWordRowChildren[1] as Text).data, '?');
+      expect((lastWordRowChildren[2] as Text).data, '»');
+      expect((lastWordRowChildren[3] as TranslationButton).tatoebaKey,
           sentence.tatoebaKey);
     },
   );

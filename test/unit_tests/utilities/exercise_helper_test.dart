@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:grammatika/consts.dart';
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
 import 'package:grammatika/models/word_form_type.dart';
 import 'package:grammatika/utilities/exercise_helper.dart';
 import 'package:grammatika/utilities/url_helper.dart';
+import 'package:grammatika/widgets/dashed_border_painter.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
 
@@ -126,10 +126,11 @@ main() {
           if (isEven) {
             final children = (((spans[i] as WidgetSpan).child as Row)).children;
             expect(
-              (((i == 0 ? children.last : children.first) as InkWell).child
-                      as Text)
+              ((((i == 0 ? children.last : children.first) as InkWell).child
+                          as CustomPaint)
+                      .child as Text)
                   .data,
-              sentence.split(' ')[i ~/ 2],
+              sentence.split(' ')[i ~/ 2].replaceAll(RegExp(r'[ ,.?]'), ''),
             );
           } else {
             expect((spans[i] as TextSpan).text, '  ');
@@ -138,12 +139,13 @@ main() {
       });
 
       test(
-        'even indexed text spans have translatable text styles if they are not placeholder text, while odd indexed text spans do not get a specific text style',
+        'even indexed text spans have subject text wrapped in custom painter with blue dashed line if they are not placeholder text, while odd indexed text spans are not wrapped in a custom painter',
         () {
+          final mockBuildContext = MockBuildContext();
           const sentence = "Всему' своё вре'мя.";
           final expectedDefaultTextStyle = MockTextStyle();
           final spans = testObject.getSpansFromSentence(
-            MockBuildContext(),
+            mockBuildContext,
             sentenceExercise: Exercise<WordForm, Sentence>(
               question: Sentence.testValue(
                 ru: sentence,
@@ -166,29 +168,36 @@ main() {
               final children =
                   (((spans[i] as WidgetSpan).child as Row)).children;
               final widgetWithText = i == 0 ? children.last : children.first;
-              if (widgetWithText is Text) {
+              if (widgetWithText is CustomPaint) {
                 expect(
-                  widgetWithText.style,
-                  expectedDefaultTextStyle,
+                  widgetWithText.painter,
+                  DashedBorderPainter(
+                    color: Theme.of(mockBuildContext)
+                            .textTheme
+                            .bodyMedium
+                            ?.color ??
+                        (MediaQuery.of(mockBuildContext).platformBrightness ==
+                                Brightness.light
+                            ? Colors.black
+                            : Colors.white),
+                    dashSpace: 1,
+                  ),
                 );
               } else {
+                final actual =
+                    ((widgetWithText as InkWell).child as CustomPaint).painter
+                        as DashedBorderPainter;
+                final expected = DashedBorderPainter(color: Colors.blue);
                 expect(
-                  ((widgetWithText as InkWell).child as Text).style,
-                  translatableTextStyle.copyWith(fontSize: 24.0),
+                  actual,
+                  expected,
                 );
               }
             } else if (span is TextSpan) {
-              if (span.text?.contains(sentenceWordPlaceholderText) == true) {
-                expect(
-                  span.style,
-                  expectedDefaultTextStyle,
-                );
-              } else if (span.text == '  ') {
-                expect(
-                  span.style,
-                  isNull,
-                );
-              }
+              expect(
+                span.style,
+                isNull,
+              );
             } else {
               fail('all spans should either be WidgetSpans or TextSpans');
             }
@@ -226,7 +235,7 @@ main() {
                   (((spans[i] as WidgetSpan).child as Row)).children;
 
               final widgetWithText = i == 0 ? children.last : children.first;
-              if (widgetWithText is Text) {
+              if (widgetWithText is CustomPaint) {
                 return;
               } else {
                 (widgetWithText as InkWell).onTap?.call();
@@ -257,8 +266,9 @@ main() {
               final children =
                   (((spans[i] as WidgetSpan).child as Row)).children;
               expect(
-                (((i == 0 ? children.last : children.first) as InkWell).child
-                        as Text)
+                ((((i == 0 ? children.last : children.first) as InkWell).child
+                            as CustomPaint)
+                        .child as Text)
                     .data
                     ?.contains("'"),
                 isFalse,
@@ -272,6 +282,93 @@ main() {
               fail('all spans should either be WidgetSpans or TextSpans');
             }
           }
+        },
+      );
+
+      test(
+        'commas at the end of words get their own Text widget without custom paint',
+        () {
+          const sentence = "Всему' своё, вре'мя.";
+          final spans = testObject.getSpansFromSentence(
+            MockBuildContext(),
+            sentenceExercise: Exercise<WordForm, Sentence>(
+              question: Sentence.testValue(ru: sentence),
+              answers: const [],
+            ),
+            defaultTextStyle: MockTextStyle(),
+            tatoebaKey: 1,
+          );
+          final secondWordWidgetSpan = spans[2] as WidgetSpan;
+          final secondWordFirstWidget =
+              (secondWordWidgetSpan.child as Row).children.first as InkWell;
+          final secondWordSecondWidget =
+              (secondWordWidgetSpan.child as Row).children.last as Text;
+          expect(
+            secondWordFirstWidget.child,
+            isA<CustomPaint>(),
+          );
+          expect(
+              ((secondWordFirstWidget.child as CustomPaint).child as Text).data,
+              'своё');
+          expect(secondWordSecondWidget.data, ',');
+        },
+      );
+
+      test(
+        'periods at the end of words get their own Text widget without custom paint',
+        () {
+          const sentence = "Всему' своё. вре'мя.";
+          final spans = testObject.getSpansFromSentence(
+            MockBuildContext(),
+            sentenceExercise: Exercise<WordForm, Sentence>(
+              question: Sentence.testValue(ru: sentence),
+              answers: const [],
+            ),
+            defaultTextStyle: MockTextStyle(),
+            tatoebaKey: 1,
+          );
+          final secondWordWidgetSpan = spans[2] as WidgetSpan;
+          final secondWordFirstWidget =
+              (secondWordWidgetSpan.child as Row).children.first as InkWell;
+          final secondWordSecondWidget =
+              (secondWordWidgetSpan.child as Row).children.last as Text;
+          expect(
+            secondWordFirstWidget.child,
+            isA<CustomPaint>(),
+          );
+          expect(
+              ((secondWordFirstWidget.child as CustomPaint).child as Text).data,
+              'своё');
+          expect(secondWordSecondWidget.data, '.');
+        },
+      );
+
+      test(
+        'question marks at the end of words get their own Text widget without custom paint',
+        () {
+          const sentence = "Всему' своё? вре'мя.";
+          final spans = testObject.getSpansFromSentence(
+            MockBuildContext(),
+            sentenceExercise: Exercise<WordForm, Sentence>(
+              question: Sentence.testValue(ru: sentence),
+              answers: const [],
+            ),
+            defaultTextStyle: MockTextStyle(),
+            tatoebaKey: 1,
+          );
+          final secondWordWidgetSpan = spans[2] as WidgetSpan;
+          final secondWordFirstWidget =
+              (secondWordWidgetSpan.child as Row).children.first as InkWell;
+          final secondWordSecondWidget =
+              (secondWordWidgetSpan.child as Row).children.last as Text;
+          expect(
+            secondWordFirstWidget.child,
+            isA<CustomPaint>(),
+          );
+          expect(
+              ((secondWordFirstWidget.child as CustomPaint).child as Text).data,
+              'своё');
+          expect(secondWordSecondWidget.data, '?');
         },
       );
     },

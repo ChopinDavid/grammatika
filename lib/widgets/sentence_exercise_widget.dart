@@ -41,7 +41,7 @@ class SentenceExerciseWidget extends StatelessWidget {
                   child: InkWell(
                     child: Text(
                       exercise.question.word.bare,
-                      style: translatableTextStyle,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     onTap: () async {
                       await GetIt.instance
