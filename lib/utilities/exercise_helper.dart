@@ -7,6 +7,7 @@ import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
 import 'package:grammatika/utilities/url_helper.dart';
+import 'package:grammatika/widgets/dashed_border_painter.dart';
 import 'package:grammatika/widgets/translation_button.dart';
 
 class ExerciseHelper {
@@ -39,11 +40,8 @@ class ExerciseHelper {
         .firstWhere((element) =>
             element.type == sentenceExercise.question.correctAnswer.type)
         .bare;
-    final sentenceWords = sentenceExercise.question.ru
-        .replaceAll('\'', '')
-        .replaceFirst(baseWord, sentenceWordPlaceholderText)
-        .replaceFirst(baseWord.capitalized(), sentenceWordPlaceholderText)
-        .split(' ');
+    final sentenceWords =
+        sentenceExercise.question.ru.replaceAll('\'', '').split(' ');
 
     List<InlineSpan> sentenceSpans = [];
     final sentenceSegmentsCount = sentenceWords.length * 2;
@@ -57,21 +55,52 @@ class ExerciseHelper {
       } else {
         final sentenceWordIndex = i ~/ 2;
         var word = sentenceWords[sentenceWordIndex];
-        final isPlaceholder = word.contains(sentenceWordPlaceholderText);
-        Widget widgetToAdd;
+        final wordWithoutPunctuation = word.replaceAll(RegExp(r'[ ,.?]'), '');
+        List<Widget> widgetsToAdd = [];
 
-        if (isPlaceholder) {
-          widgetToAdd = Text(
-            word,
-            style: defaultTextStyle.copyWith(fontSize: 24),
+        if (wordWithoutPunctuation == baseWord ||
+            wordWithoutPunctuation == baseWord.capitalized()) {
+          widgetsToAdd.add(
+            CustomPaint(
+              painter: DashedBorderPainter(
+                color: Theme.of(context).textTheme.bodyMedium?.color ??
+                    (MediaQuery.of(context).platformBrightness ==
+                            Brightness.light
+                        ? Colors.black
+                        : Colors.white),
+                dashSpace: 1,
+              ),
+              child: Text(
+                sentenceWordPlaceholderText,
+                style: defaultTextStyle.copyWith(
+                    fontSize: 24, color: Colors.transparent),
+              ),
+            ),
           );
         } else {
-          widgetToAdd = InkWell(
-            child:
-                Text(word, style: translatableTextStyle.copyWith(fontSize: 24)),
-            onTap: () {
-              GetIt.instance.get<UrlHelper>().launchWiktionaryPageFor(word);
-            },
+          widgetsToAdd.add(
+            InkWell(
+              child: CustomPaint(
+                painter: DashedBorderPainter(color: Colors.blue),
+                child: Text(wordWithoutPunctuation,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontSize: 24.0)),
+              ),
+              onTap: () {
+                GetIt.instance.get<UrlHelper>().launchWiktionaryPageFor(word);
+              },
+            ),
+          );
+        }
+
+        if (word.endsWith(',') || word.endsWith('.') || word.endsWith('?')) {
+          widgetsToAdd.add(
+            Text(
+              word.substring(word.length - 1),
+              style: defaultTextStyle,
+            ),
           );
         }
 
@@ -86,7 +115,7 @@ class ExerciseHelper {
                   '«',
                   style: defaultTextStyle,
                 ),
-              widgetToAdd,
+              ...widgetsToAdd,
               if (isLastWord) ...[
                 Text(
                   '»',

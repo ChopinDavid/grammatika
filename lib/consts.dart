@@ -1,6 +1,5 @@
 import 'package:expandable_box_drawing_table/models/entry.dart';
 import 'package:expandable_box_drawing_table/models/section.dart';
-import 'package:flutter/material.dart';
 
 import 'models/gender.dart';
 import 'models/word_form_type.dart';
@@ -13,14 +12,6 @@ class GrammatikaSpacing {
 }
 
 const sentenceWordPlaceholderText = '______';
-
-const translatableTextStyle = TextStyle(
-  fontSize: 18.0,
-  decoration: TextDecoration.underline,
-  decorationColor: Colors.blue,
-  decorationThickness: 3,
-  decorationStyle: TextDecorationStyle.dashed,
-);
 
 const masculineNounEndings = [
   'б',
