@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:grammatika/consts.dart';
 import 'package:grammatika/extensions/list_extension.dart';
 import 'package:grammatika/extensions/string_extension.dart';
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
-import 'package:grammatika/utilities/url_helper.dart';
 import 'package:grammatika/widgets/dashed_border_painter.dart';
+import 'package:grammatika/widgets/translatable_word.dart';
 import 'package:grammatika/widgets/translation_button.dart';
 
 class ExerciseHelper {
@@ -79,18 +78,12 @@ class ExerciseHelper {
           );
         } else {
           widgetsToAdd.add(
-            InkWell(
-              child: CustomPaint(
-                painter: DashedBorderPainter(color: Colors.blue),
-                child: Text(wordWithoutPunctuation,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontSize: 24.0)),
-              ),
-              onTap: () {
-                GetIt.instance.get<UrlHelper>().launchWiktionaryPageFor(word);
-              },
+            TranslatableWord(
+              wordWithoutPunctuation,
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontSize: 24.0),
             ),
           );
         }

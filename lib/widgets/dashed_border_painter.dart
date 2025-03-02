@@ -7,7 +7,7 @@ class DashedBorderPainter extends CustomPainter with EquatableMixin {
   final double dashWidth;
   final double dashSpace;
 
-  DashedBorderPainter({
+  const DashedBorderPainter({
     required this.color,
     this.strokeWidth = 2.0,
     this.dashWidth = 5.0,

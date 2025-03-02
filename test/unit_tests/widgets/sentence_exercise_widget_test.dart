@@ -13,6 +13,7 @@ import 'package:grammatika/utilities/exercise_helper.dart';
 import 'package:grammatika/utilities/url_helper.dart';
 import 'package:grammatika/widgets/answer_card.dart';
 import 'package:grammatika/widgets/sentence_exercise_widget.dart';
+import 'package:grammatika/widgets/translatable_word.dart';
 import 'package:grammatika/widgets/translation_button.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -104,34 +105,26 @@ main() {
                   .child as Row)
               .children;
       expect((firstWordRowChildren.first as Text).data, '«');
-      expect(
-          (((firstWordRowChildren.last as InkWell).child as CustomPaint).child
-                  as Text)
-              .data,
-          'Что');
+      expect((firstWordRowChildren.last as TranslatableWord).word, 'Что');
       expect(
           ((sentenceRichText.text as TextSpan).children![1] as TextSpan).text,
           '  ');
       expect(
-          ((((((sentenceRichText.text as TextSpan).children![2] as WidgetSpan)
-                              .child as Row)
-                          .children
-                          .single as InkWell)
-                      .child as CustomPaint)
-                  .child as Text)
-              .data,
+          ((((sentenceRichText.text as TextSpan).children![2] as WidgetSpan)
+                      .child as Row)
+                  .children
+                  .single as TranslatableWord)
+              .word,
           'ты');
       expect(
           ((sentenceRichText.text as TextSpan).children![3] as TextSpan).text,
           '  ');
       expect(
-          ((((((sentenceRichText.text as TextSpan).children![4] as WidgetSpan)
-                              .child as Row)
-                          .children
-                          .single as InkWell)
-                      .child as CustomPaint)
-                  .child as Text)
-              .data,
+          ((((sentenceRichText.text as TextSpan).children![4] as WidgetSpan)
+                      .child as Row)
+                  .children
+                  .single as TranslatableWord)
+              .word,
           'делаешь');
       expect(
           ((sentenceRichText.text as TextSpan).children![5] as TextSpan).text,
@@ -140,11 +133,7 @@ main() {
           (((sentenceRichText.text as TextSpan).children![6] as WidgetSpan)
                   .child as Row)
               .children;
-      expect(
-          (((lastWordRowChildren.first as InkWell).child as CustomPaint).child
-                  as Text)
-              .data,
-          'сегодня');
+      expect((lastWordRowChildren.first as TranslatableWord).word, 'сегодня');
       expect((lastWordRowChildren[1] as Text).data, '?');
       expect((lastWordRowChildren[2] as Text).data, '»');
       expect((lastWordRowChildren[3] as TranslationButton).tatoebaKey,
