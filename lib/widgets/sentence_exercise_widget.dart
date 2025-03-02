@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:grammatika/consts.dart';
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
 import 'package:grammatika/utilities/exercise_helper.dart';
-import 'package:grammatika/utilities/url_helper.dart';
+import 'package:grammatika/widgets/translatable_word.dart';
 
 import 'answer_card.dart';
 
@@ -38,16 +37,12 @@ class SentenceExerciseWidget extends StatelessWidget {
                 WidgetSpan(
                   alignment: PlaceholderAlignment.baseline,
                   baseline: TextBaseline.alphabetic,
-                  child: InkWell(
-                    child: Text(
-                      exercise.question.word.bare,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    onTap: () async {
-                      await GetIt.instance
-                          .get<UrlHelper>()
-                          .launchWiktionaryPageFor(exercise.question.word.bare);
-                    },
+                  child: TranslatableWord(
+                    exercise.question.word.bare,
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontStyle: FontStyle.italic),
                   ),
                 ),
                 TextSpan(

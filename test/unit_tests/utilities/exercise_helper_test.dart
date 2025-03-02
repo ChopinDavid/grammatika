@@ -8,6 +8,7 @@ import 'package:grammatika/models/word_form_type.dart';
 import 'package:grammatika/utilities/exercise_helper.dart';
 import 'package:grammatika/utilities/url_helper.dart';
 import 'package:grammatika/widgets/dashed_border_painter.dart';
+import 'package:grammatika/widgets/translatable_word.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
@@ -126,10 +127,8 @@ main() {
           if (isEven) {
             final children = (((spans[i] as WidgetSpan).child as Row)).children;
             expect(
-              ((((i == 0 ? children.last : children.first) as InkWell).child
-                          as CustomPaint)
-                      .child as Text)
-                  .data,
+              ((i == 0 ? children.last : children.first) as TranslatableWord)
+                  .word,
               sentence.split(' ')[i ~/ 2].replaceAll(RegExp(r'[ ,.?]'), ''),
             );
           } else {
@@ -184,13 +183,9 @@ main() {
                   ),
                 );
               } else {
-                final actual =
-                    ((widgetWithText as InkWell).child as CustomPaint).painter
-                        as DashedBorderPainter;
-                final expected = DashedBorderPainter(color: Colors.blue);
                 expect(
-                  actual,
-                  expected,
+                  widgetWithText,
+                  isA<TranslatableWord>(),
                 );
               }
             } else if (span is TextSpan) {
@@ -206,7 +201,7 @@ main() {
       );
 
       test(
-        'even indexed text spans launch wiktionary for respective word when tapped',
+        'even indexed text spans are TranslatableWords',
         () {
           const sentence = "Всему' своё вре'мя.";
           final expectedDefaultTextStyle = MockTextStyle();
@@ -238,9 +233,7 @@ main() {
               if (widgetWithText is CustomPaint) {
                 return;
               } else {
-                (widgetWithText as InkWell).onTap?.call();
-                verify(() => mockUrlHelper.launchWiktionaryPageFor(
-                    sentence.split(' ')[i ~/ 2].replaceAll('\'', '')));
+                expect(widgetWithText, isA<TranslatableWord>());
               }
             }
           }
@@ -266,11 +259,9 @@ main() {
               final children =
                   (((spans[i] as WidgetSpan).child as Row)).children;
               expect(
-                ((((i == 0 ? children.last : children.first) as InkWell).child
-                            as CustomPaint)
-                        .child as Text)
-                    .data
-                    ?.contains("'"),
+                ((i == 0 ? children.last : children.first) as TranslatableWord)
+                    .word
+                    .contains("'"),
                 isFalse,
               );
             } else if (span is TextSpan) {
@@ -299,17 +290,12 @@ main() {
             tatoebaKey: 1,
           );
           final secondWordWidgetSpan = spans[2] as WidgetSpan;
-          final secondWordFirstWidget =
-              (secondWordWidgetSpan.child as Row).children.first as InkWell;
+          final secondWordFirstWidget = (secondWordWidgetSpan.child as Row)
+              .children
+              .first as TranslatableWord;
           final secondWordSecondWidget =
               (secondWordWidgetSpan.child as Row).children.last as Text;
-          expect(
-            secondWordFirstWidget.child,
-            isA<CustomPaint>(),
-          );
-          expect(
-              ((secondWordFirstWidget.child as CustomPaint).child as Text).data,
-              'своё');
+          expect(secondWordFirstWidget.word, 'своё');
           expect(secondWordSecondWidget.data, ',');
         },
       );
@@ -328,17 +314,12 @@ main() {
             tatoebaKey: 1,
           );
           final secondWordWidgetSpan = spans[2] as WidgetSpan;
-          final secondWordFirstWidget =
-              (secondWordWidgetSpan.child as Row).children.first as InkWell;
+          final secondWordFirstWidget = (secondWordWidgetSpan.child as Row)
+              .children
+              .first as TranslatableWord;
           final secondWordSecondWidget =
               (secondWordWidgetSpan.child as Row).children.last as Text;
-          expect(
-            secondWordFirstWidget.child,
-            isA<CustomPaint>(),
-          );
-          expect(
-              ((secondWordFirstWidget.child as CustomPaint).child as Text).data,
-              'своё');
+          expect(secondWordFirstWidget.word, 'своё');
           expect(secondWordSecondWidget.data, '.');
         },
       );
@@ -357,17 +338,12 @@ main() {
             tatoebaKey: 1,
           );
           final secondWordWidgetSpan = spans[2] as WidgetSpan;
-          final secondWordFirstWidget =
-              (secondWordWidgetSpan.child as Row).children.first as InkWell;
+          final secondWordFirstWidget = (secondWordWidgetSpan.child as Row)
+              .children
+              .first as TranslatableWord;
           final secondWordSecondWidget =
               (secondWordWidgetSpan.child as Row).children.last as Text;
-          expect(
-            secondWordFirstWidget.child,
-            isA<CustomPaint>(),
-          );
-          expect(
-              ((secondWordFirstWidget.child as CustomPaint).child as Text).data,
-              'своё');
+          expect(secondWordFirstWidget.word, 'своё');
           expect(secondWordSecondWidget.data, '?');
         },
       );
