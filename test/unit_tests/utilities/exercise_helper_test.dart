@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:grammatika/consts.dart';
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
@@ -103,6 +104,7 @@ main() {
                 ),
                 defaultTextStyle: MockTextStyle(),
                 tatoebaKey: 1,
+                answerGiven: false,
               )
               .length,
           sentence.split(' ').length * 2 - 1,
@@ -121,6 +123,7 @@ main() {
           ),
           defaultTextStyle: MockTextStyle(),
           tatoebaKey: 1,
+          answerGiven: false,
         );
         for (int i = 0; i < spans.length; i++) {
           final isEven = i % 2 == 0;
@@ -160,6 +163,7 @@ main() {
             ),
             defaultTextStyle: expectedDefaultTextStyle,
             tatoebaKey: 1,
+            answerGiven: false,
           );
           for (int i = 0; i < spans.length; i++) {
             final span = spans[i];
@@ -201,6 +205,95 @@ main() {
       );
 
       test(
+        'placeholder text is transparent when answerGiven is false',
+        () {
+          final mockBuildContext = MockBuildContext();
+          const sentence = "Всему' своё вре'мя.";
+          final spans = testObject.getSpansFromSentence(
+            mockBuildContext,
+            sentenceExercise: Exercise<WordForm, Sentence>(
+              question: Sentence.testValue(
+                ru: sentence,
+                possibleAnswers: [
+                  WordForm.testValue(
+                    bare: 'время',
+                    type: WordFormType.ruNounSgNom,
+                  ),
+                ],
+                formType: WordFormType.ruNounSgNom,
+              ),
+              answers: const [],
+            ),
+            defaultTextStyle: const TextStyle(),
+            tatoebaKey: 1,
+            answerGiven: false,
+          );
+          final span = spans[4] as WidgetSpan;
+          final widgetWithText =
+              (span.child as Row).children.first as CustomPaint;
+          expect(
+            widgetWithText.painter,
+            DashedBorderPainter(
+              color: Theme.of(mockBuildContext).textTheme.bodyMedium?.color ??
+                  (MediaQuery.of(mockBuildContext).platformBrightness ==
+                          Brightness.light
+                      ? Colors.black
+                      : Colors.white),
+              dashSpace: 1,
+            ),
+          );
+          expect(
+              (widgetWithText.child as Text).data, sentenceWordPlaceholderText);
+          expect(
+              (widgetWithText.child as Text).style?.color, Colors.transparent);
+        },
+      );
+
+      test(
+        'placeholder text is correct answer text and not transparent when answerGiven is true',
+        () {
+          final mockBuildContext = MockBuildContext();
+          const sentence = "Всему' своё вре'мя.";
+          const expectedWord = 'время';
+          final spans = testObject.getSpansFromSentence(
+            mockBuildContext,
+            sentenceExercise: Exercise<WordForm, Sentence>(
+              question: Sentence.testValue(
+                ru: sentence,
+                possibleAnswers: [
+                  WordForm.testValue(
+                    bare: expectedWord,
+                    type: WordFormType.ruNounSgNom,
+                  ),
+                ],
+                formType: WordFormType.ruNounSgNom,
+              ),
+              answers: const [],
+            ),
+            defaultTextStyle: const TextStyle(),
+            tatoebaKey: 1,
+            answerGiven: true,
+          );
+          final span = spans[4] as WidgetSpan;
+          final widgetWithText =
+              (span.child as Row).children.first as CustomPaint;
+          expect(
+            widgetWithText.painter,
+            DashedBorderPainter(
+              color: Theme.of(mockBuildContext).textTheme.bodyMedium?.color ??
+                  (MediaQuery.of(mockBuildContext).platformBrightness ==
+                          Brightness.light
+                      ? Colors.black
+                      : Colors.white),
+              dashSpace: 1,
+            ),
+          );
+          expect((widgetWithText.child as Text).data, expectedWord);
+          expect((widgetWithText.child as Text).style?.color, null);
+        },
+      );
+
+      test(
         'even indexed text spans are TranslatableWords',
         () {
           const sentence = "Всему' своё вре'мя.";
@@ -222,6 +315,7 @@ main() {
             ),
             defaultTextStyle: expectedDefaultTextStyle,
             tatoebaKey: 1,
+            answerGiven: false,
           );
           for (int i = 0; i < spans.length; i++) {
             final span = spans[i];
@@ -252,6 +346,7 @@ main() {
             ),
             defaultTextStyle: MockTextStyle(),
             tatoebaKey: 1,
+            answerGiven: false,
           );
           for (int i = 0; i < spans.length; i++) {
             final span = spans[i];
@@ -277,6 +372,27 @@ main() {
       );
 
       test(
+        '"words" that are just hyphens get their own Text widget without custom paint',
+        () {
+          const sentence = "Всему' своё - вре'мя.";
+          final spans = testObject.getSpansFromSentence(
+            MockBuildContext(),
+            sentenceExercise: Exercise<WordForm, Sentence>(
+              question: Sentence.testValue(ru: sentence),
+              answers: const [],
+            ),
+            defaultTextStyle: MockTextStyle(),
+            tatoebaKey: 1,
+            answerGiven: false,
+          );
+          final thirdWordWidgetSpan = spans[4] as WidgetSpan;
+          final secondWordFirstWidget =
+              (thirdWordWidgetSpan.child as Row).children.first as Text;
+          expect(secondWordFirstWidget.data, '-');
+        },
+      );
+
+      test(
         'commas at the end of words get their own Text widget without custom paint',
         () {
           const sentence = "Всему' своё, вре'мя.";
@@ -288,6 +404,7 @@ main() {
             ),
             defaultTextStyle: MockTextStyle(),
             tatoebaKey: 1,
+            answerGiven: false,
           );
           final secondWordWidgetSpan = spans[2] as WidgetSpan;
           final secondWordFirstWidget = (secondWordWidgetSpan.child as Row)
@@ -312,6 +429,7 @@ main() {
             ),
             defaultTextStyle: MockTextStyle(),
             tatoebaKey: 1,
+            answerGiven: false,
           );
           final secondWordWidgetSpan = spans[2] as WidgetSpan;
           final secondWordFirstWidget = (secondWordWidgetSpan.child as Row)
@@ -336,6 +454,7 @@ main() {
             ),
             defaultTextStyle: MockTextStyle(),
             tatoebaKey: 1,
+            answerGiven: false,
           );
           final secondWordWidgetSpan = spans[2] as WidgetSpan;
           final secondWordFirstWidget = (secondWordWidgetSpan.child as Row)

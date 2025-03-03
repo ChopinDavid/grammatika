@@ -45,6 +45,25 @@ main() {
       when(() => mockUrlHelper.launchWiktionaryPageFor(any())).thenAnswer(
         (invocation) async => true,
       );
+
+      when(
+        () => mockExerciseHelper.getAnswerGroupsForSentenceExercise(
+          sentenceExercise: any(
+            named: 'sentenceExercise',
+          ),
+        ),
+      ).thenReturn({});
+
+      when(
+        () => mockExerciseHelper.getSpansFromSentence(
+          any(),
+          sentenceExercise: any(named: 'sentenceExercise'),
+          defaultTextStyle: any(named: 'defaultTextStyle'),
+          tatoebaKey: any(named: 'tatoebaKey'),
+          answerGiven: any(named: 'answerGiven'),
+        ),
+      ).thenReturn([]);
+
       GetIt.instance.registerSingleton<UrlHelper>(mockUrlHelper);
     },
   );
@@ -205,14 +224,6 @@ main() {
           ),
         ),
       ).thenReturn(answerGroups);
-      when(
-        () => mockExerciseHelper.getSpansFromSentence(
-          any(),
-          sentenceExercise: any(named: 'sentenceExercise'),
-          defaultTextStyle: any(named: 'defaultTextStyle'),
-          tatoebaKey: any(named: 'tatoebaKey'),
-        ),
-      ).thenReturn([]);
 
       await widgetTester.pumpWidget(
         MaterialApp(
@@ -242,19 +253,19 @@ main() {
   );
 
   testWidgets(
-    "UrlHelper.launchWiktionaryPageFor is invoked when question's word is tapped",
+    'invokes ExerciseHelper.getSpansFromSentence with answerGiven false when passed Exercise does not have any answers',
     (widgetTester) async {
-      const bare = 'яблоко';
       await widgetTester.pumpWidget(
         MaterialApp(
           home: BlocProvider<ExerciseBloc>.value(
             value: mockExerciseBloc,
             child: Scaffold(
               body: SentenceExerciseWidget(
-                exercise: Exercise<WordForm, Sentence>(
-                  question: Sentence.testValue(bare: bare),
+                exercise: Exercise.testValue(
+                  question: Sentence.testValue(),
                   answers: const [],
                 ),
+                exerciseHelper: mockExerciseHelper,
               ),
             ),
           ),
@@ -262,8 +273,48 @@ main() {
       );
       await widgetTester.pumpAndSettle();
 
-      await widgetTester.tap(find.text(bare, findRichText: true));
+      verify(
+        () => mockExerciseHelper.getSpansFromSentence(
+          any(),
+          sentenceExercise: any(named: 'sentenceExercise'),
+          defaultTextStyle: any(named: 'defaultTextStyle'),
+          tatoebaKey: any(named: 'tatoebaKey'),
+          answerGiven: false,
+        ),
+      );
+    },
+  );
+
+  testWidgets(
+    'invokes ExerciseHelper.getSpansFromSentence with answerGiven true when passed Exercise does have answers',
+    (widgetTester) async {
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ExerciseBloc>.value(
+            value: mockExerciseBloc,
+            child: Scaffold(
+              body: SentenceExerciseWidget(
+                exercise: Exercise.testValue(
+                  question: Sentence.testValue(),
+                  answers: [WordForm.testValue()],
+                ),
+                exerciseHelper: mockExerciseHelper,
+              ),
+            ),
+          ),
+        ),
+      );
       await widgetTester.pumpAndSettle();
+
+      verify(
+        () => mockExerciseHelper.getSpansFromSentence(
+          any(),
+          sentenceExercise: any(named: 'sentenceExercise'),
+          defaultTextStyle: any(named: 'defaultTextStyle'),
+          tatoebaKey: any(named: 'tatoebaKey'),
+          answerGiven: true,
+        ),
+      );
     },
   );
 }
