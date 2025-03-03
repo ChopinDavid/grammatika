@@ -66,6 +66,7 @@ class SentenceExerciseWidget extends StatelessWidget {
                 defaultTextStyle:
                     DefaultTextStyle.of(context).style.copyWith(fontSize: 24.0),
                 tatoebaKey: exercise.question.tatoebaKey,
+                answerGiven: givenAnswers?.isNotEmpty == true,
               ),
               style: Theme.of(context).textTheme.bodyMedium,
             ),

@@ -34,6 +34,7 @@ class ExerciseHelper {
     required Exercise<WordForm, Sentence> sentenceExercise,
     required TextStyle defaultTextStyle,
     required int? tatoebaKey,
+    required bool answerGiven,
   }) {
     final baseWord = sentenceExercise.question.possibleAnswers
         .firstWhere((element) =>
@@ -70,13 +71,17 @@ class ExerciseHelper {
                 dashSpace: 1,
               ),
               child: Text(
-                sentenceWordPlaceholderText,
+                answerGiven
+                    ? wordWithoutPunctuation
+                    : sentenceWordPlaceholderText,
                 style: defaultTextStyle.copyWith(
-                    fontSize: 24, color: Colors.transparent),
+                  fontSize: 24,
+                  color: answerGiven ? null : Colors.transparent,
+                ),
               ),
             ),
           );
-        } else {
+        } else if (wordWithoutPunctuation != '-') {
           widgetsToAdd.add(
             TranslatableWord(
               wordWithoutPunctuation,
@@ -88,7 +93,10 @@ class ExerciseHelper {
           );
         }
 
-        if (word.endsWith(',') || word.endsWith('.') || word.endsWith('?')) {
+        if (word == '-' ||
+            word.endsWith(',') ||
+            word.endsWith('.') ||
+            word.endsWith('?')) {
           widgetsToAdd.add(
             Text(
               word.substring(word.length - 1),
