@@ -58,7 +58,7 @@ WHERE gender IS NOT NULL
               (e) => '''\n  AND gender IS NOT \'$e\'''',
             ).join()}
 ORDER BY RANDOM()
-LIMIT 1;''';
+LIMIT 50;''';
 
     return sqlString;
   }
