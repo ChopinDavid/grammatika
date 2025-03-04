@@ -38,6 +38,32 @@ class ExerciseCacheService {
     );
   }
 
+  Future<List<Exercise<Gender, Noun>>> cachedGenderExercises() async {
+    final db = await _dbHelper.getDatabase();
+
+    // Check if the table exists
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS noun_exercises (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      exercise TEXT NOT NULL
+    );
+  ''');
+
+    final List<Map<String, dynamic>> maps = await db.query('noun_exercises');
+
+    if (maps.isEmpty) {
+      return [];
+    }
+
+    return List<Exercise<Gender, Noun>>.from(
+      maps.map(
+        (map) => Exercise.fromJson<Gender, Noun>(
+          jsonDecode(map['exercise']),
+        ),
+      ),
+    );
+  }
+
   Future<void> updateExercises(List<Exercise> exercises) async {
     final db = await _dbHelper.getDatabase();
     final batch = db.batch();
