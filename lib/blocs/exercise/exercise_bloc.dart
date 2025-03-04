@@ -1,3 +1,4 @@
+import 'dart:async';
 import "dart:math";
 
 import 'package:equatable/equatable.dart';
@@ -13,6 +14,7 @@ import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
 import 'package:grammatika/models/word_form_type.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/exercise_cache_service.dart';
 import 'package:grammatika/services/statistics_service.dart';
 import 'package:grammatika/utilities/db_helper.dart';
 import 'package:grammatika/utilities/explanation_helper.dart';
@@ -24,6 +26,9 @@ part 'exercise_state.dart';
 
 class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
   Exercise? exercise;
+  bool updatingExercises = false;
+  List<Exercise<WordForm, Sentence>>? cachedSentenceExercises;
+
   ExerciseBloc({@visibleForTesting Random? mockRandom})
       : super(ExerciseInitial()) {
     on<ExerciseEvent>((event, emit) async {
@@ -109,48 +114,86 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       if (event is ExerciseRetrieveRandomSentenceEvent) {
         emit(ExerciseRetrievingExerciseState());
         try {
-          final dbHelper = GetIt.instance.get<DbHelper>();
-          final db = await dbHelper.getDatabase();
+          final exerciseCacheService =
+              GetIt.instance.get<ExerciseCacheService>();
 
-          final Map<String, dynamic> sentenceQuery = (await db.rawQuery(
-            dbHelper.randomSentenceQueryString(),
-          ))
-              .single;
+          Future<void> fetchExercises() async {
+            updatingExercises = true;
+            final dbHelper = GetIt.instance.get<DbHelper>();
+            final db = await dbHelper.getDatabase();
 
-          final List<Map<String, dynamic>> answers = (await db.rawQuery(
-              'SELECT form_type, position AS word_form_position, form, _form_bare FROM words_forms WHERE word_id = ${sentenceQuery['word_id']};'));
-          final correctAnswer = WordForm.fromJson(sentenceQuery);
-          final (explanation, visualExplanation) =
-              GetIt.instance.get<ExplanationHelper>().sentenceExplanation(
-                    correctAnswer: correctAnswer,
-                    bare: sentenceQuery['bare'],
-                    wordFormTypesToBareMap: <WordFormType, String>{
-                      for (var answer in answers)
-                        WordFormTypeExt.fromString(answer['form_type']):
-                            answer['_form_bare'],
-                    },
-                    gender: GenderExtension.fromString(sentenceQuery['gender']),
-                  );
-          final json = {
-            ...sentenceQuery,
-            'answer_synonyms': answers.where((element) {
-              return element['_form_bare'] == sentenceQuery['_form_bare'] &&
-                  element['form_type'] != sentenceQuery['form_type'];
-            }),
-            'possible_answers': answers,
-            'explanation': explanation,
-            'visual_explanation': visualExplanation,
-          };
-          final sentence = Sentence.fromJson(json);
+            final List<Map<String, dynamic>> sentenceQueryRows =
+                (await db.rawQuery(
+              dbHelper.randomSentenceQueryString(),
+            ));
 
-          exercise = Exercise<WordForm, Sentence>(
-            question: sentence,
-            answers: null,
-          );
+            for (var sentenceQueryRow in sentenceQueryRows) {
+              try {
+                final List<Map<String, dynamic>> answers = (await db.rawQuery(
+                    'SELECT form_type, position AS word_form_position, form, _form_bare FROM words_forms WHERE word_id = ${sentenceQueryRow['word_id']} AND _form_bare IS NOT NULL;'));
+                final correctAnswer = WordForm.fromJson(sentenceQueryRow);
+                final (explanation, visualExplanation) =
+                    GetIt.instance.get<ExplanationHelper>().sentenceExplanation(
+                          correctAnswer: correctAnswer,
+                          bare: sentenceQueryRow['bare'],
+                          wordFormTypesToBareMap: <WordFormType, String>{
+                            for (var answer in answers)
+                              WordFormTypeExt.fromString(answer['form_type']):
+                                  answer['_form_bare'],
+                          },
+                          gender: GenderExtension.fromString(
+                              sentenceQueryRow['gender']),
+                        );
+                final json = {
+                  ...sentenceQueryRow,
+                  'answer_synonyms': answers.where((element) {
+                    return element['_form_bare'] ==
+                            sentenceQueryRow['_form_bare'] &&
+                        element['form_type'] != sentenceQueryRow['form_type'];
+                  }),
+                  'possible_answers': answers,
+                  'explanation': explanation,
+                  'visual_explanation': visualExplanation,
+                  ...correctAnswer.toJson(),
+                };
+                final sentence = Sentence.fromJson(json);
+                final exercise = Exercise<WordForm, Sentence>(
+                  question: sentence,
+                  answers: null,
+                );
+                cachedSentenceExercises?.add(exercise);
+              } catch (e) {
+                print('Error: $e');
+                continue;
+              }
+            }
+          }
 
+          cachedSentenceExercises ??=
+              await exerciseCacheService.cachedSentenceExercises();
+
+          if (cachedSentenceExercises?.isNotEmpty == false) {
+            await fetchExercises();
+            updatingExercises = false;
+          }
+
+          exercise = cachedSentenceExercises?.removeAt(0);
           emit(
             ExerciseExerciseRetrievedState(),
           );
+
+          if ((cachedSentenceExercises?.length ?? 0) < 10 &&
+              !updatingExercises) {
+            fetchExercises().then(
+              (value) {
+                exerciseCacheService
+                    .updateExercises(cachedSentenceExercises ?? []);
+                updatingExercises = false;
+              },
+            );
+          } else if (!updatingExercises) {
+            exerciseCacheService.updateExercises(cachedSentenceExercises ?? []);
+          }
         } catch (e) {
           emit(
             ExerciseErrorState(

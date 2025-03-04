@@ -5,5 +5,10 @@ enum Gender implements Answer {
   f,
   n,
   pl,
-  both,
+  both;
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {'id': name};
+  }
 }
