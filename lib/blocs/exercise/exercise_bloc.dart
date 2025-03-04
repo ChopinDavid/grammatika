@@ -26,8 +26,10 @@ part 'exercise_state.dart';
 
 class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
   Exercise? exercise;
-  bool updatingExercises = false;
+  bool updatingSentenceExercises = false;
+  bool updatingGenderExercises = false;
   List<Exercise<WordForm, Sentence>>? cachedSentenceExercises;
+  List<Exercise<Gender, Noun>>? cachedGenderExercises;
 
   ExerciseBloc({@visibleForTesting Random? mockRandom})
       : super(ExerciseInitial()) {
@@ -78,32 +80,72 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
         emit(ExerciseRetrievingExerciseState());
 
         try {
-          final dbHelper = GetIt.instance.get<DbHelper>();
-          final db = await dbHelper.getDatabase();
+          final exerciseCacheService =
+              GetIt.instance.get<ExerciseCacheService>();
 
-          final Map<String, dynamic> nounQuery = (await db.rawQuery(
-            dbHelper.randomNounQueryString(),
-          ))
-              .single;
-          final answers = Gender.values.map((gender) => gender.name);
-          final explanation = GetIt.instance
-              .get<ExplanationHelper>()
-              .genderExplanation(
-                  bare: nounQuery['bare'],
-                  correctAnswer: Gender.values.byName(nounQuery['gender']));
+          Future<void> fetchExercises() async {
+            updatingGenderExercises = true;
+            final dbHelper = GetIt.instance.get<DbHelper>();
+            final db = await dbHelper.getDatabase();
 
-          final json = {
-            ...nounQuery,
-            'possible_answers': answers,
-            'explanation': explanation,
-          };
-          exercise = Exercise<Gender, Noun>(
-            question: Noun.fromJson(json),
-            answers: null,
-          );
+            final List<Map<String, dynamic>> nounQueryRows = (await db.rawQuery(
+              dbHelper.randomNounQueryString(),
+            ));
+
+            for (var nounQueryRow in nounQueryRows) {
+              try {
+                final answers = Gender.values.map((gender) => gender.name);
+                final explanation = GetIt.instance
+                    .get<ExplanationHelper>()
+                    .genderExplanation(
+                        bare: nounQueryRow['bare'],
+                        correctAnswer:
+                            Gender.values.byName(nounQueryRow['gender']));
+                final json = {
+                  ...nounQueryRow,
+                  'possible_answers': answers,
+                  'explanation': explanation,
+                };
+                final noun = Noun.fromJson(json);
+                final exercise = Exercise<Gender, Noun>(
+                  question: noun,
+                  answers: null,
+                );
+                cachedGenderExercises?.add(exercise);
+              } catch (e) {
+                print('Error: $e');
+                continue;
+              }
+            }
+          }
+
+          print('asdf: ${cachedGenderExercises?.length}');
+
+          cachedGenderExercises ??=
+              await exerciseCacheService.cachedGenderExercises();
+
+          if (cachedGenderExercises?.isNotEmpty == false) {
+            await fetchExercises();
+            updatingGenderExercises = false;
+          }
+
+          exercise = cachedGenderExercises?.removeAt(0);
           emit(
             ExerciseExerciseRetrievedState(),
           );
+
+          if ((cachedGenderExercises?.length ?? 0) < 10 &&
+              !updatingGenderExercises) {
+            fetchExercises().then(
+              (value) {
+                exerciseCacheService
+                    .updateExercises(cachedGenderExercises ?? []);
+                updatingGenderExercises = false;
+              },
+            );
+          } else if (!updatingGenderExercises) {
+            exerciseCacheService.updateExercises(cachedGenderExercises ?? []);
+          }
         } catch (e) {
           emit(
             ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
@@ -118,7 +160,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
               GetIt.instance.get<ExerciseCacheService>();
 
           Future<void> fetchExercises() async {
-            updatingExercises = true;
+            updatingSentenceExercises = true;
             final dbHelper = GetIt.instance.get<DbHelper>();
             final db = await dbHelper.getDatabase();
 
@@ -174,7 +216,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
 
           if (cachedSentenceExercises?.isNotEmpty == false) {
             await fetchExercises();
-            updatingExercises = false;
+            updatingSentenceExercises = false;
           }
 
           exercise = cachedSentenceExercises?.removeAt(0);
@@ -183,15 +225,15 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
           );
 
           if ((cachedSentenceExercises?.length ?? 0) < 10 &&
-              !updatingExercises) {
+              !updatingSentenceExercises) {
             fetchExercises().then(
               (value) {
                 exerciseCacheService
                     .updateExercises(cachedSentenceExercises ?? []);
-                updatingExercises = false;
+                updatingSentenceExercises = false;
               },
             );
-          } else if (!updatingExercises) {
+          } else if (!updatingSentenceExercises) {
             exerciseCacheService.updateExercises(cachedSentenceExercises ?? []);
           }
         } catch (e) {
