@@ -466,6 +466,31 @@ main() {
           expect(secondWordSecondWidget.data, '?');
         },
       );
+
+      test(
+        'exclamation points at the end of words get their own Text widget without custom paint',
+        () {
+          const sentence = "Всему' своё! вре'мя.";
+          final spans = testObject.getSpansFromSentence(
+            MockBuildContext(),
+            sentenceExercise: Exercise<WordForm, Sentence>(
+              question: Sentence.testValue(ru: sentence),
+              answers: const [],
+            ),
+            defaultTextStyle: MockTextStyle(),
+            tatoebaKey: 1,
+            answerGiven: false,
+          );
+          final secondWordWidgetSpan = spans[2] as WidgetSpan;
+          final secondWordFirstWidget = (secondWordWidgetSpan.child as Row)
+              .children
+              .first as TranslatableWord;
+          final secondWordSecondWidget =
+              (secondWordWidgetSpan.child as Row).children.last as Text;
+          expect(secondWordFirstWidget.word, 'своё');
+          expect(secondWordSecondWidget.data, '!');
+        },
+      );
     },
   );
 
