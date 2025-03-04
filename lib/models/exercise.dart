@@ -7,7 +7,10 @@ import 'package:grammatika/models/question.dart';
 import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
 
-class Exercise<A extends Answer, Q extends Question<A>> extends Equatable {
+import 'json_serializable_mixin.dart';
+
+class Exercise<A extends Answer, Q extends Question<A>> extends Equatable
+    implements JsonSerializable {
   const Exercise({
     required this.question,
     required this.answers,
@@ -52,6 +55,31 @@ class Exercise<A extends Answer, Q extends Question<A>> extends Equatable {
         question,
         answers,
       ];
+
+  static Exercise fromJson<A extends Answer, Q extends Question<A>>(
+      Map<String, dynamic> json) {
+    if (Q == Noun) {
+      return Exercise<Gender, Noun>(
+        question: Noun.fromJson(json['question']),
+        answers: null,
+      );
+    } else if (Q == Sentence) {
+      return Exercise<WordForm, Sentence>(
+        question: Sentence.fromJson(json['question']),
+        answers: null,
+      );
+    } else {
+      throw Exception();
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'question': question.toJson(),
+      'answers': answers?.map((e) => e.toJson()).toList(),
+    };
+  }
 }
 
 enum ExerciseType {
