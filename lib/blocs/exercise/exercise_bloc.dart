@@ -5,17 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:grammatika/extensions/gender_extension.dart';
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/gender.dart';
-import 'package:grammatika/models/noun.dart';
-import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
 import 'package:grammatika/models/word_form_type.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/exercise_cache_service.dart';
 import 'package:grammatika/services/statistics_service.dart';
-import 'package:grammatika/utilities/db_helper.dart';
-import 'package:grammatika/utilities/explanation_helper.dart';
 
 import '../../models/answer.dart';
 
@@ -24,6 +20,7 @@ part 'exercise_state.dart';
 
 class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
   Exercise? exercise;
+
   ExerciseBloc({@visibleForTesting Random? mockRandom})
       : super(ExerciseInitial()) {
     on<ExerciseEvent>((event, emit) async {
@@ -72,30 +69,11 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       if (event is ExerciseRetrieveRandomNounEvent) {
         emit(ExerciseRetrievingExerciseState());
 
+        final exerciseCacheService = GetIt.instance.get<ExerciseCacheService>();
+
         try {
-          final dbHelper = GetIt.instance.get<DbHelper>();
-          final db = await dbHelper.getDatabase();
+          exercise = await exerciseCacheService.getCachedGenderExercise();
 
-          final Map<String, dynamic> nounQuery = (await db.rawQuery(
-            dbHelper.randomNounQueryString(),
-          ))
-              .single;
-          final answers = Gender.values.map((gender) => gender.name);
-          final explanation = GetIt.instance
-              .get<ExplanationHelper>()
-              .genderExplanation(
-                  bare: nounQuery['bare'],
-                  correctAnswer: Gender.values.byName(nounQuery['gender']));
-
-          final json = {
-            ...nounQuery,
-            'possible_answers': answers,
-            'explanation': explanation,
-          };
-          exercise = Exercise<Gender, Noun>(
-            question: Noun.fromJson(json),
-            answers: null,
-          );
           emit(
             ExerciseExerciseRetrievedState(),
           );
@@ -104,49 +82,22 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
             ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
           );
         }
+
+        try {
+          exerciseCacheService.reCacheGenderExercisesIfNeeded();
+        } catch (e) {
+          emit(ExerciseErrorState(
+              errorString: 'Unable to re-cache gender exercises'));
+        }
       }
 
       if (event is ExerciseRetrieveRandomSentenceEvent) {
         emit(ExerciseRetrievingExerciseState());
+
+        final exerciseCacheService = GetIt.instance.get<ExerciseCacheService>();
+
         try {
-          final dbHelper = GetIt.instance.get<DbHelper>();
-          final db = await dbHelper.getDatabase();
-
-          final Map<String, dynamic> sentenceQuery = (await db.rawQuery(
-            dbHelper.randomSentenceQueryString(),
-          ))
-              .single;
-
-          final List<Map<String, dynamic>> answers = (await db.rawQuery(
-              'SELECT form_type, position AS word_form_position, form, _form_bare FROM words_forms WHERE word_id = ${sentenceQuery['word_id']};'));
-          final correctAnswer = WordForm.fromJson(sentenceQuery);
-          final (explanation, visualExplanation) =
-              GetIt.instance.get<ExplanationHelper>().sentenceExplanation(
-                    correctAnswer: correctAnswer,
-                    bare: sentenceQuery['bare'],
-                    wordFormTypesToBareMap: <WordFormType, String>{
-                      for (var answer in answers)
-                        WordFormTypeExt.fromString(answer['form_type']):
-                            answer['_form_bare'],
-                    },
-                    gender: GenderExtension.fromString(sentenceQuery['gender']),
-                  );
-          final json = {
-            ...sentenceQuery,
-            'answer_synonyms': answers.where((element) {
-              return element['_form_bare'] == sentenceQuery['_form_bare'] &&
-                  element['form_type'] != sentenceQuery['form_type'];
-            }),
-            'possible_answers': answers,
-            'explanation': explanation,
-            'visual_explanation': visualExplanation,
-          };
-          final sentence = Sentence.fromJson(json);
-
-          exercise = Exercise<WordForm, Sentence>(
-            question: sentence,
-            answers: null,
-          );
+          exercise = await exerciseCacheService.getCachedSentenceExercise();
 
           emit(
             ExerciseExerciseRetrievedState(),
@@ -156,6 +107,13 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
             ExerciseErrorState(
                 errorString: 'Unable to parse sentence from JSON'),
           );
+        }
+
+        try {
+          exerciseCacheService.reCacheSentenceExercisesIfNeeded();
+        } catch (e) {
+          emit(ExerciseErrorState(
+              errorString: 'Unable to re-cache sentence exercises'));
         }
       }
 

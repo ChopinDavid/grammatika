@@ -55,7 +55,7 @@ class ExerciseHelper {
       } else {
         final sentenceWordIndex = i ~/ 2;
         var word = sentenceWords[sentenceWordIndex];
-        final wordWithoutPunctuation = word.replaceAll(RegExp(r'[ ,.?]'), '');
+        final wordWithoutPunctuation = word.replaceAll(RegExp(r'[ ,.?!]'), '');
         List<Widget> widgetsToAdd = [];
 
         if (wordWithoutPunctuation == baseWord ||
@@ -96,7 +96,8 @@ class ExerciseHelper {
         if (word == '-' ||
             word.endsWith(',') ||
             word.endsWith('.') ||
-            word.endsWith('?')) {
+            word.endsWith('?') ||
+            word.endsWith('!')) {
           widgetsToAdd.add(
             Text(
               word.substring(word.length - 1),

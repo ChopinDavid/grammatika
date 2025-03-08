@@ -2,12 +2,13 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
 import 'package:grammatika/my_app.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/exercise_cache_service.dart';
 import 'package:grammatika/services/theme_service.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'mocks.dart';
 
@@ -34,6 +35,8 @@ main() {
     GetIt.instance.registerSingleton<ThemeService>(themeService);
     GetIt.instance.registerSingleton<EnabledExercisesService>(
         MockEnabledExercisesService());
+    GetIt.instance
+        .registerSingleton<ExerciseCacheService>(MockExerciseCacheService());
   });
 
   testWidgets(

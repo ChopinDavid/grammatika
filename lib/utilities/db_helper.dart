@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:grammatika/models/gender.dart';
 import 'package:grammatika/models/word_form_type.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
   Future<Database> getDatabase() async {
@@ -30,7 +30,10 @@ class DbHelper {
       await File(path).writeAsBytes(bytes, flush: true);
     }
 
-    return await openDatabase(path, readOnly: true);
+    // Open the database in read-only mode
+    var db = await openDatabase(path, readOnly: false);
+
+    return db;
   }
 
   String randomNounQueryString() {
@@ -55,7 +58,7 @@ WHERE gender IS NOT NULL
               (e) => '''\n  AND gender IS NOT \'$e\'''',
             ).join()}
 ORDER BY RANDOM()
-LIMIT 1;''';
+LIMIT 50;''';
 
     return sqlString;
   }
@@ -98,10 +101,10 @@ WHERE sentences_words.form_type IS NOT NULL
   AND sentences_words.form_type IS NOT 'ru_adj_short_m'
   AND sentences_words.form_type IS NOT 'ru_adj_short_f'
   AND sentences_words.form_type IS NOT 'ru_adj_short_n'
-  AND sentences_words.form_type IS NOT 'ru_adj_short_pl\'${disabledWordFormExercises.map((disabledWordFormExercise) => '''\n  AND sentences_words.form_type IS NOT '$disabledWordFormExercise\'''').join()}
+  AND sentences_words.form_type IS NOT 'ru_adj_short_pl'${disabledWordFormExercises.map((disabledWordFormExercise) => '''\n  AND sentences_words.form_type IS NOT '$disabledWordFormExercise\'''').join()}
   AND words_forms.form_type = sentences_words.form_type
 ORDER BY RANDOM()
-LIMIT 1;''';
+LIMIT 50;''';
 
     return sqlString;
   }
