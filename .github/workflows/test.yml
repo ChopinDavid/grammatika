@@ -1,0 +1,87 @@
+name: Build, Test, and Push to Codecov
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_test_and_push_to_codecov:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Set up the Dart SDK
+      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+
+      - name: Extract current version
+        id: extract_version
+        run: |
+          echo "VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')" >> $GITHUB_ENV
+
+      - name: Check CHANGELOG.md for version header
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          if ! grep -q "## $VERSION" CHANGELOG.md; then
+            echo "CHANGELOG.md does not contain a header for version $VERSION. Failing the build."
+            exit 1
+          fi
+
+      - name: Fetch main branch
+        run: git fetch origin main:main
+
+      - name: Extract main branch version
+        run: |
+          git checkout main
+          MAIN_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "MAIN_VERSION=$MAIN_VERSION" >> $GITHUB_ENV
+
+      - name: Compare versions
+        run: |
+          git checkout -
+          PR_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "PR_VERSION=$PR_VERSION" >> $GITHUB_ENV
+          if [ "$PR_VERSION" = "$MAIN_VERSION" ]; then
+            echo "Version $PR_VERSION is not greater than main branch version $MAIN_VERSION. Failing the build."
+            exit 1
+          elif [ "$(printf '%s\n' "$PR_VERSION" "$MAIN_VERSION" | sort -V | head -n1)" = "$PR_VERSION" ]; then
+            echo "Version $PR_VERSION is not greater than main branch version $MAIN_VERSION. Failing the build."
+            exit 1
+          fi
+
+      # Install Flutter
+      - name: Install Flutter
+        run: |
+          git clone https://github.com/flutter/flutter.git $HOME/flutter -b stable
+          echo "$HOME/flutter/bin" >> $GITHUB_PATH
+          echo "$HOME/flutter/bin/cache/dart-sdk/bin" >> $GITHUB_PATH
+          export PATH="$PATH:$HOME/flutter/bin"
+          export PATH="$HOME/flutter/bin/cache/dart-sdk/bin:$PATH"
+          flutter precache
+          flutter doctor
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Uncomment this step to verify the use of 'dart format' on each commit.
+      # - name: Verify formatting
+      # run: dart format --output=none --set-exit-if-changed .
+
+      # Consider passing '--fatal-infos' for slightly stricter analysis.
+      - name: Analyze project source
+        run: dart analyze
+
+      # Run tests with coverage
+      - name: Run tests
+        run: flutter test --coverage
+
+      - name: Generate coverage report
+        run: |
+          sudo apt-get install lcov
+          lcov --list ./coverage/lcov.info
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: ChopinDavid/grammatika
