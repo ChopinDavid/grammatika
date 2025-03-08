@@ -67,7 +67,8 @@ main() {
         'throws AssertionError if value is String that does not represent an int',
         () {
       const key = 'key';
-      expect(() => {key: 'spaghetti'}.parseOptionalIntForKey(key), throws);
+      expect(() => {key: 'spaghetti'}.parseOptionalIntForKey(key),
+          throwsA(isA<AssertionError>()));
     });
 
     test('throws AssertionError if value is bool', () {

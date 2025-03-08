@@ -53,7 +53,7 @@ class ExplanationsWidget extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     gradientColor,
-                    gradientColor.withOpacity(0.0),
+                    gradientColor.withValues(alpha: 0.0),
                   ],
                 ),
               ),
@@ -65,7 +65,7 @@ class ExplanationsWidget extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    gradientColor.withOpacity(0.0),
+                    gradientColor.withValues(alpha: 0.0),
                     gradientColor,
                   ],
                 ),

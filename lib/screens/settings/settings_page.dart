@@ -38,7 +38,7 @@ class _SettingsPageState extends State<SettingsPage> {
 }
 
 class _AppearanceSettingsWidget extends StatefulWidget {
-  const _AppearanceSettingsWidget({super.key});
+  const _AppearanceSettingsWidget();
 
   @override
   State<_AppearanceSettingsWidget> createState() =>
@@ -120,7 +120,7 @@ class _AppearanceSettingsWidgetState extends State<_AppearanceSettingsWidget> {
 }
 
 class _EnabledExercisesWidget extends StatefulWidget {
-  const _EnabledExercisesWidget({super.key});
+  const _EnabledExercisesWidget();
 
   @override
   State<_EnabledExercisesWidget> createState() =>

@@ -87,6 +87,7 @@ class Sentence extends Question<WordForm> {
     }
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'form_type': correctAnswer.type.name,
