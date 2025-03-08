@@ -81,6 +81,7 @@ class Noun extends Question<Gender> {
     }
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'gender': correctAnswer.name,
