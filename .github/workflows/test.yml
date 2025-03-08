@@ -84,4 +84,4 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: ChopinDavid/expandable_box_drawing_table
+          slug: ChopinDavid/grammatika
