@@ -4,7 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
-import 'package:grammatika/models/answer.dart' as Answer;
+import 'package:grammatika/models/answer.dart' as answer;
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/gender.dart';
 import 'package:grammatika/models/noun.dart';
@@ -491,7 +491,7 @@ class _MockQuestion extends Question<_MockAnswer> {
   }
 }
 
-class _MockAnswer extends Answer.Answer {
+class _MockAnswer extends answer.Answer {
   @override
   Map<String, dynamic> toJson() {
     return {};
