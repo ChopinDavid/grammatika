@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:grammatika/models/gender.dart';
 import 'package:grammatika/models/word_form_type.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
 import 'package:grammatika/utilities/db_helper.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
 
@@ -45,7 +45,7 @@ WHERE gender IS NOT NULL
   AND gender IS NOT 'pl'
 ${disabledGenderIdentifiers.map((disabledGenderIdentifier) => '''  AND gender IS NOT \'$disabledGenderIdentifier\'''').join('\n')}
 ORDER BY RANDOM()
-LIMIT 1;''';
+LIMIT 50;''';
       expect(testObject.randomNounQueryString(), expectedRandomNounQueryString);
     });
   });
@@ -96,7 +96,7 @@ WHERE sentences_words.form_type IS NOT NULL
 ${disabledWordFormTypeIdentifiers.map((disabledWordFormExercise) => '''  AND sentences_words.form_type IS NOT '$disabledWordFormExercise\'''').join('\n')}
   AND words_forms.form_type = sentences_words.form_type
 ORDER BY RANDOM()
-LIMIT 1;''';
+LIMIT 50;''';
       expect(testObject.randomSentenceQueryString(),
           expectedRandomSentenceQueryString);
     });
