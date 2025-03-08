@@ -6,6 +6,7 @@ import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
 import 'package:grammatika/blocs/translation/translation_bloc.dart';
 import 'package:grammatika/models/noun.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/exercise_cache_service.dart';
 import 'package:grammatika/services/navigation_service.dart';
 import 'package:grammatika/services/statistics_service.dart';
 import 'package:grammatika/services/theme_service.dart';
@@ -117,3 +118,7 @@ class MockEnabledExercisesService extends Mock
 }
 
 class MockStatisticsService extends Mock implements StatisticsService {}
+
+class MockBatch extends Mock implements Batch {}
+
+class MockExerciseCacheService extends Mock implements ExerciseCacheService {}

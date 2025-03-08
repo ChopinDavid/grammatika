@@ -3,79 +3,64 @@ import 'dart:math';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
+import 'package:grammatika/models/answer.dart' as Answer;
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/gender.dart';
 import 'package:grammatika/models/noun.dart';
+import 'package:grammatika/models/question.dart';
 import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
 import 'package:grammatika/models/word_form_type.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/exercise_cache_service.dart';
 import 'package:grammatika/services/statistics_service.dart';
-import 'package:grammatika/utilities/db_helper.dart';
-import 'package:grammatika/utilities/explanation_helper.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../test_utils.dart';
 import '../../mocks.dart';
 
 main() {
   late ExerciseBloc testObject;
-  late DbHelper mockDbHelper;
-  late Database mockDatabase;
+  late ExerciseCacheService mockExerciseCacheService;
   late Random mockRandom;
-  late ExplanationHelper mockExplanationHelper;
   late EnabledExercisesService mockEnabledExercisesService;
   late StatisticsService mockStatisticsService;
   final Noun noun = Noun.testValue();
   final Sentence sentence = Sentence.testValue();
 
-  const mockRandomNounQueryString = 'abc';
-  const mockRandomSentenceQueryString = 'def';
-
   setUpAll(TestUtils.registerFallbackValues);
 
   setUp(() async {
     await GetIt.instance.reset();
-    mockDatabase = MockDatabase();
-    mockDbHelper = MockDbHelper();
+    mockExerciseCacheService = MockExerciseCacheService();
     mockRandom = MockRandom();
-    mockExplanationHelper = MockExplanationHelper();
     mockEnabledExercisesService = MockEnabledExercisesService();
     mockStatisticsService = MockStatisticsService();
 
-    when(() => mockDbHelper.getDatabase())
-        .thenAnswer((invocation) async => mockDatabase);
-    when(() => mockDbHelper.randomNounQueryString())
-        .thenReturn(mockRandomNounQueryString);
-    when(() => mockDbHelper.randomSentenceQueryString())
-        .thenReturn(mockRandomSentenceQueryString);
-    when(() => mockDatabase.rawQuery(mockRandomNounQueryString))
-        .thenAnswer((invocation) async => [noun.toJson()]);
-    when(() => mockDatabase.rawQuery(mockRandomSentenceQueryString))
-        .thenAnswer((invocation) async => [sentence.toJson()]);
-    when(() => mockDatabase.rawQuery(
-            'SELECT form_type, position AS word_form_position, form, _form_bare FROM words_forms WHERE word_id = ${sentence.word.id};'))
-        .thenAnswer((invocation) async {
-      return sentence.possibleAnswers.map((e) => e.toJson()).toList();
-    });
-    when(() => mockExplanationHelper.genderExplanation(
-            bare: any(named: 'bare'),
-            correctAnswer: any(named: 'correctAnswer')))
-        .thenAnswer((invocation) => 'because I said so');
-    when(() => mockExplanationHelper.sentenceExplanation(
-            bare: any(named: 'bare'),
-            correctAnswer: any(named: 'correctAnswer'),
-            wordFormTypesToBareMap: any(named: 'wordFormTypesToBareMap')))
-        .thenAnswer((invocation) => ('because I said so', 'сказ- ➡️ сказал'));
+    when(() => mockExerciseCacheService.getCachedSentenceExercise()).thenAnswer(
+      (_) async => Exercise<WordForm, Sentence>(
+        question: sentence,
+        answers: null,
+      ),
+    );
+    when(() => mockExerciseCacheService.getCachedGenderExercise()).thenAnswer(
+      (_) async => Exercise<Gender, Noun>(
+        question: noun,
+        answers: null,
+      ),
+    );
+    when(() => mockExerciseCacheService.reCacheSentenceExercisesIfNeeded())
+        .thenAnswer((_) async {});
+    when(() => mockExerciseCacheService.reCacheGenderExercisesIfNeeded())
+        .thenAnswer((_) async {});
     when(() => mockStatisticsService.addExercisePassed(any(), any()))
         .thenAnswer((_) async {});
     when(() => mockStatisticsService.addExerciseFailed(any(), any()))
         .thenAnswer((_) async {});
 
-    GetIt.instance.registerSingleton<DbHelper>(mockDbHelper);
-    GetIt.instance.registerSingleton<ExplanationHelper>(mockExplanationHelper);
+    GetIt.instance
+        .registerSingleton<ExerciseCacheService>(mockExerciseCacheService);
     GetIt.instance.registerSingleton<EnabledExercisesService>(
         mockEnabledExercisesService);
     GetIt.instance.registerSingleton<StatisticsService>(mockStatisticsService);
@@ -158,10 +143,10 @@ main() {
       );
 
       blocTest(
-        'emits ExerciseRetrievingExerciseState, ExerciseErrorState when DbHelper.getDatabase throws',
+        'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExerciseCacheService.getCachedGenderExercise throws',
         build: () => testObject,
         setUp: () {
-          when(() => mockDbHelper.getDatabase())
+          when(() => mockExerciseCacheService.getCachedGenderExercise())
               .thenThrow(Exception('something went wrong!'));
         },
         act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
@@ -175,39 +160,19 @@ main() {
       );
 
       blocTest(
-        'emits ExerciseRetrievingExerciseState, ExerciseErrorState when Database.rawQuery throws',
+        'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExerciseCacheService.reCacheGenderExercisesIfNeeded throws',
         build: () => testObject,
         setUp: () {
-          when(() => mockDatabase.rawQuery(any()))
+          when(() => mockExerciseCacheService.reCacheGenderExercisesIfNeeded())
               .thenThrow(Exception('something went wrong!'));
         },
         act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
         expect: () => [
           ExerciseRetrievingExerciseState(),
-          ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
+          ExerciseExerciseRetrievedState(),
+          ExerciseErrorState(
+              errorString: 'Unable to re-cache gender exercises'),
         ],
-        tearDown: () {
-          expect(testObject.exercise, isNull);
-        },
-      );
-
-      blocTest(
-        'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExplanationHelper.genderExplanation throws',
-        build: () => testObject,
-        setUp: () {
-          when(() => mockExplanationHelper.genderExplanation(
-                  bare: any(named: 'bare'),
-                  correctAnswer: any(named: 'correctAnswer')))
-              .thenThrow(Exception());
-        },
-        act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
-        expect: () => [
-          ExerciseRetrievingExerciseState(),
-          ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
-        ],
-        tearDown: () {
-          expect(testObject.exercise, isNull);
-        },
       );
     });
 
@@ -234,10 +199,10 @@ main() {
       );
 
       blocTest(
-        'emits ExerciseRetrievingExerciseState, ExerciseErrorState when DbHelper.getDatabase throws',
+        'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExerciseCacheService.getCachedSentenceExercise throws',
         build: () => testObject,
         setUp: () {
-          when(() => mockDbHelper.getDatabase())
+          when(() => mockExerciseCacheService.getCachedSentenceExercise())
               .thenThrow(Exception('something went wrong!'));
         },
         act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
@@ -251,40 +216,20 @@ main() {
       );
 
       blocTest(
-        'emits ExerciseRetrievingExerciseState, ExerciseErrorState when Database.rawQuery throws',
+        'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExerciseCacheService.reCacheSentenceExercisesIfNeeded throws',
         build: () => testObject,
         setUp: () {
-          when(() => mockDatabase.rawQuery(any()))
+          when(() =>
+                  mockExerciseCacheService.reCacheSentenceExercisesIfNeeded())
               .thenThrow(Exception('something went wrong!'));
         },
         act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
         expect: () => [
           ExerciseRetrievingExerciseState(),
-          ExerciseErrorState(errorString: 'Unable to parse sentence from JSON'),
+          ExerciseExerciseRetrievedState(),
+          ExerciseErrorState(
+              errorString: 'Unable to re-cache sentence exercises'),
         ],
-        tearDown: () {
-          expect(testObject.exercise, isNull);
-        },
-      );
-
-      blocTest(
-        'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExplanationHelper.sentenceExplanation throws',
-        build: () => testObject,
-        setUp: () {
-          when(() => mockExplanationHelper.sentenceExplanation(
-                  bare: any(named: 'bare'),
-                  correctAnswer: any(named: 'correctAnswer'),
-                  wordFormTypesToBareMap: any(named: 'wordFormTypesToBareMap')))
-              .thenThrow(Exception());
-        },
-        act: (bloc) => bloc.add(ExerciseRetrieveExerciseEvent()),
-        expect: () => [
-          ExerciseRetrievingExerciseState(),
-          ExerciseErrorState(errorString: 'Unable to parse sentence from JSON'),
-        ],
-        tearDown: () {
-          expect(testObject.exercise, isNull);
-        },
       );
     });
   });
@@ -309,10 +254,10 @@ main() {
     );
 
     blocTest(
-      'emits ExerciseRetrievingExerciseState, ExerciseErrorState when DbHelper.getDatabase throws',
+      'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExerciseCacheService.getCachedGenderExercise throws',
       build: () => testObject,
       setUp: () {
-        when(() => mockDbHelper.getDatabase())
+        when(() => mockExerciseCacheService.getCachedGenderExercise())
             .thenThrow(Exception('something went wrong!'));
       },
       act: (bloc) => bloc.add(ExerciseRetrieveRandomNounEvent()),
@@ -326,38 +271,18 @@ main() {
     );
 
     blocTest(
-      'emits ExerciseRetrievingExerciseState, ExerciseErrorState when Database.rawQuery throws',
+      'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExerciseCacheService.reCacheGenderExercisesIfNeeded throws',
       build: () => testObject,
       setUp: () {
-        when(() => mockDatabase.rawQuery(any()))
+        when(() => mockExerciseCacheService.reCacheGenderExercisesIfNeeded())
             .thenThrow(Exception('something went wrong!'));
       },
       act: (bloc) => bloc.add(ExerciseRetrieveRandomNounEvent()),
       expect: () => [
         ExerciseRetrievingExerciseState(),
-        ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
+        ExerciseExerciseRetrievedState(),
+        ExerciseErrorState(errorString: 'Unable to re-cache gender exercises'),
       ],
-      tearDown: () {
-        expect(testObject.exercise, isNull);
-      },
-    );
-
-    blocTest(
-      'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExplanationHelper.genderExplanation throws',
-      build: () => testObject,
-      setUp: () {
-        when(() => mockExplanationHelper.genderExplanation(
-            bare: any(named: 'bare'),
-            correctAnswer: any(named: 'correctAnswer'))).thenThrow(Exception());
-      },
-      act: (bloc) => bloc.add(ExerciseRetrieveRandomNounEvent()),
-      expect: () => [
-        ExerciseRetrievingExerciseState(),
-        ExerciseErrorState(errorString: 'Unable to parse noun from JSON'),
-      ],
-      tearDown: () {
-        expect(testObject.exercise, isNull);
-      },
     );
   });
 
@@ -381,10 +306,10 @@ main() {
     );
 
     blocTest(
-      'emits ExerciseRetrievingExerciseState, ExerciseErrorState when DbHelper.getDatabase throws',
+      'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExerciseCacheService.getCachedSentenceExercise throws',
       build: () => testObject,
       setUp: () {
-        when(() => mockDbHelper.getDatabase())
+        when(() => mockExerciseCacheService.getCachedSentenceExercise())
             .thenThrow(Exception('something went wrong!'));
       },
       act: (bloc) => bloc.add(ExerciseRetrieveRandomSentenceEvent()),
@@ -398,56 +323,49 @@ main() {
     );
 
     blocTest(
-      'emits ExerciseRetrievingExerciseState, ExerciseErrorState when Database.rawQuery throws',
+      'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExerciseCacheService.reCacheSentenceExercisesIfNeeded throws',
       build: () => testObject,
       setUp: () {
-        when(() => mockDatabase.rawQuery(any()))
+        when(() => mockExerciseCacheService.reCacheSentenceExercisesIfNeeded())
             .thenThrow(Exception('something went wrong!'));
       },
       act: (bloc) => bloc.add(ExerciseRetrieveRandomSentenceEvent()),
       expect: () => [
         ExerciseRetrievingExerciseState(),
-        ExerciseErrorState(errorString: 'Unable to parse sentence from JSON'),
+        ExerciseExerciseRetrievedState(),
+        ExerciseErrorState(
+            errorString: 'Unable to re-cache sentence exercises'),
       ],
-      tearDown: () {
-        expect(testObject.exercise, isNull);
-      },
-    );
-
-    blocTest(
-      'emits ExerciseRetrievingExerciseState, ExerciseErrorState when ExplanationHelper.sentenceExplanation throws',
-      build: () => testObject,
-      setUp: () {
-        when(() => mockExplanationHelper.sentenceExplanation(
-                bare: any(named: 'bare'),
-                correctAnswer: any(named: 'correctAnswer'),
-                wordFormTypesToBareMap: any(named: 'wordFormTypesToBareMap')))
-            .thenThrow(Exception());
-      },
-      act: (bloc) => bloc.add(ExerciseRetrieveRandomSentenceEvent()),
-      expect: () => [
-        ExerciseRetrievingExerciseState(),
-        ExerciseErrorState(errorString: 'Unable to parse sentence from JSON'),
-      ],
-      tearDown: () {
-        expect(testObject.exercise, isNull);
-      },
     );
   });
 
   group('ExerciseSubmitAnswerEvent', () {
-    final initialExercise = Exercise<WordForm, Sentence>(
+    final initialSentenceExercise = Exercise<WordForm, Sentence>(
       question: sentence,
       answers: null,
     );
-    final answersToAdd = [WordForm.testValue()];
+    final initialGenderExercise = Exercise<Gender, Noun>(
+      question: noun,
+      answers: null,
+    );
+    final initialMockExercise = Exercise<_MockAnswer, _MockQuestion>(
+      question: _MockQuestion(
+          correctAnswer: _MockAnswer(),
+          answerSynonyms: const [],
+          possibleAnswers: const [],
+          explanation: '',
+          visualExplanation: ''),
+      answers: null,
+    );
+    final sentenceAnswersToAdd = [WordForm.testValue()];
     blocTest(
-      'emits ExerciseAnswerSelectedState, appending answers to existing Exercise',
+      'emits ExerciseAnswerSelectedState, appending answers to existing Exercise, when correctAnswer is WordForm',
       build: () => testObject,
       setUp: () {
-        testObject.exercise = initialExercise;
+        testObject.exercise = initialSentenceExercise;
       },
-      act: (bloc) => bloc.add(ExerciseSubmitAnswerEvent(answers: answersToAdd)),
+      act: (bloc) =>
+          bloc.add(ExerciseSubmitAnswerEvent(answers: sentenceAnswersToAdd)),
       expect: () => [
         ExerciseAnswerSelectedState(),
       ],
@@ -455,9 +373,52 @@ main() {
         expect(
           testObject.exercise,
           Exercise<WordForm, Sentence>(
-            question: initialExercise.question,
-            answers: answersToAdd,
+            question: initialSentenceExercise.question,
+            answers: sentenceAnswersToAdd,
           ),
+        );
+      },
+    );
+
+    final genderAnswersToAdd = [Gender.f];
+    blocTest(
+      'emits ExerciseAnswerSelectedState, appending answers to existing Exercise, when correctAnswer is Gender',
+      build: () => testObject,
+      setUp: () {
+        testObject.exercise = initialGenderExercise;
+      },
+      act: (bloc) =>
+          bloc.add(ExerciseSubmitAnswerEvent(answers: genderAnswersToAdd)),
+      expect: () => [
+        ExerciseAnswerSelectedState(),
+      ],
+      tearDown: () {
+        expect(
+          testObject.exercise,
+          Exercise<Gender, Noun>(
+            question: initialGenderExercise.question,
+            answers: genderAnswersToAdd,
+          ),
+        );
+      },
+    );
+
+    blocTest(
+      'emits ExerciseErrorState when correctAnswer is neither WordForm nor Gender',
+      build: () => testObject,
+      setUp: () {
+        testObject.exercise = initialMockExercise;
+      },
+      act: (bloc) =>
+          bloc.add(ExerciseSubmitAnswerEvent(answers: genderAnswersToAdd)),
+      expect: () => [
+        ExerciseErrorState(
+            errorString: 'Unable to determine exercise answer ID.')
+      ],
+      tearDown: () {
+        expect(
+          testObject.exercise,
+          initialMockExercise,
         );
       },
     );
@@ -466,7 +427,7 @@ main() {
       'invokes StatisticsService.addExercisePassed when correct answer is selected',
       build: () => testObject,
       setUp: () {
-        testObject.exercise = initialExercise;
+        testObject.exercise = initialSentenceExercise;
       },
       act: (bloc) => bloc.add(
         ExerciseSubmitAnswerEvent(
@@ -476,7 +437,8 @@ main() {
         ),
       ),
       verify: (_) {
-        final correctAnswer = initialExercise.question.correctAnswer.type.name;
+        final correctAnswer =
+            initialSentenceExercise.question.correctAnswer.type.name;
 
         verify(() =>
                 mockStatisticsService.addExercisePassed(correctAnswer, any()))
@@ -490,7 +452,7 @@ main() {
       'invokes StatisticsService.addExerciseFailed when incorrect answer is selected',
       build: () => testObject,
       setUp: () {
-        testObject.exercise = initialExercise;
+        testObject.exercise = initialSentenceExercise;
       },
       act: (bloc) => bloc.add(
         ExerciseSubmitAnswerEvent(
@@ -502,7 +464,8 @@ main() {
         ),
       ),
       verify: (_) {
-        final correctAnswer = initialExercise.question.correctAnswer.type.name;
+        final correctAnswer =
+            initialSentenceExercise.question.correctAnswer.type.name;
 
         verifyNever(() =>
             mockStatisticsService.addExercisePassed(correctAnswer, any()));
@@ -512,4 +475,25 @@ main() {
       },
     );
   });
+}
+
+class _MockQuestion extends Question<_MockAnswer> {
+  const _MockQuestion(
+      {required super.correctAnswer,
+      required super.answerSynonyms,
+      required super.possibleAnswers,
+      required super.explanation,
+      required super.visualExplanation});
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {};
+  }
+}
+
+class _MockAnswer extends Answer.Answer {
+  @override
+  Map<String, dynamic> toJson() {
+    return {};
+  }
 }
