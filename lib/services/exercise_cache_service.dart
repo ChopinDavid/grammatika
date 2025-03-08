@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -182,7 +183,7 @@ class ExerciseCacheService {
               ? cachedSentenceExercises = [exercise]
               : cachedSentenceExercises?.add(exercise);
         } catch (e) {
-          print('Error: $e');
+          log('Error: $e');
         }
       }));
     }
@@ -201,8 +202,6 @@ class ExerciseCacheService {
     final List<Map<String, dynamic>> nounQueryRows = (await db.rawQuery(
       _dbHelper.randomNounQueryString(),
     ));
-
-    List<Future<void>> futures = [];
 
     for (var nounQueryRow in nounQueryRows) {
       try {
@@ -226,7 +225,7 @@ class ExerciseCacheService {
             ? cachedGenderExercises = [exercise]
             : cachedGenderExercises?.add(exercise);
       } catch (e) {
-        print('Error: $e');
+        log('Error: $e');
       }
     }
 
