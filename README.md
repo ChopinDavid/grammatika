@@ -1,4 +1,7 @@
-[![codecov](https://codecov.io/gh/ChopinDavid/grammatika/graph/badge.svg?token=H40NNOYB8Y)](https://codecov.io/gh/ChopinDavid/uchu)
+<p align="center">
+<a href="https://github.com/ChopinDavid/grammatika/actions"><img src="https://github.com/ChopinDavid/grammatika/actions/workflows/test.yml/badge.svg" alt="build"></a>
+<a href="https://app.codecov.io/gh/ChopinDavid/grammatika"><img src="https://codecov.io/gh/ChopinDavid/grammatika/branch/main/graph/badge.svg" alt="codecov"></a>
+</p>
 # grammatika
 
 A new Flutter project.
