@@ -72,18 +72,30 @@ jobs:
       - name: Analyze project source
         run: dart analyze
 
+      # Install lcov
+      - name: Install lcov
+        run: sudo apt-get install lcov
+
       # Run tests with coverage
       - name: Run tests
         run: flutter test --coverage
 
-      - name: Convert coverage to lcov format
-        run: |
-          dart pub global activate coverage
-          dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
+      # Verify coverage directory contents
+      - name: Verify coverage directory contents
+        run: ls -la coverage
+
+      # Print first few lines of lcov.info
+      - name: Print first few lines of lcov.info
+        run: head -n 20 coverage/lcov.info
+
+      # Print environment variables
+      - name: Print environment variables
+        run: printenv
 
       - name: Generate coverage report
         run: |
-          sudo apt-get install lcov
+          echo "Contents of ./coverage/lcov.info:"
+          cat ./coverage/lcov.info
           lcov --list coverage/lcov.info
 
       - name: Upload coverage reports to Codecov
