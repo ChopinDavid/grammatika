@@ -35,6 +35,7 @@ class GrammatikaDrawer extends StatelessWidget {
                     'https://github.com/ChopinDavid/grammatika/issues'),
               );
           }
+          return null;
         },
       ),
     );
