@@ -1,11 +1,11 @@
-name: Build, Test, and Push to Codecov
+name: Build, Lint, and Test
 
 on:
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build_test_and_push_to_codecov:
+  build_lint_and_test:
     runs-on: ubuntu-latest
 
     steps:
@@ -73,15 +73,4 @@ jobs:
 
       # Run tests with coverage
       - name: Run tests
-        run: flutter test --coverage
-
-      - name: Generate coverage report
-        run: |
-          sudo apt-get install lcov
-          lcov --list ./coverage/lcov.info
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: ChopinDavid/grammatika
+        run: flutter test
