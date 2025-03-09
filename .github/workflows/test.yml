@@ -3,7 +3,6 @@ name: Build, Test, and Push to Codecov
 on:
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:
 
 jobs:
   build_test_and_push_to_codecov:
@@ -29,17 +28,17 @@ jobs:
           fi
 
       - name: Fetch main branch
-        run: git fetch origin main
+        run: git fetch origin main:main
 
       - name: Extract main branch version
         run: |
-          git checkout origin/main
+          git checkout main
           MAIN_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
           echo "MAIN_VERSION=$MAIN_VERSION" >> $GITHUB_ENV
-          git checkout -
 
       - name: Compare versions
         run: |
+          git checkout -
           PR_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
           echo "PR_VERSION=$PR_VERSION" >> $GITHUB_ENV
           if [ "$PR_VERSION" = "$MAIN_VERSION" ]; then

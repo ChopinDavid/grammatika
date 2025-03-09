@@ -25,6 +25,7 @@ class WordForm extends Equatable implements Answer {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'form_type': type.name,
