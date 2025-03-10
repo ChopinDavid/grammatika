@@ -143,7 +143,14 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
         }
         exercise = exercise?.withAnswers(answers);
         emit(
-          ExerciseAnswerSelectedState(),
+          // TODO(DC): Make auto-view explanation configurable in settings
+          ExerciseAnswerSelectedState(viewingExplanation: false),
+        );
+      }
+
+      if (event is ExerciseViewExplanationEvent) {
+        emit(
+          ExerciseAnswerSelectedState(viewingExplanation: true),
         );
       }
     });

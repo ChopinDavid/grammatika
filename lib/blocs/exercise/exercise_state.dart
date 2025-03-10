@@ -22,4 +22,12 @@ class ExerciseErrorState extends ExerciseState {
   List<Object?> get props => [...super.props, errorString];
 }
 
-class ExerciseAnswerSelectedState<T> extends ExerciseState {}
+class ExerciseAnswerSelectedState<T> extends ExerciseState {
+  ExerciseAnswerSelectedState({
+    required this.viewingExplanation,
+  });
+  final bool viewingExplanation;
+
+  @override
+  List<Object?> get props => [...super.props, viewingExplanation];
+}

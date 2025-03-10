@@ -1,0 +1,26 @@
+# Fastfile
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and upload to App Store Connect"
+  lane :build_and_upload do
+    gym(
+      project: "ios/Runner.xcodeproj", # Specify the correct path to your project file
+      scheme: "Runner",
+      export_options: {
+        provisioningProfiles: {
+          "com.chopindavid.grammatika" => "match AppStore com.chopindavid.grammatika"
+        }
+      },
+      xcargs: "-allowProvisioningUpdates"
+    )
+    upload_to_app_store(
+      api_key: {
+        key_id: ENV['APP_STORE_CONNECT_API_KEY_ID'],
+        issuer_id: ENV['APP_STORE_CONNECT_API_ISSUER_ID'],
+        key_content: ENV['APP_STORE_CONNECT_API_KEY']
+      }
+    )
+  end
+end

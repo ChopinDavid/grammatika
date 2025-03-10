@@ -128,8 +128,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   .toList()
                                 ..sort((a, b) => a.value.compareTo(b.value));
                               return Flexible(
-                                child: ListView.builder(
+                                child: ListView.separated(
                                   itemCount: passRates.length,
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(height: 16.0);
+                                  },
                                   itemBuilder: (context, index) {
                                     final title =
                                         sortedPassRateEntries[index].key;

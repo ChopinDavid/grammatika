@@ -38,8 +38,9 @@ class ExerciseCacheService {
   @visibleForTesting
   Future<List<Exercise<WordForm, Sentence>>>
       cachedSQLiteSentenceExercises() async {
+    final cachedSentenceExercises = this.cachedSentenceExercises;
     if (cachedSentenceExercises != null) {
-      return cachedSentenceExercises!;
+      return cachedSentenceExercises;
     }
     final db = await _dbHelper.getDatabase();
 
@@ -58,7 +59,8 @@ class ExerciseCacheService {
       return [];
     }
 
-    return List<Exercise<WordForm, Sentence>>.from(
+    return this.cachedSentenceExercises =
+        List<Exercise<WordForm, Sentence>>.from(
       maps.map(
         (map) => Exercise.fromJson<WordForm, Sentence>(
           jsonDecode(map['exercise']),
@@ -69,8 +71,9 @@ class ExerciseCacheService {
 
   @visibleForTesting
   Future<List<Exercise<Gender, Noun>>> cachedSQLiteGenderExercises() async {
+    final cachedGenderExercises = this.cachedGenderExercises;
     if (cachedGenderExercises != null) {
-      return cachedGenderExercises!;
+      return cachedGenderExercises;
     }
 
     final db = await _dbHelper.getDatabase();
@@ -89,7 +92,7 @@ class ExerciseCacheService {
       return [];
     }
 
-    return List<Exercise<Gender, Noun>>.from(
+    return this.cachedGenderExercises = List<Exercise<Gender, Noun>>.from(
       maps.map(
         (map) => Exercise.fromJson<Gender, Noun>(
           jsonDecode(map['exercise']),

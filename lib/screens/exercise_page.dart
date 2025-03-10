@@ -4,13 +4,12 @@ import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/gender.dart';
 import 'package:grammatika/models/noun.dart';
+import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
 import 'package:grammatika/widgets/explanations_widget.dart';
 import 'package:grammatika/widgets/gender_exercise_widget.dart';
 import 'package:grammatika/widgets/grammatika_drawer.dart';
 import 'package:grammatika/widgets/sentence_exercise_widget.dart';
-
-import '../models/sentence.dart';
 
 class ExercisePage extends StatelessWidget {
   const ExercisePage({super.key});
@@ -29,7 +28,11 @@ class ExercisePage extends StatelessWidget {
         }),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.only(
+          left: 24.0,
+          right: 24.0,
+          bottom: 24.0,
+        ),
         child: Center(
           child: BlocConsumer<ExerciseBloc, ExerciseState>(
             listener: (context, state) {
@@ -81,47 +84,104 @@ class ExercisePage extends StatelessWidget {
                 final question =
                     context.read<ExerciseBloc>().exercise?.question;
                 children.add(
-                  Flexible(
-                    child: ExplanationsWidget(
-                      explanation: question?.explanation,
-                      visualExplanation: question?.visualExplanation,
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: state.viewingExplanation
+                        ? ExplanationsWidget(
+                            explanation: question?.explanation,
+                            visualExplanation: question?.visualExplanation,
+                          )
+                        : TextButton(
+                            onPressed: () {
+                              BlocProvider.of<ExerciseBloc>(context).add(
+                                ExerciseViewExplanationEvent(),
+                              );
+                            },
+                            child: const Text('Show Explanation'),
+                          ),
                   ),
                 );
-                children.add(
-                  Material(
-                    color:
-                        Theme.of(context).colorScheme.surfaceContainerHighest,
-                    child: InkWell(
-                      child: const SizedBox(
-                        height: 48.0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Next',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        BlocProvider.of<ExerciseBloc>(context).add(
-                          ExerciseRetrieveExerciseEvent(),
-                        );
-                      },
-                    ),
-                  ),
-                );
-              } else {
-                children.add(const Spacer());
               }
 
               if (children.isNotEmpty) {
+                final gradientColor = Theme.of(context).scaffoldBackgroundColor;
+
                 return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: children,
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          SingleChildScrollView(
+                            padding:
+                                const EdgeInsets.only(top: 24.0, bottom: 16.0),
+                            child: Column(
+                              children: children,
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height: 24.0,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      gradientColor.withValues(alpha: 0.9),
+                                      gradientColor.withValues(alpha: 0.0),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 16.0,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      gradientColor.withValues(alpha: 0.0),
+                                      gradientColor.withValues(alpha: 0.9),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (state is ExerciseAnswerSelectedState)
+                      Material(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(20),
+                        clipBehavior: Clip.hardEdge,
+                        elevation: Theme.of(context).cardTheme.elevation ?? 2.0,
+                        child: InkWell(
+                          child: const SizedBox(
+                            height: 48.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Next',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                          onTap: () {
+                            BlocProvider.of<ExerciseBloc>(context).add(
+                              ExerciseRetrieveExerciseEvent(),
+                            );
+                          },
+                        ),
+                      )
+                  ],
                 );
               }
               return const CircularProgressIndicator();

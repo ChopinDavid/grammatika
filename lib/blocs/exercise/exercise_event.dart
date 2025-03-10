@@ -25,3 +25,5 @@ class ExerciseSubmitAnswerEvent<T extends Answer> extends ExerciseEvent {
         answers,
       ];
 }
+
+class ExerciseViewExplanationEvent extends ExerciseEvent {}

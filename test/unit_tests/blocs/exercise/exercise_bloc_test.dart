@@ -367,7 +367,7 @@ main() {
       act: (bloc) =>
           bloc.add(ExerciseSubmitAnswerEvent(answers: sentenceAnswersToAdd)),
       expect: () => [
-        ExerciseAnswerSelectedState(),
+        ExerciseAnswerSelectedState(viewingExplanation: false),
       ],
       tearDown: () {
         expect(
@@ -390,7 +390,7 @@ main() {
       act: (bloc) =>
           bloc.add(ExerciseSubmitAnswerEvent(answers: genderAnswersToAdd)),
       expect: () => [
-        ExerciseAnswerSelectedState(),
+        ExerciseAnswerSelectedState(viewingExplanation: false),
       ],
       tearDown: () {
         expect(
@@ -474,6 +474,19 @@ main() {
             .called(1);
       },
     );
+  });
+
+  group('ExerciseViewExplanationEvent', () {
+    blocTest('emits ExerciseAnswerSelectedState with viewingExplanation true',
+        build: () => testObject,
+        act: (bloc) => bloc.add(
+              ExerciseViewExplanationEvent(),
+            ),
+        expect: () => [
+              ExerciseAnswerSelectedState(
+                viewingExplanation: true,
+              ),
+            ]);
   });
 }
 
