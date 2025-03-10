@@ -1,0 +1,118 @@
+name: Manual Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      job:
+        description: 'Select the job to run'
+        required: true
+        default: 'build_and_upload_to_google_play'
+        type: choice
+        options:
+          - build_and_upload_to_google_play
+          - build_and_upload_to_app_store_connect
+
+jobs:
+  build_and_upload_to_google_play:
+    if: ${{ github.event.inputs.job == 'build_and_upload_to_google_play' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          lfs: true  # Ensures LFS files are included
+
+      - name: Install Git LFS
+        run: |
+          sudo apt-get install -y git-lfs
+          git lfs install
+
+      - name: Pull LFS files
+        run: git lfs pull
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install Flutter
+        run: |
+          git clone https://github.com/flutter/flutter.git $HOME/flutter -b stable
+          echo "$HOME/flutter/bin" >> $GITHUB_PATH
+          echo "$HOME/flutter/bin/cache/dart-sdk/bin" >> $GITHUB_PATH
+          export PATH="$PATH:$HOME/flutter/bin"
+          export PATH="$HOME/flutter/bin/cache/dart-sdk/bin:$PATH"
+          flutter precache
+          flutter doctor
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Extract version from pubspec.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+      - name: Update version in pubspec.yaml
+        run: |
+          sed -i "s/^version:.*/version: ${{ env.version }}+${{ github.run_number }}/" pubspec.yaml
+
+      - name: Decode keystore file
+        run: |
+          echo "${{ secrets.KEYSTORE_FILE_BASE64 }}" | base64 --decode > $HOME/keystore.jks
+
+      - name: View keystore contents
+        run: |
+          keytool -list -v -keystore $HOME/keystore.jks -storepass ${{ secrets.KEYSTORE_PASSWORD }}
+
+      - name: Build AAB
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: flutter build appbundle --release
+
+      - name: Upload AAB to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: ${{ secrets.PACKAGE_NAME }}
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          track: internal
+
+      - name: Upload artifact to GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.version }}+${{ github.run_number }}-app-release.aab
+          path: build/app/outputs/bundle/release/app-release.aab
+
+      - name: Build APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: flutter build apk --release
+
+      - name: Upload APK as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.version }}+${{ github.run_number }}-app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Post to Discord
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d "{\"content\": \"New build uploaded: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+  build_and_upload_to_app_store_connect:
+    if: ${{ github.event.inputs.job == 'build_and_upload_to_app_store_connect' }}
+    runs-on: macos-latest
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3

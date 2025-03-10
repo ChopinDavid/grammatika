@@ -137,12 +137,48 @@ main() {
   });
 
   group('when state is ExerciseAnswerSelectedState', () {
-    testWidgets('displays ExerciseFooter', (widgetTester) async {
+    testWidgets(
+        'displays "Show Explanation" button when state.viewingExplanation is false',
+        (widgetTester) async {
       whenListen(
         mockExerciseBloc,
         Stream.fromIterable(
           [
-            ExerciseAnswerSelectedState(),
+            ExerciseAnswerSelectedState(viewingExplanation: false),
+          ],
+        ),
+        initialState: ExerciseInitial(),
+      );
+
+      final sentence = Sentence.testValue();
+      final exercise = Exercise<WordForm, Sentence>.testValue(
+          question: sentence,
+          answers: [sentence.correctAnswer, ...sentence.answerSynonyms]);
+      when(() => mockExerciseBloc.exercise).thenReturn(exercise);
+
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider.value(
+            value: mockExerciseBloc,
+            child: const ExercisePage(),
+          ),
+        ),
+      );
+      await widgetTester.pump();
+      await widgetTester.idle();
+
+      final exerciseFooterFinder = find.byType(ExplanationsWidget);
+      expect(exerciseFooterFinder, findsNothing);
+      expect(find.text('Show Explanation'), findsOneWidget);
+    });
+
+    testWidgets('displays ExerciseFooter when state.viewingExplanation is true',
+        (widgetTester) async {
+      whenListen(
+        mockExerciseBloc,
+        Stream.fromIterable(
+          [
+            ExerciseAnswerSelectedState(viewingExplanation: true),
           ],
         ),
         initialState: ExerciseInitial(),
@@ -173,6 +209,42 @@ main() {
               .widget<ExplanationsWidget>(exerciseFooterFinder)
               .explanation,
           explanation);
+      expect(find.text('Show Explanation'), findsNothing);
+    });
+
+    testWidgets(
+        'tapping "Show Explanation" button adds ExerciseViewExplanationEvent to ExerciseBloc',
+        (widgetTester) async {
+      whenListen(
+        mockExerciseBloc,
+        Stream.fromIterable(
+          [
+            ExerciseAnswerSelectedState(viewingExplanation: false),
+          ],
+        ),
+        initialState: ExerciseInitial(),
+      );
+
+      final sentence = Sentence.testValue();
+      final exercise = Exercise<WordForm, Sentence>.testValue(
+          question: sentence,
+          answers: [sentence.correctAnswer, ...sentence.answerSynonyms]);
+      when(() => mockExerciseBloc.exercise).thenReturn(exercise);
+
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider.value(
+            value: mockExerciseBloc,
+            child: const ExercisePage(),
+          ),
+        ),
+      );
+      await widgetTester.pump();
+      await widgetTester.idle();
+
+      await widgetTester.tap(find.text('Show Explanation'));
+      verify(() => mockExerciseBloc.add(ExerciseViewExplanationEvent()))
+          .called(1);
     });
 
     testWidgets(
@@ -182,7 +254,7 @@ main() {
         mockExerciseBloc,
         Stream.fromIterable(
           [
-            ExerciseAnswerSelectedState(),
+            ExerciseAnswerSelectedState(viewingExplanation: false),
           ],
         ),
         initialState: ExerciseInitial(),

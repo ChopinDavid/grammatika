@@ -45,7 +45,8 @@ main() {
     await widgetTester.pumpAndSettle();
 
     expect(find.byKey(const Key('explanation-text')), findsOneWidget);
-    expect(find.text(explanation), findsOneWidget);
+    expect(
+        find.textContaining(explanation, findRichText: true), findsOneWidget);
   });
 
   testWidgets('displays visual explanation if not null', (widgetTester) async {

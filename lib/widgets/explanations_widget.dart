@@ -14,63 +14,37 @@ class ExplanationsWidget extends StatelessWidget {
     final explanation = this.explanation;
     final visualExplanation = this.visualExplanation;
 
-    final gradientColor = Theme.of(context).scaffoldBackgroundColor;
-
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            vertical: 16.0,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (explanation != null)
-                Text(
-                  explanation,
-                  key: const Key('explanation-text'),
-                ),
-              if (visualExplanation != null)
-                Center(
-                  child: Text(
-                    visualExplanation,
-                    key: const Key('visual-explanation-text'),
-                  ),
-                ),
-            ],
-          ),
-        ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              height: 16.0,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    gradientColor,
-                    gradientColor.withValues(alpha: 0.0),
+            if (explanation != null)
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Explanation: ',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                    TextSpan(
+                        text: explanation,
+                        style: Theme.of(context).textTheme.bodyMedium),
                   ],
                 ),
+                key: const Key('explanation-text'),
               ),
-            ),
-            Container(
-              height: 16.0,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    gradientColor.withValues(alpha: 0.0),
-                    gradientColor,
-                  ],
+            if (visualExplanation != null)
+              Center(
+                child: Text(
+                  visualExplanation,
+                  key: const Key('visual-explanation-text'),
                 ),
               ),
-            ),
           ],
         ),
       ],

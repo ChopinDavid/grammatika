@@ -29,10 +29,13 @@ class GenderExerciseWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              '${exercise.question.word.bare}?',
-              key: const Key('bare-key'),
-              style: Theme.of(context).textTheme.headlineLarge,
+            Flexible(
+              child: Text(
+                '${exercise.question.word.bare}?',
+                key: const Key('bare-key'),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
             ),
             isAnswered
                 ? TranslationButton(

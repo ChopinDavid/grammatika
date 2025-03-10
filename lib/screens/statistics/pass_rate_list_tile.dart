@@ -25,6 +25,7 @@ class PassRateListTile extends StatelessWidget {
             const SizedBox(height: 4.0),
             Text(
               '${(value * 100).toStringAsFixed(2)}% pass rate',
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
