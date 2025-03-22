@@ -7,6 +7,7 @@ import 'package:grammatika/blocs/exercise/exercise_bloc.dart';
 import 'package:grammatika/models/answer.dart' as answer;
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/miscellaneous_settings.dart';
 import 'package:grammatika/models/noun.dart';
 import 'package:grammatika/models/question.dart';
 import 'package:grammatika/models/sentence.dart';
@@ -14,6 +15,7 @@ import 'package:grammatika/models/word_form.dart';
 import 'package:grammatika/models/word_form_type.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
 import 'package:grammatika/services/exercise_cache_service.dart';
+import 'package:grammatika/services/miscellaneous_settings_service.dart';
 import 'package:grammatika/services/statistics_service.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -23,6 +25,7 @@ import '../../mocks.dart';
 main() {
   late ExerciseBloc testObject;
   late ExerciseCacheService mockExerciseCacheService;
+  late MiscellaneousSettingsService mockMiscellaneousSettingsService;
   late Random mockRandom;
   late EnabledExercisesService mockEnabledExercisesService;
   late StatisticsService mockStatisticsService;
@@ -34,6 +37,7 @@ main() {
   setUp(() async {
     await GetIt.instance.reset();
     mockExerciseCacheService = MockExerciseCacheService();
+    mockMiscellaneousSettingsService = MockMiscellaneousSettingsService();
     mockRandom = MockRandom();
     mockEnabledExercisesService = MockEnabledExercisesService();
     mockStatisticsService = MockStatisticsService();
@@ -54,6 +58,8 @@ main() {
         .thenAnswer((_) async {});
     when(() => mockExerciseCacheService.reCacheGenderExercisesIfNeeded())
         .thenAnswer((_) async {});
+    when(() => mockMiscellaneousSettingsService.getSettings())
+        .thenReturn(MiscellaneousSettings.defaultSettings());
     when(() => mockStatisticsService.addExercisePassed(any(), any()))
         .thenAnswer((_) async {});
     when(() => mockStatisticsService.addExerciseFailed(any(), any()))
@@ -61,6 +67,8 @@ main() {
 
     GetIt.instance
         .registerSingleton<ExerciseCacheService>(mockExerciseCacheService);
+    GetIt.instance.registerSingleton<MiscellaneousSettingsService>(
+        mockMiscellaneousSettingsService);
     GetIt.instance.registerSingleton<EnabledExercisesService>(
         mockEnabledExercisesService);
     GetIt.instance.registerSingleton<StatisticsService>(mockStatisticsService);
@@ -380,6 +388,32 @@ main() {
       },
     );
 
+    blocTest(
+      'emits ExerciseAnswerSelectedState with viewingExplanation true when MiscellaneousSettings.viewExplanationOnAnswer is true',
+      build: () => testObject,
+      setUp: () {
+        when(
+          () => mockMiscellaneousSettingsService.getSettings(),
+        ).thenReturn(
+            const MiscellaneousSettings(automaticallyShowExplanation: true));
+        testObject.exercise = initialSentenceExercise;
+      },
+      act: (bloc) =>
+          bloc.add(ExerciseSubmitAnswerEvent(answers: sentenceAnswersToAdd)),
+      expect: () => [
+        ExerciseAnswerSelectedState(viewingExplanation: true),
+      ],
+      tearDown: () {
+        expect(
+          testObject.exercise,
+          Exercise<WordForm, Sentence>(
+            question: initialSentenceExercise.question,
+            answers: sentenceAnswersToAdd,
+          ),
+        );
+      },
+    );
+
     final genderAnswersToAdd = [Gender.f];
     blocTest(
       'emits ExerciseAnswerSelectedState, appending answers to existing Exercise, when correctAnswer is Gender',
@@ -476,11 +510,11 @@ main() {
     );
   });
 
-  group('ExerciseViewExplanationEvent', () {
+  group('ExerciseShowExplanationEvent', () {
     blocTest('emits ExerciseAnswerSelectedState with viewingExplanation true',
         build: () => testObject,
         act: (bloc) => bloc.add(
-              ExerciseViewExplanationEvent(),
+              ExerciseShowExplanationEvent(),
             ),
         expect: () => [
               ExerciseAnswerSelectedState(

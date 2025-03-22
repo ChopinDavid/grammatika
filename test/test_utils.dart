@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/gender.dart';
+import 'package:grammatika/models/miscellaneous_settings.dart';
 import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
 import 'package:mocktail/mocktail.dart';
@@ -19,5 +20,6 @@ class TestUtils {
     registerFallbackValue(const LaunchOptions());
     registerFallbackValue(MockBuildContext());
     registerFallbackValue(Brightness.light);
+    registerFallbackValue(MiscellaneousSettings.defaultSettings());
   }
 }
