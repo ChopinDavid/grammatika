@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build_test_and_push_to_codecov:
+  build_test_push_to_codecov_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -47,3 +47,19 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: ChopinDavid/grammatika
+
+      - name: Trigger build_and_upload_to_google_play
+        run: |
+          curl -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/actions/workflows/workflow_dispatch.yml/dispatches \
+          -d '{"ref":"main","inputs":{"job":"build_and_upload_to_google_play"}}'
+
+      - name: Trigger build_and_upload_to_app_store_connect
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/workflow_dispatch.yml/dispatches \
+            -d '{"ref":"main","inputs":{"job":"build_and_upload_to_app_store_connect"}}'
