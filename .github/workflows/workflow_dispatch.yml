@@ -97,6 +97,7 @@ jobs:
         run: flutter build apk --release
 
       - name: Upload APK as Artifact
+        id: upload_apk
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.version }}+${{ github.run_number }}-app-release.apk
@@ -106,7 +107,7 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
           -X POST \
-          -d "{\"content\": \"New build uploaded: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          -d "{\"content\": \"New build uploaded: ${{ steps.upload_apk.outputs.artifact-url }}\"}" \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
 
   build_and_upload_to_app_store_connect:
