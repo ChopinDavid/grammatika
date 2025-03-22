@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:grammatika/screens/settings/settings_page.dart';
 import 'package:grammatika/screens/statistics/statistics_page.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
 import 'package:grammatika/services/navigation_service.dart';
 import 'package:grammatika/services/statistics_service.dart';
 import 'package:grammatika/services/theme_service.dart';
+import 'package:mocktail/mocktail.dart';
 
+import '../../test_utils.dart';
 import '../mocks.dart';
 
 void main() {
   late NavigationService testObject;
-  late ThemeService mockSharedPreferencesService;
+  late ThemeService mockThemeService;
+
+  setUpAll(TestUtils.registerFallbackValues);
 
   setUp(() async {
     await GetIt.instance.reset();
 
     testObject = NavigationService();
 
-    mockSharedPreferencesService = MockThemeService();
+    mockThemeService = MockThemeService();
 
-    when(() => mockSharedPreferencesService.getThemeMode())
-        .thenReturn(ThemeMode.system);
+    when(() => mockThemeService.getThemeMode()).thenReturn(ThemeMode.system);
+    when(() => mockThemeService.getBrightness(
+            platformBrightness: any(named: 'platformBrightness')))
+        .thenReturn(Brightness.light);
 
-    GetIt.instance
-        .registerSingleton<ThemeService>(mockSharedPreferencesService);
+    GetIt.instance.registerSingleton<ThemeService>(mockThemeService);
     GetIt.instance.registerSingleton<EnabledExercisesService>(
         MockEnabledExercisesService());
     GetIt.instance

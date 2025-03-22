@@ -61,6 +61,11 @@ class MyApp extends StatelessWidget {
             ),
             darkTheme: _applyFontSizesTo(
               themeData: ThemeData.dark().copyWith(
+                checkboxTheme: const CheckboxThemeData(
+                  side: BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
                 expansionTileTheme: const ExpansionTileThemeData(
                   textColor: Colors.white,
                   collapsedTextColor: Colors.white,

@@ -9,11 +9,14 @@ import 'package:grammatika/services/enabled_exercises_service.dart';
 import 'package:grammatika/services/theme_service.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../test_utils.dart';
 import '../../mocks.dart';
 
 main() {
   late ThemeService mockThemeService;
   late EnabledExercisesService mockEnabledExercisesService;
+
+  setUpAll(TestUtils.registerFallbackValues);
 
   setUp(() async {
     await GetIt.instance.reset();
@@ -22,6 +25,9 @@ main() {
     mockEnabledExercisesService = MockEnabledExercisesService();
 
     when(() => mockThemeService.getThemeMode()).thenReturn(ThemeMode.system);
+    when(() => mockThemeService.getBrightness(
+            platformBrightness: any(named: 'platformBrightness')))
+        .thenReturn(Brightness.light);
     GetIt.instance.registerSingleton<ThemeService>(
       mockThemeService,
     );
