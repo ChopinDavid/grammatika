@@ -11,6 +11,7 @@ import 'package:grammatika/models/word_form.dart';
 import 'package:grammatika/models/word_form_type.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
 import 'package:grammatika/services/exercise_cache_service.dart';
+import 'package:grammatika/services/miscellaneous_settings_service.dart';
 import 'package:grammatika/services/statistics_service.dart';
 
 import '../../models/answer.dart';
@@ -143,12 +144,16 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
         }
         exercise = exercise?.withAnswers(answers);
         emit(
-          // TODO(DC): Make auto-view explanation configurable in settings
-          ExerciseAnswerSelectedState(viewingExplanation: false),
+          ExerciseAnswerSelectedState(
+            viewingExplanation: GetIt.instance
+                .get<MiscellaneousSettingsService>()
+                .getSettings()
+                .automaticallyShowExplanation,
+          ),
         );
       }
 
-      if (event is ExerciseViewExplanationEvent) {
+      if (event is ExerciseShowExplanationEvent) {
         emit(
           ExerciseAnswerSelectedState(viewingExplanation: true),
         );
