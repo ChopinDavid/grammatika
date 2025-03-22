@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
 import 'package:grammatika/services/exercise_cache_service.dart';
+import 'package:grammatika/services/miscellaneous_settings_service.dart';
 import 'package:grammatika/services/navigation_service.dart';
 import 'package:grammatika/services/statistics_service.dart';
 import 'package:grammatika/services/theme_service.dart';
@@ -27,6 +28,8 @@ void main() async {
       ThemeService(sharedPreferences: sharedPreferences));
   GetIt.instance.registerSingleton<EnabledExercisesService>(
       EnabledExercisesService(sharedPreferences: sharedPreferences));
+  GetIt.instance.registerSingleton<MiscellaneousSettingsService>(
+      MiscellaneousSettingsService(sharedPreferences: sharedPreferences));
   GetIt.instance.registerSingleton<StatisticsService>(StatisticsService());
   GetIt.instance
       .registerSingleton<ExerciseCacheService>(ExerciseCacheService());

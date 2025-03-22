@@ -94,7 +94,7 @@ class ExercisePage extends StatelessWidget {
                         : TextButton(
                             onPressed: () {
                               BlocProvider.of<ExerciseBloc>(context).add(
-                                ExerciseViewExplanationEvent(),
+                                ExerciseShowExplanationEvent(),
                               );
                             },
                             child: const Text('Show Explanation'),

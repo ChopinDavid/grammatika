@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:grammatika/consts.dart';
+import 'package:grammatika/models/miscellaneous_settings.dart';
 import 'package:grammatika/screens/settings/appearance_setting_widget.dart';
 import 'package:grammatika/screens/settings/settings_page.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/miscellaneous_settings_service.dart';
 import 'package:grammatika/services/theme_service.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -14,6 +16,7 @@ import '../../mocks.dart';
 
 main() {
   late ThemeService mockThemeService;
+  late MiscellaneousSettingsService mockMiscellaneousSettingsService;
   late EnabledExercisesService mockEnabledExercisesService;
 
   setUpAll(TestUtils.registerFallbackValues);
@@ -22,15 +25,22 @@ main() {
     await GetIt.instance.reset();
 
     mockThemeService = MockThemeService();
+    mockMiscellaneousSettingsService = MockMiscellaneousSettingsService();
     mockEnabledExercisesService = MockEnabledExercisesService();
 
     when(() => mockThemeService.getThemeMode()).thenReturn(ThemeMode.system);
     when(() => mockThemeService.getBrightness(
             platformBrightness: any(named: 'platformBrightness')))
         .thenReturn(Brightness.light);
+    when(() => mockMiscellaneousSettingsService.getSettings())
+        .thenReturn(MiscellaneousSettings.defaultSettings());
+    when(() => mockMiscellaneousSettingsService.updateSettings(any()))
+        .thenAnswer((_) async {});
     GetIt.instance.registerSingleton<ThemeService>(
       mockThemeService,
     );
+    GetIt.instance.registerSingleton<MiscellaneousSettingsService>(
+        mockMiscellaneousSettingsService);
     GetIt.instance.registerSingleton<EnabledExercisesService>(
         mockEnabledExercisesService);
   });
@@ -247,6 +257,110 @@ main() {
 
     group('"Automatic" Switch', () {});
   });
+
+  group(
+    'Miscellaneous Settings section',
+    () {
+      testWidgets(
+        'displays "Miscellaneous Settings" header',
+        (widgetTester) async {
+          await widgetTester.pumpWidget(
+            const MaterialApp(
+              home: SettingsPage(),
+            ),
+          );
+          await widgetTester.pumpAndSettle();
+
+          expect(find.text('Miscellaneous Settings'), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'switch is initially on when MiscellaneousSettings.automaticallyShowExplanation is true',
+        (widgetTester) async {
+          const expectedIsOn = true;
+          const originalSettings = MiscellaneousSettings(
+            automaticallyShowExplanation: expectedIsOn,
+          );
+          when(() => mockMiscellaneousSettingsService.getSettings())
+              .thenReturn(originalSettings);
+
+          await widgetTester.pumpWidget(
+            const MaterialApp(
+              home: SettingsPage(),
+            ),
+          );
+          await widgetTester.pumpAndSettle();
+
+          expect(
+              widgetTester
+                  .widget<Switch>(find.byKey(
+                      const Key('automatically_show_explanation_switch')))
+                  .value,
+              expectedIsOn);
+        },
+      );
+
+      testWidgets(
+        'switch is initially off when MiscellaneousSettings.automaticallyShowExplanation is false',
+        (widgetTester) async {
+          const expectedIsOn = false;
+          const originalSettings = MiscellaneousSettings(
+            automaticallyShowExplanation: expectedIsOn,
+          );
+          when(() => mockMiscellaneousSettingsService.getSettings())
+              .thenReturn(originalSettings);
+
+          await widgetTester.pumpWidget(
+            const MaterialApp(
+              home: SettingsPage(),
+            ),
+          );
+          await widgetTester.pumpAndSettle();
+
+          expect(
+              widgetTester
+                  .widget<Switch>(find.byKey(
+                      const Key('automatically_show_explanation_switch')))
+                  .value,
+              expectedIsOn);
+        },
+      );
+
+      testWidgets(
+        'invokes MiscellaneousSettingsService with new settings when "Automatically show explanation" Switch is tapped',
+        (widgetTester) async {
+          const originalSettings = MiscellaneousSettings(
+            automaticallyShowExplanation: true,
+          );
+          when(() => mockMiscellaneousSettingsService.getSettings())
+              .thenReturn(originalSettings);
+
+          await widgetTester.pumpWidget(
+            const MaterialApp(
+              home: SettingsPage(),
+            ),
+          );
+          await widgetTester.pumpAndSettle();
+
+          await widgetTester.tap(
+            find.byKey(
+              const Key('automatically_show_explanation_switch'),
+            ),
+          );
+          await widgetTester.pumpAndSettle();
+
+          verify(
+            () => mockMiscellaneousSettingsService.updateSettings(
+              originalSettings.copyWith(
+                  automaticallyShowExplanation:
+                      !originalSettings.automaticallyShowExplanation),
+            ),
+          ).called(1);
+        },
+      );
+    },
+  );
 
   group('Enabled Exercises section', () {
     testWidgets(
