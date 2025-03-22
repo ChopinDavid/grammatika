@@ -11,8 +11,21 @@ import 'package:grammatika/widgets/gender_exercise_widget.dart';
 import 'package:grammatika/widgets/grammatika_drawer.dart';
 import 'package:grammatika/widgets/sentence_exercise_widget.dart';
 
-class ExercisePage extends StatelessWidget {
-  const ExercisePage({super.key});
+class ExercisePage extends StatefulWidget {
+  const ExercisePage({
+    super.key,
+    @visibleForTesting this.scrollController,
+  });
+
+  @visibleForTesting
+  final ScrollController? scrollController;
+
+  @override
+  State<ExercisePage> createState() => _ExercisePageState();
+}
+
+class _ExercisePageState extends State<ExercisePage> {
+  late final scrollController = widget.scrollController ?? ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +57,19 @@ class ExercisePage extends StatelessWidget {
                       'There was an error fetching exercise: ${state.errorString}',
                     ),
                   ),
+                );
+              }
+
+              if (state is ExerciseAnswerSelectedState &&
+                  state.viewingExplanation) {
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (timeStamp) {
+                    scrollController.animateTo(
+                      scrollController.position.maxScrollExtent,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                    );
+                  },
                 );
               }
             },
@@ -113,6 +139,7 @@ class ExercisePage extends StatelessWidget {
                       child: Stack(
                         children: [
                           SingleChildScrollView(
+                            controller: scrollController,
                             padding:
                                 const EdgeInsets.only(top: 24.0, bottom: 16.0),
                             child: Column(
