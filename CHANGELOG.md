@@ -1,3 +1,8 @@
+## 1.0.4
+
+* Added setting to automatically show explanation after answering an exercise
+* Made it so that the exercise page automatically scrolls to the bottom when an explanation is shown
+
 ## 1.0.3
 
 * Increased text size on answer buttons
