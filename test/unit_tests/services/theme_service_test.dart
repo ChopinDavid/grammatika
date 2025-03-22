@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:grammatika/consts.dart';
 import 'package:grammatika/services/theme_service.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../mocks.dart';
 
@@ -51,5 +51,34 @@ main() {
         expect(testObject.getThemeMode(), themeMode);
       });
     }
+  });
+
+  group('getBrightness', () {
+    test(
+        'returns Brightness.light when SharedPreferences.getInt returns 0 and platformBrightness is light',
+        () {
+      when(() => mockSharedPreferences.getInt(any())).thenReturn(0);
+      expect(testObject.getBrightness(platformBrightness: Brightness.light),
+          Brightness.light);
+    });
+    test(
+        'returns Brightness.dark when SharedPreferences.getInt returns 0 and platformBrightness is dark',
+        () {
+      when(() => mockSharedPreferences.getInt(any())).thenReturn(0);
+      expect(testObject.getBrightness(platformBrightness: Brightness.dark),
+          Brightness.dark);
+    });
+    test('returns Brightness.light when SharedPreferences.getInt returns 0',
+        () {
+      when(() => mockSharedPreferences.getInt(any())).thenReturn(1);
+      expect(testObject.getBrightness(platformBrightness: Brightness.dark),
+          Brightness.light);
+    });
+
+    test('returns Brightness.dark when SharedPreferences.getInt returns 1', () {
+      when(() => mockSharedPreferences.getInt(any())).thenReturn(2);
+      expect(testObject.getBrightness(platformBrightness: Brightness.light),
+          Brightness.dark);
+    });
   });
 }

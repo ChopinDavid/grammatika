@@ -1,8 +1,10 @@
-import 'package:mocktail/mocktail.dart';
+import 'dart:ui';
+
 import 'package:grammatika/models/exercise.dart';
 import 'package:grammatika/models/gender.dart';
 import 'package:grammatika/models/sentence.dart';
 import 'package:grammatika/models/word_form.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import 'unit_tests/mocks.dart';
@@ -16,5 +18,6 @@ class TestUtils {
     registerFallbackValue(MockTextStyle());
     registerFallbackValue(const LaunchOptions());
     registerFallbackValue(MockBuildContext());
+    registerFallbackValue(Brightness.light);
   }
 }

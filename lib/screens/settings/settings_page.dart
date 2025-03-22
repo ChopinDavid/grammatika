@@ -1,3 +1,4 @@
+import 'package:expandable_box_drawing_table/models/expandable_box_drawing_table_configuration.dart';
 import 'package:expandable_box_drawing_table/widgets/expandable_box_drawing_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -130,6 +131,12 @@ class _EnabledExercisesWidget extends StatefulWidget {
 class _EnabledExercisesWidgetState extends State<_EnabledExercisesWidget> {
   @override
   Widget build(BuildContext context) {
+    final iconColor = GetIt.instance.get<ThemeService>().getBrightness(
+                platformBrightness:
+                    MediaQuery.of(context).platformBrightness) ==
+            Brightness.light
+        ? Colors.black
+        : Colors.white;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -139,6 +146,10 @@ class _EnabledExercisesWidgetState extends State<_EnabledExercisesWidget> {
           height: 24.0,
         ),
         ExpandableBoxDrawingTable<String>(
+          configuration: const ExpandableBoxDrawingTableConfigurationData
+                  .defaultConfiguration()
+              .copyWith(
+                  expandedIconColor: iconColor, collapsedIconColor: iconColor),
           initialValues: GetIt.instance
               .get<EnabledExercisesService>()
               .getEnabledExercises(),
