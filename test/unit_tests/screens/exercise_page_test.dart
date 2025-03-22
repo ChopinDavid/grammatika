@@ -172,6 +172,77 @@ main() {
       expect(find.text('Show Explanation'), findsOneWidget);
     });
 
+    testWidgets(
+        'does not display "Show Explanation" button when state.viewingExplanation is true',
+        (widgetTester) async {
+      whenListen(
+        mockExerciseBloc,
+        Stream.fromIterable(
+          [
+            ExerciseAnswerSelectedState(viewingExplanation: true),
+          ],
+        ),
+        initialState: ExerciseInitial(),
+      );
+
+      final sentence = Sentence.testValue();
+      final exercise = Exercise<WordForm, Sentence>.testValue(
+          question: sentence,
+          answers: [sentence.correctAnswer, ...sentence.answerSynonyms]);
+      when(() => mockExerciseBloc.exercise).thenReturn(exercise);
+
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider.value(
+            value: mockExerciseBloc,
+            child: const ExercisePage(),
+          ),
+        ),
+      );
+      await widgetTester.pump();
+      await widgetTester.idle();
+
+      final exerciseFooterFinder = find.byType(ExplanationsWidget);
+      expect(exerciseFooterFinder, findsOneWidget);
+      expect(find.text('Show Explanation'), findsNothing);
+    });
+
+    testWidgets(
+        'scrolls to bottom of page when state.viewingExplanation is true',
+        (widgetTester) async {
+      whenListen(
+        mockExerciseBloc,
+        Stream.fromIterable(
+          [
+            ExerciseAnswerSelectedState(viewingExplanation: true),
+          ],
+        ),
+        initialState: ExerciseInitial(),
+      );
+
+      final scrollController = ScrollController();
+      final sentence = Sentence.testValue();
+      final exercise = Exercise<WordForm, Sentence>.testValue(
+          question: sentence,
+          answers: [sentence.correctAnswer, ...sentence.answerSynonyms]);
+      when(() => mockExerciseBloc.exercise).thenReturn(exercise);
+
+      await widgetTester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider.value(
+            value: mockExerciseBloc,
+            child: ExercisePage(
+              scrollController: scrollController,
+            ),
+          ),
+        ),
+      );
+      await widgetTester.pumpAndSettle();
+
+      expect(
+          scrollController.offset, scrollController.position.maxScrollExtent);
+    });
+
     testWidgets('displays ExerciseFooter when state.viewingExplanation is true',
         (widgetTester) async {
       whenListen(
