@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:grammatika/consts.dart';
 import 'package:grammatika/screens/settings/appearance_setting_widget.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/miscellaneous_settings_service.dart';
 import 'package:grammatika/services/theme_service.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -25,9 +26,11 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Padding(
           padding: EdgeInsets.only(top: 24.0, left: 24.0, bottom: 24.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _AppearanceSettingsWidget(),
+              SizedBox(height: 24.0),
+              _MiscellaneousSettingsWidget(),
               SizedBox(height: 24.0),
               _EnabledExercisesWidget(),
             ],
@@ -49,8 +52,8 @@ class _AppearanceSettingsWidget extends StatefulWidget {
 class _AppearanceSettingsWidgetState extends State<_AppearanceSettingsWidget> {
   @override
   Widget build(BuildContext context) {
-    var sharedPreferencesService = GetIt.instance.get<ThemeService>();
-    var themeMode = sharedPreferencesService.getThemeMode();
+    var themeService = GetIt.instance.get<ThemeService>();
+    var themeMode = themeService.getThemeMode();
     return Padding(
       padding: const EdgeInsets.only(right: 24.0),
       child: Column(
@@ -71,8 +74,8 @@ class _AppearanceSettingsWidgetState extends State<_AppearanceSettingsWidget> {
                             Brightness.light),
                 title: 'Light mode',
                 icon: Icons.light_mode,
-                onSelected: () => setState(() =>
-                    sharedPreferencesService.updateThemeMode(ThemeMode.light)),
+                onSelected: () => setState(
+                    () => themeService.updateThemeMode(ThemeMode.light)),
               ),
               AppearanceSettingWidget(
                 key: const Key('dark_mode_appearance_setting_widget'),
@@ -82,8 +85,8 @@ class _AppearanceSettingsWidgetState extends State<_AppearanceSettingsWidget> {
                             Brightness.dark),
                 title: 'Dark mode',
                 icon: Icons.dark_mode,
-                onSelected: () => setState(() =>
-                    sharedPreferencesService.updateThemeMode(ThemeMode.dark)),
+                onSelected: () => setState(
+                    () => themeService.updateThemeMode(ThemeMode.dark)),
               ),
             ],
           ),
@@ -100,15 +103,69 @@ class _AppearanceSettingsWidgetState extends State<_AppearanceSettingsWidget> {
                     onChanged: (value) {
                       setState(() {
                         if (value == true) {
-                          sharedPreferencesService
-                              .updateThemeMode(ThemeMode.system);
+                          themeService.updateThemeMode(ThemeMode.system);
                         } else {
-                          sharedPreferencesService.updateThemeMode(
+                          themeService.updateThemeMode(
                               MediaQuery.of(context).platformBrightness ==
                                       Brightness.light
                                   ? ThemeMode.light
                                   : ThemeMode.dark);
                         }
+                      });
+                    }),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MiscellaneousSettingsWidget extends StatefulWidget {
+  const _MiscellaneousSettingsWidget();
+
+  @override
+  State<_MiscellaneousSettingsWidget> createState() =>
+      _MiscellaneousSettingsWidgetState();
+}
+
+class _MiscellaneousSettingsWidgetState
+    extends State<_MiscellaneousSettingsWidget> {
+  var miscellaneousSettingsService =
+      GetIt.instance.get<MiscellaneousSettingsService>();
+
+  late var miscellaneousSettings = miscellaneousSettingsService.getSettings();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Miscellaneous Settings',
+              style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(
+            height: 24.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 12.0, left: 12.0),
+            child: Row(
+              children: [
+                const Text('Automatically show explanation'),
+                const Spacer(),
+                Switch(
+                    key: const Key('automatically_show_explanation_switch'),
+                    value: miscellaneousSettings.automaticallyShowExplanation,
+                    activeTrackColor: Colors.blueAccent,
+                    thumbColor: WidgetStateProperty.all(Colors.white),
+                    onChanged: (value) {
+                      setState(() {
+                        miscellaneousSettings = miscellaneousSettings.copyWith(
+                            automaticallyShowExplanation: value);
+                        miscellaneousSettingsService
+                            .updateSettings(miscellaneousSettings);
                       });
                     }),
               ],

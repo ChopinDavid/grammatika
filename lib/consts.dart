@@ -45,6 +45,7 @@ const foreignNeuterNounEndings = ['и', 'у', 'ю'];
 
 const String themeModeSharedPreferencesKey = 'theme_mode';
 const String enabledExercisesSharedPreferencesKey = 'enabled_exercises';
+const String miscellaneousSettingsPreferencesKey = 'miscellaneous_settings';
 
 final List<Section<String>> sections = [
   Section(

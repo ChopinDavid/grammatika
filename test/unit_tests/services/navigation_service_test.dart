@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:grammatika/models/miscellaneous_settings.dart';
 import 'package:grammatika/screens/settings/settings_page.dart';
 import 'package:grammatika/screens/statistics/statistics_page.dart';
 import 'package:grammatika/services/enabled_exercises_service.dart';
+import 'package:grammatika/services/miscellaneous_settings_service.dart';
 import 'package:grammatika/services/navigation_service.dart';
 import 'package:grammatika/services/statistics_service.dart';
 import 'package:grammatika/services/theme_service.dart';
@@ -15,6 +17,7 @@ import '../mocks.dart';
 void main() {
   late NavigationService testObject;
   late ThemeService mockThemeService;
+  late MiscellaneousSettingsService mockMiscellaneousSettingsService;
 
   setUpAll(TestUtils.registerFallbackValues);
 
@@ -30,7 +33,13 @@ void main() {
             platformBrightness: any(named: 'platformBrightness')))
         .thenReturn(Brightness.light);
 
+    mockMiscellaneousSettingsService = MockMiscellaneousSettingsService();
+    when(() => mockMiscellaneousSettingsService.getSettings())
+        .thenReturn(MiscellaneousSettings.defaultSettings());
+
     GetIt.instance.registerSingleton<ThemeService>(mockThemeService);
+    GetIt.instance.registerSingleton<MiscellaneousSettingsService>(
+        mockMiscellaneousSettingsService);
     GetIt.instance.registerSingleton<EnabledExercisesService>(
         MockEnabledExercisesService());
     GetIt.instance

@@ -213,7 +213,7 @@ main() {
     });
 
     testWidgets(
-        'tapping "Show Explanation" button adds ExerciseViewExplanationEvent to ExerciseBloc',
+        'tapping "Show Explanation" button adds ExerciseShowExplanationEvent to ExerciseBloc',
         (widgetTester) async {
       whenListen(
         mockExerciseBloc,
@@ -243,7 +243,7 @@ main() {
       await widgetTester.idle();
 
       await widgetTester.tap(find.text('Show Explanation'));
-      verify(() => mockExerciseBloc.add(ExerciseViewExplanationEvent()))
+      verify(() => mockExerciseBloc.add(ExerciseShowExplanationEvent()))
           .called(1);
     });
 
