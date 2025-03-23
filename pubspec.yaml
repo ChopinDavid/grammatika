@@ -51,6 +51,20 @@ dev_dependencies:
   bloc_test: ^10.0.0
   plugin_platform_interface: ^2.1.8
   url_launcher_platform_interface: ^2.3.2
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/icon.png"
+  adaptive_icon_background: "assets/images/icon_bg.png"
+  adaptive_icon_foreground: "assets/images/icon_fg.png"
+  adaptive_icon_maskable: true
+  android_enable_round_icon: true
+  android_adaptive_icon_background: "assets/images/icon_bg.png"
+  android_adaptive_icon_foreground: "assets/images/icon_fg.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  remove_alpha_ios: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
