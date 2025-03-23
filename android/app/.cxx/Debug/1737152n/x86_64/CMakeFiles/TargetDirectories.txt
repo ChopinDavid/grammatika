@@ -1,0 +1,2 @@
+C:/Users/chopi/Desktop/Coding/projects/grammatika/android/app/.cxx/Debug/1737152n/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/chopi/Desktop/Coding/projects/grammatika/android/app/.cxx/Debug/1737152n/x86_64/CMakeFiles/rebuild_cache.dir
