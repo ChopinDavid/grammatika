@@ -1,21 +1,27 @@
 <p align="center">
-<a href="https://github.com/ChopinDavid/grammatika/actions"><img src="https://github.com/ChopinDavid/grammatika/actions/workflows/push_main.yml/badge.svg" alt="build"></a>
-<a href="https://app.codecov.io/gh/ChopinDavid/grammatika"><img src="https://codecov.io/gh/ChopinDavid/grammatika/branch/main/graph/badge.svg" alt="codecov"></a>
+<a href="https://discord.gg/JAndPDc3" target="_blank"><img src="https://img.shields.io/discord/1351718119147831460?logo=discord"></a>
+<a href="https://github.com/ChopinDavid/grammatika/actions" target="_blank"><img src="https://github.com/ChopinDavid/grammatika/actions/workflows/push_main.yml/badge.svg" alt="build"></a>
+<a href="https://app.codecov.io/gh/ChopinDavid/grammatika" target="_blank"><img src="https://codecov.io/gh/ChopinDavid/grammatika/branch/main/graph/badge.svg" alt="codecov"></a>
 </p>
 
-# grammatika
+## Grammatika
+Grammatika is a free and open source language learning app. We do not charge and we do not show adds, and we never will. Grammatika is built using the [OpenRussian.org database](https://en.openrussian.org/) and currently supports exercises for English speakers wanting to learn the Russian language and its grammar. With that being said, there is tremendous potential for the app to have additional languages added, provided that the language is indexed in a way identical to the OpenRussian.org database (I believe [OpenSpanish.org](https://en.openspanish.org/) is also in the works). The app is also extremely flexible in the sense that new exercise types could easily be added. Right now, exercises to identify gender and practice declension and conjugation exist, but date/time telling, identifying numbers, etc. could all easily be added in the future.
 
-A new Flutter project.
+### How to contribute
+Contributions to this project are welcome and encouraged! If you would like to report a bug or feature request, feel free to do so in [this repository's Issues page](https://github.com/ChopinDavid/grammatika/issues).
 
-## Getting Started
+Please note that PRs will not be approved/merged until adequate test coverage has been added, either by the person who opened the PR or by a project maintainer. We have high test coverage and we want to keep it that way!
 
-This project is a starting point for a Flutter application.
+This project is setup so that open PRs must have all of their tests pass and pass a linter before they can be approved. This includes bumping [the version number in the pubspec.yaml](https://github.com/ChopinDavid/grammatika/blob/069626f93de02bb3234d09cb3010e232b0d1d2f7/pubspec.yaml#L19) and adding a corresponding entry in [our CHANGELOG.md](https://github.com/ChopinDavid/grammatika/blob/main/CHANGELOG.md).
 
-A few resources to get you started if this is your first Flutter project:
+### Setup
+Install flutter, clone the repo, run `flutter pub get` and you should be ready to code!
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Downloading the app
+We plan to release the app to both Google Play and the App Store in the near future. For the time being, we will be building a beta testing group. Members of [our Discord server](https://discord.gg/JAndPDc3) can also be notified/can download new builds from the [mobile-builds channel](https://discord.gg/7GAAGzdS).
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Help wanted!
+Any issue in the Issues page is something that the team has identified as needing to be addressed, but here are some issues that are particularly noteworthy:
+* We need app icon/splash page designs!
+* General UI designs from Figma would be very nice.
+* Our deploy to iOS workflow is currently not workring as expected. Signing/building the ipa file seems to always fail in CD/CI. Would love some guidance on how to make this work correctly.
