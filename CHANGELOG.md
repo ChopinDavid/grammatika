@@ -1,3 +1,7 @@
+## 1.0.5
+
+* Added app icons and splash pages
+
 ## 1.0.4
 
 * Added setting to automatically show explanation after answering an exercise
