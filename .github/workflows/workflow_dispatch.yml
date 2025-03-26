@@ -169,7 +169,7 @@ jobs:
           cp $DIST_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       - name: Build iOS
-        run: flutter build ios --release
+        run: flutter build ios --release --no-codesign
 
       - name: build archive
         run: |
