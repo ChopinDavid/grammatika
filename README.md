@@ -7,6 +7,10 @@
 ## Grammatika
 Grammatika is a free and open source language learning app. We do not charge and we do not show adds, and we never will. Grammatika is built using the [OpenRussian.org database](https://en.openrussian.org/) and currently supports exercises for English speakers wanting to learn the Russian language and its grammar. With that being said, there is tremendous potential for the app to have additional languages added, provided that the language is indexed in a way identical to the OpenRussian.org database (I believe [OpenSpanish.org](https://en.openspanish.org/) is also in the works). The app is also extremely flexible in the sense that new exercise types could easily be added. Right now, exercises to identify gender and practice declension and conjugation exist, but date/time telling, identifying numbers, etc. could all easily be added in the future.
 
+<a href="https://testflight.apple.com/join/bDtu3G9B"><img src="https://askyourself.app/assets/testflight.png" style="width: 20vw;"></a>
+
+### [Demo Video](https://www.youtube.com/watch?v=WtZY2Bri0pA)
+
 ### How to contribute
 Contributions to this project are welcome and encouraged! If you would like to report a bug or feature request, feel free to do so in [this repository's Issues page](https://github.com/ChopinDavid/grammatika/issues).
 
