@@ -155,7 +155,8 @@ jobs:
           -sdk iphoneos \
           -configuration Debug \
           -destination generic/platform=iOS \
-          clean archive        
+          -allowProvisioningUpdates \
+          clean archive       
 
       - name: export ipa
         env:
