@@ -22,7 +22,7 @@ This project is setup so that open PRs must have all of their tests pass and pas
 Install flutter, clone the repo, run `flutter pub get` and you should be ready to code!
 
 ### Downloading the app
-We plan to release the app to both Google Play and the App Store in the near future. For the time being, we will be building a beta testing group. Members of [our Discord server](https://discord.gg/JAndPDc3) can also be notified/can download new builds from the [mobile-builds channel](https://discord.gg/7GAAGzdS).
+We plan to release the app to both Google Play and the App Store in the near future. For the time being, we will be building a beta testing group. Members of [our Discord server](https://discord.gg/JAndPDc3) can also be notified/can download new builds from the [mobile-builds channel](https://discord.gg/7GAAGzdS). iOS users can also take part in [our public TestFlight](https://testflight.apple.com/join/bDtu3G9B).
 
 ### Help wanted!
 Any issue in the Issues page is something that the team has identified as needing to be addressed, but here are some issues that are particularly noteworthy:
