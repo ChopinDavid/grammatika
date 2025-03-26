@@ -153,10 +153,10 @@ jobs:
           -scheme Runner \
           -archivePath build/ios/archive/Runner.xcarchive \
           -sdk iphoneos \
-          -configuration Debug \
+          -configuration Release \
           -destination generic/platform=iOS \
           -allowProvisioningUpdates \
-          clean archive       
+          clean archive  
 
       - name: export ipa
         env:
